@@ -1,0 +1,59 @@
+{% extends "front/base.html" %}
+{% block content %}
+<div class="page-banner">
+    <div class="container">
+        <h1>{{ title or '网上营业厅' }}</h1>
+        <div class="en">Online Business Hall</div>
+    </div>
+</div>
+<div class="page-breadcrumb">
+    <div class="container">
+        <a href="{{ url_for('index') }}">首页</a>
+        <span class="sep">/</span>
+        <span>网上营业厅</span>
+        <span class="sep">/</span>
+        <span style="color:var(--accent);">{{ title }}</span>
+    </div>
+</div>
+<div class="container">
+    <div class="page-layout">
+        <aside>
+            <div class="side-menu">
+                <h3>网上营业厅<span class="en">Online Service</span></h3>
+                <ul>
+                    <li class="{% if category=='price' %}active{% endif %}"><a href="{{ url_for('hall_list', category='price') }}">价格与时效</a></li>
+                    <li class="{% if category=='wechat' %}active{% endif %}"><a href="{{ url_for('hall_list', category='wechat') }}">微信服务</a></li>
+                    <li class="{% if category=='forbidden' %}active{% endif %}"><a href="{{ url_for('hall_list', category='forbidden') }}">禁运品</a></li>
+                </ul>
+            </div>
+            <div class="side-contact">
+                <div class="label">SERVICE HOTLINE</div>
+                <div class="tel">{{ hotline or '400-888-8888' }}</div>
+                <div class="small">欢迎来电咨询价格时效</div>
+            </div>
+        </aside>
+        <div class="page-content">
+            <h2>{{ title }}</h2>
+            <div class="business-grid" style="grid-template-columns: 1fr; margin-top:20px;">
+                {% for item in items %}
+                <div class="business-card">
+                    <div class="icon">✦</div>
+                    <h3>{{ item.get('title', '') }}</h3>
+                    <p style="font-size:14px; line-height:2; white-space: pre-line;">{{ item.get('content') or '' }}</p>
+                </div>
+                {% else %}
+                <div style="grid-column:1/-1; text-align:center; padding:60px 0; color:var(--text-muted);">
+                    <p style="font-size:50px; margin-bottom:10px;">📦</p>
+                    <p>暂无内容,敬请期待...</p>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div style="margin-top:40px; padding:26px; background:var(--bg-gray); border-radius:6px; border-left:4px solid var(--accent);">
+                <h3 style="color:var(--primary); margin-top:0;">温馨提示</h3>
+                <p style="font-size:14px; line-height:2; margin:0;">价格与时效会因季节、目的地及重量不同有所调整,以上内容仅供参考,具体请以客服实时报价为准。如需精确报价,请拨打服务热线或联系专属业务员。</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

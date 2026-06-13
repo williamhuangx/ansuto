@@ -1,0 +1,64 @@
+{% extends "admin/base.html" %}
+{% block page_title %}网点分布{% endblock %}
+{% block content %}
+
+<div class="card">
+    <div class="card-title">
+        网点列表
+        <span class="actions"><a href="{{ url_for('admin_branches_new') }}" class="btn btn-sm btn-accent">➕ 新增网点</a></span>
+    </div>
+    <div class="toolbar">
+        <form method="get" class="search">
+            <input type="text" name="province" placeholder="省份" value="{{ current_province }}">
+            <input type="text" name="keyword" placeholder="网点 / 地址 / 负责人" value="{{ keyword }}">
+            <button type="submit" class="btn btn-sm btn-primary">🔍 搜索</button>
+        </form>
+        <span style="color:#999; font-size:13px;">共 {{ total }} 个网点</span>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>网点名称</th>
+                <th>省份</th>
+                <th>城市</th>
+                <th>详细地址</th>
+                <th>电话</th>
+                <th>负责人</th>
+                <th>状态</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td>{{ item['id'] }}</td>
+                <td><strong>{{ item['branch_name'] }}</strong></td>
+                <td>{{ item['province'] or '-' }}</td>
+                <td>{{ item['city'] or '-' }}</td>
+                <td>{{ item['address'] or '-' }}</td>
+                <td>{{ item['phone'] or '-' }}</td>
+                <td>{{ item['manager'] or '-' }}</td>
+                <td>{% if item.get('status', 1) == 1 %}<span class="badge badge-active">启用</span>{% else %}<span class="badge badge-inactive">禁用</span>{% endif %}</td>
+                <td>
+                    <a href="{{ url_for('admin_branches_edit', item_id=item['id']) }}" class="btn btn-sm btn-default">编辑</a>
+                    <a href="{{ url_for('admin_branches_delete', item_id=item['id']) }}" class="btn btn-sm btn-danger" onclick="return confirm('确定删除该网点?')">删除</a>
+                </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="9" style="text-align:center; padding: 40px; color: #999;">暂无网点,请先添加</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% if total_pages > 1 %}
+    <div class="pagination">
+        <span class="pagination-info">共 {{ total }} 条 / 第 {{ page }} 页</span>
+        {% if has_prev %}<a href="?page={{ prev_num }}">上一页</a>{% endif %}
+        {% for p in range(1, total_pages + 1) %}
+        {% if p == page %}<span class="current">{{ p }}</span>{% else %}<a href="?page={{ p }}">{{ p }}</a>{% endif %}
+        {% endfor %}
+        {% if has_next %}<a href="?page={{ next_num }}">下一页</a>{% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

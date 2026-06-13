@@ -1,0 +1,29 @@
+{% extends "admin/base.html" %}
+{% block page_title %}站点配置{% endblock %}
+{% block content %}
+<div class="card">
+    <div class="card-title">站点配置 (SEO / 联系信息)</div>
+    <form method="post">
+        <div class="form-row">
+            <div><label>网站名称</label><input type="text" name="site_name" value="{{ cfg.get('site_name', '') }}"></div>
+            <div><label>SEO 标题</label><input type="text" name="site_title" value="{{ cfg.get('site_title', '') }}"></div>
+        </div>
+        <div class="form-row full">
+            <div><label>SEO 关键词</label><input type="text" name="site_keywords" value="{{ cfg.get('site_keywords', '') }}"></div>
+        </div>
+        <div class="form-row full">
+            <div><label>SEO 描述</label><textarea name="site_description" rows="3">{{ cfg.get('site_description', '') }}</textarea></div>
+        </div>
+        <div class="form-row">
+            <div><label>版权声明</label><input type="text" name="site_copyright" value="{{ cfg.get('site_copyright', '') }}"></div>
+            <div><label>服务热线</label><input type="text" name="service_hotline" value="{{ cfg.get('service_hotline', '') }}"></div>
+        </div>
+        <div class="form-row full">
+            <div><label>公司地址</label><input type="text" name="company_address" value="{{ cfg.get('company_address', '') }}"></div>
+        </div>
+        <div style="text-align:center; padding:16px 0;">
+            <button type="submit" class="btn btn-primary">保存配置</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

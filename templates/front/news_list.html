@@ -1,0 +1,59 @@
+{% extends "front/base.html" %}
+{% block content %}
+<div class="page-banner">
+    <div class="container">
+        <h1>{{ title or '公司新闻' }}</h1>
+        <div class="en">Company News</div>
+    </div>
+</div>
+<div class="page-breadcrumb">
+    <div class="container">
+        <a href="{{ url_for('index') }}">首页</a>
+        <span class="sep">/</span>
+        <span>公司新闻</span>
+        <span class="sep">/</span>
+        <span style="color:var(--accent);">{{ title }}</span>
+    </div>
+</div>
+<div class="container">
+    <div class="page-layout">
+        <aside>
+            <div class="side-menu">
+                <h3>新闻中心<span class="en">News Center</span></h3>
+                <ul>
+                    <li class="{% if category=='company' %}active{% endif %}"><a href="{{ url_for('news_list', category='company') }}">新闻中心</a></li>
+                    <li class="{% if category=='industry' %}active{% endif %}"><a href="{{ url_for('news_list', category='industry') }}">行业资讯</a></li>
+                </ul>
+            </div>
+            <div class="side-contact">
+                <div class="label">客服热线</div>
+                <div class="tel">{{ hotline or '400-888-8888' }}</div>
+                <div class="small">如需详细信息欢迎来电咨询</div>
+            </div>
+        </aside>
+        <div class="page-content">
+            <h2>{{ title }}</h2>
+            <div style="margin-top:20px;">
+                {% for item in items %}
+                <div class="news-list-item" onclick="location.href='{{ url_for('news_detail', nid=item['id']) }}'" style="cursor:pointer;">
+                    <div class="date-box">
+                        <div class="d">{% set d = item.get('created_at') or '' %}{% if d and d|string|length >= 10 %}{{ (d|string)[8:10] }}{% else %}01{% endif %}</div>
+                        <div class="ym">{% set d = item.get('created_at') or '' %}{% if d and d|string|length >= 7 %}{{ (d|string)[:7] }}{% else %}2024-01{% endif %}</div>
+                    </div>
+                    <div class="body">
+                        <div class="title">{{ item.get('title', '') }}</div>
+                        <div class="summary">{% set s = item.get('content') or '' %}{{ s[:130] if s|length > 130 else s }}...</div>
+                    </div>
+                    <div class="arrow">›</div>
+                </div>
+                {% else %}
+                <div style="text-align:center; padding:60px 0; color:var(--text-muted);">
+                    <p style="font-size:50px; margin-bottom:10px;">📰</p>
+                    <p>暂无新闻,敬请期待</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

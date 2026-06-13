@@ -1,0 +1,40 @@
+{% extends "admin/base.html" %}
+{% block page_title %}留言详情{% endblock %}
+{% block content %}
+
+<div class="card">
+    <div class="card-title">
+        留言详情
+        <span class="actions"><a href="{{ url_for('admin_contacts') }}" class="btn btn-sm btn-default">← 返回</a></span>
+    </div>
+    <div class="form-row">
+        <div><strong>姓名:</strong> {{ item['name'] or '-' }}</div>
+        <div><strong>公司:</strong> {{ item['company'] or '-' }}</div>
+    </div>
+    <div class="form-row">
+        <div><strong>电话:</strong> {{ item['phone'] or '-' }}</div>
+        <div><strong>邮箱:</strong> {{ item['email'] or '-' }}</div>
+    </div>
+    <div class="form-row full">
+        <div><strong>主题:</strong> {{ item['subject'] or '-' }}</div>
+    </div>
+    <div class="form-row full">
+        <div><strong>留言内容:</strong><br><div style="background:#f5f7fa; padding: 16px; margin-top: 8px; border-radius: 4px;">{{ item['message'] or '无' }}</div></div>
+    </div>
+    <div class="form-row">
+        <div><strong>状态:</strong>
+            {% if item.get('is_read') %}<span class="badge badge-active">已读</span>{% else %}<span class="badge badge-warn">未读</span>{% endif %}
+            {% if item.get('is_replied') %}<span class="badge badge-info">已回复</span>{% endif %}
+        </div>
+        <div><strong>时间:</strong> {{ item['created_at'] }}</div>
+    </div>
+    <form method="post" action="{{ url_for('admin_contacts_reply', cid=item['id']) }}">
+        <div class="form-row full">
+            <div><label>回复备注 (仅后台可见)</label><textarea name="reply_note" rows="5">{{ item['reply_note'] or '' }}</textarea></div>
+        </div>
+        <div style="text-align:center;">
+            <button type="submit" class="btn btn-primary">标记为已回复并保存</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

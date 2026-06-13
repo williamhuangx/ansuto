@@ -1,0 +1,62 @@
+{% extends "front/base.html" %}
+{% block content %}
+<div class="page-banner">
+    <div class="container">
+        <h1>网点分布</h1>
+        <div class="en">BRANCH NETWORK</div>
+    </div>
+</div>
+<div class="page-breadcrumb">
+    <div class="container">
+        <a href="{{ url_for('index') }}">首页</a>
+        <span class="sep">/</span>
+        <span style="color:var(--accent);">网点分布</span>
+    </div>
+</div>
+<div class="container">
+    <div class="page-layout">
+        <aside>
+            <div class="side-menu">
+                <h3>网点分布<span class="en">Branch</span></h3>
+                <ul>
+                    <li class="active"><a href="#">按省份查看</a></li>
+                    <li><a href="{{ url_for('contact_page') }}">联系总部</a></li>
+                </ul>
+            </div>
+            <div class="side-contact">
+                <div class="label">SERVICE HOTLINE</div>
+                <div class="tel">{{ hotline or '400-888-8888' }}</div>
+                <div class="small">全国统一服务热线</div>
+            </div>
+        </aside>
+        <div class="page-content">
+            <h2>全国服务网点</h2>
+            {% if province_groups %}
+                {% for province, items in province_groups.items() %}
+                <div style="margin-top:24px;">
+                    <h3 style="color:var(--primary); font-size:18px; border-left:4px solid var(--accent); padding-left:14px; margin-bottom:16px;">
+                        {{ province }} <span style="font-size:13px; color:var(--text-muted); font-weight:400;">(共 {{ items|length }} 个网点)</span>
+                    </h3>
+                    <div class="branch-list">
+                        {% for item in items %}
+                        <div class="branch-item">
+                            <h5>{{ item['branch_name'] }}</h5>
+                            <p><i>📍</i>{{ item['address'] }}</p>
+                            <p><i>📞</i>{{ item['phone'] or item['mobile'] or '400-888-8888' }}</p>
+                            {% if item['business_scope'] %}<p><i>📦</i>{{ item['business_scope'] }}</p>{% endif %}
+                            {% if item['work_time'] %}<p><i>⏰</i>{{ item['work_time'] }}</p>{% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+            <div style="text-align:center; padding:60px 0; color:var(--text-muted);">
+                <p style="font-size:50px; margin-bottom:10px;">🏢</p>
+                <p>暂无网点数据</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

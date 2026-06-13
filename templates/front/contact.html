@@ -1,0 +1,92 @@
+{% extends "front/base.html" %}
+{% block content %}
+<div class="page-banner">
+    <div class="container">
+        <h1>联系我们</h1>
+        <div class="en">CONTACT US</div>
+    </div>
+</div>
+<div class="page-breadcrumb">
+    <div class="container">
+        <a href="{{ url_for('index') }}">首页</a>
+        <span class="sep">/</span>
+        <span style="color:var(--accent);">联系我们</span>
+    </div>
+</div>
+<div class="container">
+    <div class="page-layout">
+        <aside>
+            <div class="side-menu">
+                <h3>联系我们<span class="en">Contact</span></h3>
+                <ul>
+                    <li class="active"><a href="#">在线咨询</a></li>
+                    <li><a href="{{ url_for('branches_list') }}">网点分布</a></li>
+                </ul>
+            </div>
+            <div class="side-contact">
+                <div class="label">SERVICE HOTLINE</div>
+                <div class="tel">{{ hotline or '400-888-8888' }}</div>
+                <div class="small">7×24 小时专业服务</div>
+            </div>
+        </aside>
+        <div class="page-content">
+            {% if success %}
+            <div
+                style="padding:30px; background:#e8f5e9; border:1px solid #a5d6a7; border-radius:6px; text-align:center;">
+                <div style="font-size:48px; color:#388e3c; margin-bottom:10px;">✓</div>
+                <h3 style="color:#2e7d32;">提交成功,我们将尽快与您联系</h3>
+                <p style="color:var(--text-light); margin-top:10px;">感谢您对安速通物流的关注与信任,我们的客服人员将在 1 个工作日内与您联系。</p>
+            </div>
+            {% endif %}
+            <div style="display:grid; grid-template-columns: 1.2fr 1fr; gap:26px; margin-top:20px;">
+                <div>
+                    <h3 style="color:var(--primary); margin-bottom:18px;">✉ 在线留言</h3>
+                    <form method="post" class="contact-form"
+                        style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+                        <input type="text" name="name" placeholder="您的姓名 *" required>
+                        <input type="text" name="phone" placeholder="联系电话 *" required>
+                        <input type="text" name="company" placeholder="公司名称">
+                        <input type="email" name="email" placeholder="邮箱地址">
+                        <input type="text" name="subject" placeholder="咨询主题" class="full" style="grid-column: 1/-1;">
+                        <textarea name="message" placeholder="请详细描述您的需求或问题" rows="6"
+                            style="grid-column:1/-1;"></textarea>
+                        <button type="submit" class="btn btn-primary"
+                            style="grid-column: 1/-1; padding:14px; font-size:15px;">提交留言</button>
+                    </form>
+                </div>
+                <div class="contact-info-box">
+                    <h3>公司信息</h3>
+                    <div class="item">
+                        <div class="ico">☎</div>
+                        <div class="txt">
+                            <b>服务热线</b>
+                            {{ company['phone'] or hotline or '0755-85265156' }}
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="ico">🏢</div>
+                        <div class="txt">
+                            <b>公司地址</b>
+                            {{ company['address'] or company_address or '广东省深圳市宝安区沙井镇新沙路与西环路交汇处竞德园11号首层' }}
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="ico">✉</div>
+                        <div class="txt">
+                            <b>商务邮箱</b>
+                            {{ company['email'] or 'cs@ansuto.com' }}
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="ico">⏰</div>
+                        <div class="txt">
+                            <b>工作时间</b>
+                            周一至周日 08:00 - 22:00
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

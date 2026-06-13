@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ site_title or '安速通物流 - 专业的国际国内物流服务提供商' }}{% endblock %}</title>
+    <meta name="keywords" content="{{ site_keywords or '安速通,物流,快递,国际物流,货运,运输,供应链' }}">
+    <meta name="description" content="{{ site_description or '安速通物流专注于国际国内物流运输服务,为客户提供高效、安全、专业的物流解决方案。' }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.png') }}" type="image/x-icon">
+</head>
+
+<body>
+    <!-- 顶部栏 -->
+    <!--  -->
+    <div class="top-bar">
+        <div class="container">
+            <div class="left">
+                <span><i>☎</i> 服务热线: {{ hotline or '0755-85265156' }}</span>
+                <span><i>✉</i> 今天寄 · 明天到</span>
+            </div>
+            <div class="right">
+                <a href="{{ url_for('contact_page') }}">联系我们</a>
+                <a href="#">English</a>
+                <!-- <a href="{{ url_for('admin_login') }}">后台登录</a> -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="{{ url_for('index') }}" class="logo">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" width="200px" alt="安速通物流">
+            </a>
+            <ul class="nav-menu">
+                <li class="{% if request.path == '/' %}active{% endif %}"><a href="{{ url_for('index') }}">首页</a></li>
+                <li>
+                    <a href="javascript:;">业务介绍 ▾</a>
+                    <ul class="submenu">
+                        <li><a href="{{ url_for('business_list', category='main') }}">主营产品</a></li>
+                        <li><a href="{{ url_for('business_list', category='value_added') }}">增值服务</a></li>
+                        <li><a href="{{ url_for('business_list', category='marketing') }}">市场活动</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="javascript:;">网上营业厅 ▾</a>
+                    <ul class="submenu">
+                        <li><a href="{{ url_for('hall_list', category='price') }}">价格与时效</a></li>
+                        <li><a href="{{ url_for('hall_list', category='wechat') }}">微信服务</a></li>
+                        <li><a href="{{ url_for('hall_list', category='forbidden') }}">禁运品</a></li>
+                    </ul>
+                </li>
+                <li><a href="{{ url_for('tracking') }}">货物追踪</a></li>
+                <li>
+                    <a href="javascript:;">帮助支持 ▾</a>
+                    <ul class="submenu">
+                        <li><a href="{{ url_for('help_list', category='knowledge') }}">基本常识</a></li>
+                        <li><a href="{{ url_for('help_list', category='download') }}">下载中心</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="javascript:;">公司新闻 ▾</a>
+                    <ul class="submenu">
+                        <li><a href="{{ url_for('news_list', category='company') }}">新闻中心</a></li>
+                        <li><a href="{{ url_for('news_list', category='industry') }}">行业资讯</a></li>
+                    </ul>
+                </li>
+                <li><a href="{{ url_for('branches_list') }}">网点分布</a></li>
+                <li>
+                    <a href="javascript:;">关于安速通 ▾</a>
+                    <ul class="submenu">
+                        <li><a href="{{ url_for('about_page', category='profile') }}">公司简介</a></li>
+                        <li><a href="{{ url_for('about_page', category='history') }}">发展历程</a></li>
+                        <li><a href="{{ url_for('about_page', category='recruit') }}">人才招聘</a></li>
+                        <li><a href="{{ url_for('about_page', category='notice') }}">公司公告</a></li>
+                        <li><a href="{{ url_for('about_page', category='culture') }}">企业文化</a></li>
+                        <li><a href="{{ url_for('contact_page') }}">联系我们</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <!-- <div class="tel-header">
+                <div>
+                    <div class="label">服务热线</div>
+                    <div class="num">{{ hotline or '400-888-8888' }}</div>
+                </div>
+            </div> -->
+        </div>
+    </nav>
+
+    {% block content %}{% endblock %}
+
+    <!-- 联系我们(底部模块) -->
+    <div class="section section-dark">
+        <div class="container">
+            <div class="contact-grid">
+                <div class="contact-card">
+                    <h4>关于安速通</h4>
+                    <p style="line-height:2;">
+                        深圳市安速通物流有限公司，原名东尓威货运有限公司，成立于2008年10月，于2011年更名为深圳市安速通物流有限公司。</p>
+                </div>
+                <div class="contact-card">
+                    <h4>服务热线</h4>
+                    <p style="font-size:13px; color:var(--text-muted);">7×24 小时客户服务</p>
+                    <div class="hot-line">{{ hotline or '0755-85265156' }}</div>
+                    <p>Fax: 0755-29854560</p>
+                    <p>投诉建议:cs@ansuto.com</p>
+                </div>
+                <div class="contact-card">
+                    <h4>公司总部</h4>
+                    <p style="line-height:2.2;">
+                        <strong style="color:#fff;">总部地址:</strong><br>
+                        {{ company_address or '广东省深圳市宝安区沙井镇新沙路与西环路交汇处竞德园11号首层' }}<br>
+                        <strong style="color:#fff;">营业时间:</strong><br>
+                        周一至周日 08:00 - 22:00
+                    </p>
+                </div>
+                <div class="contact-card">
+                    <h4>快捷入口</h4>
+                    <ul>
+                        <li><a href="{{ url_for('tracking') }}">» 货物追踪</a></li>
+                        <li><a href="{{ url_for('hall_list', category='price') }}">» 价格与时效</a></li>
+                        <li><a href="{{ url_for('branches_list') }}">» 网点分布</a></li>
+                        <li><a href="{{ url_for('help_list', category='download') }}">» 资料下载</a></li>
+                        <li><a href="{{ url_for('news_list', category='company') }}">» 新闻中心</a></li>
+                        <li><a href="{{ url_for('contact_page') }}">» 联系我们</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部版权 -->
+    <footer class="footer">
+        <div class="container">
+            <div>Copyright © 2026 {{ site_name or '安速通物流' }} 版权所有 &nbsp;|&nbsp; 粤ICP备15113714号</div>
+            <div>专业的国际国内物流服务提供商 &nbsp;|&nbsp; 技术支持:安速通信息中心</div>
+        </div>
+    </footer>
+
+    <script>
+        // Banner 自动切换
+        (function () {
+            const slides = document.querySelectorAll('.banner-slide');
+            const dots = document.querySelectorAll('.banner-dots span');
+            if (!slides.length) return;
+            let idx = 0;
+            function show(n) {
+                slides.forEach((s, i) => s.classList.toggle('active', i === n));
+                dots.forEach((d, i) => d.classList.toggle('active', i === n));
+                idx = n;
+            }
+            setInterval(() => { show((idx + 1) % slides.length); }, 5000);
+            dots.forEach((d, i) => d.addEventListener('click', () => show(i)));
+        })();
+    </script>
+</body>
+
+</html>

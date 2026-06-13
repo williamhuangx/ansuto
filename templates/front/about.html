@@ -1,0 +1,78 @@
+{% extends "front/base.html" %}
+{% block content %}
+<div class="page-banner">
+    <div class="container">
+        <h1>{{ title or '关于安速通' }}</h1>
+        <div class="en">About Us</div>
+    </div>
+</div>
+<div class="page-breadcrumb">
+    <div class="container">
+        <a href="{{ url_for('index') }}">首页</a>
+        <span class="sep">/</span>
+        <span style="color:var(--accent);">{{ title }}</span>
+    </div>
+</div>
+<div class="container">
+    <div class="page-layout">
+        <aside>
+            <div class="side-menu">
+                <h3>关于安速通<span class="en">About</span></h3>
+                <ul>
+                    <li class="{% if category=='profile' %}active{% endif %}"><a href="{{ url_for('about_page', category='profile') }}">公司简介</a></li>
+                    <li class="{% if category=='history' %}active{% endif %}"><a href="{{ url_for('about_page', category='history') }}">发展历程</a></li>
+                    <li class="{% if category=='culture' %}active{% endif %}"><a href="{{ url_for('about_page', category='culture') }}">企业文化</a></li>
+                    <li class="{% if category=='structure' %}active{% endif %}"><a href="{{ url_for('about_page', category='structure') }}">组织架构</a></li>
+                    <li class="{% if category=='video' %}active{% endif %}"><a href="{{ url_for('about_page', category='video') }}">走进安速通</a></li>
+                    <li class="{% if category=='notice' %}active{% endif %}"><a href="{{ url_for('about_page', category='notice') }}">公司公告</a></li>
+                    <li class="{% if category=='recruit' %}active{% endif %}"><a href="{{ url_for('about_page', category='recruit') }}">人才招聘</a></li>
+                </ul>
+            </div>
+            <div class="side-contact">
+                <div class="label">CONTACT US</div>
+                <div class="tel">{{ hotline or '400-888-8888' }}</div>
+                <div class="small">期待您的加入与咨询</div>
+            </div>
+        </aside>
+        <div class="page-content">
+            <h2>{{ title }}</h2>
+            {% if category in ('recruit', 'notice', 'news') %}
+            <div style="margin-top:20px;">
+                {% for item in items %}
+                <a href="{{ url_for('about_detail', aid=item['id']) }}" class="news-list-item" style="text-decoration:none; color:#333; cursor:pointer;">
+                    <div class="date-box">
+                        <div class="d">{% set d = item.get('created_at') or '' %}{% if d and d|string|length >= 10 %}{{ (d|string)[8:10] }}{% else %}01{% endif %}</div>
+                        <div class="ym">{% set d = item.get('created_at') or '' %}{% if d and d|string|length >= 7 %}{{ (d|string)[:7] }}{% else %}2024-01{% endif %}</div>
+                    </div>
+                    <div class="body">
+                        <div class="title">{{ item.get('title', '') }}</div>
+                        <div class="summary">{% set s = item.get('content') or '' %}{{ s[:100] if s|length > 100 else s }}...</div>
+                    </div>
+                    <div class="arrow">›</div>
+                </a>
+                {% else %}
+                <div style="text-align:center; padding:60px 0; color:var(--text-muted);">
+                    <p style="font-size:50px; margin-bottom:10px;">📝</p>
+                    <p>暂无内容</p>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="article-content" style="margin-top:20px;">
+                {% for item in items %}
+                <div style="padding:24px 0; border-bottom:1px dashed var(--border);">
+                    <h3 style="color:var(--primary); font-size:19px;">{{ item.get('title', '') }}</h3>
+                    <p style="line-height:2; white-space: pre-line;">{{ item.get('content') or '' }}</p>
+                </div>
+                {% else %}
+                <div style="text-align:center; padding:60px 0; color:var(--text-muted);">
+                    <p style="font-size:50px; margin-bottom:10px;">📑</p>
+                    <p>暂无内容,敬请期待</p>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

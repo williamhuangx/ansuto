@@ -1,0 +1,52 @@
+{% extends "front/base.html" %}
+{% block content %}
+<div class="page-banner">
+    <div class="container">
+        <h1>业务详情</h1>
+        <div class="en">Service Details</div>
+    </div>
+</div>
+<div class="page-breadcrumb">
+    <div class="container">
+        <a href="{{ url_for('index') }}">首页</a>
+        <span class="sep">/</span>
+        <a href="{{ url_for('business_list', category=item.get('category')) }}">业务介绍</a>
+        <span class="sep">/</span>
+        <span style="color:var(--accent);">{{ item.get('title') }}</span>
+    </div>
+</div>
+<div class="container">
+    <div class="page-layout">
+        <aside>
+            <div class="side-menu">
+                <h3>业务介绍<span class="en">Our Services</span></h3>
+                <ul>
+                    <li><a href="{{ url_for('business_list', category='main') }}">主营产品</a></li>
+                    <li><a href="{{ url_for('business_list', category='value_added') }}">增值服务</a></li>
+                    <li><a href="{{ url_for('business_list', category='marketing') }}">市场活动</a></li>
+                </ul>
+            </div>
+            <div class="side-contact">
+                <div class="label">SERVICE HOTLINE</div>
+                <div class="tel">{{ hotline or '400-888-8888' }}</div>
+                <div class="small">欢迎来电咨询详情</div>
+            </div>
+        </aside>
+        <div class="page-content">
+            <div class="article-title">{{ item.get('title', '') }}</div>
+            <div class="article-meta">
+                <span>分类: {{ item.get('category', '') }}</span>
+                <span>发布时间: {{ item.get('updated_at') or item.get('created_at') }}</span>
+            </div>
+            <div class="article-content">
+                <p>{{ item.get('content') or '内容待完善...' }}</p>
+                <div style="margin-top:40px; padding:26px; background:var(--bg-gray); border-radius:6px; border-left:4px solid var(--accent);">
+                    <h3 style="color:var(--primary); margin-top:0;">如需了解更多,请联系我们</h3>
+                    <p style="margin-bottom:0;">服务热线: <strong style="color:var(--accent); font-size:18px;">{{ hotline or '400-888-8888' }}</strong></p>
+                    <p>公司邮箱: service@ansu-express.com</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

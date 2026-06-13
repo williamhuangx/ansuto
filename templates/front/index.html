@@ -1,0 +1,232 @@
+{% extends "front/base.html" %}
+{% block content %}
+
+<!-- Banner -->
+<div class="banner">
+    <div class="banner-slide active">
+        <div class="banner-decoration"></div>
+        <div class="banner-content">
+            <div class="banner-subtitle">PROFESSIONAL LOGISTICS SERVICES</div>
+            <h1 class="banner-title">专业<em>高效</em>的物流运输<br>让货物安全<em>畅达</em>世界</h1>
+            <p class="banner-desc">安速通物流,深耕物流行业多年,覆盖国际国内多条精品线路,为客户提供安全、快捷、专业的一站式物流解决方案。</p>
+            <div class="banner-buttons">
+                <a href="{{ url_for('tracking') }}" class="btn btn-primary">立即查询运单</a>
+                <a href="{{ url_for('business_list', category='main') }}" class="btn btn-outline">了解主营产品</a>
+            </div>
+        </div>
+    </div>
+    <div class="banner-slide">
+        <div class="banner-decoration"></div>
+        <div class="banner-content">
+            <div class="banner-subtitle">GLOBAL FREIGHT NETWORK</div>
+            <h1 class="banner-title">覆盖<em>全国</em>的网点分布<br>国际国内<em>双线路</em>运行</h1>
+            <p class="banner-desc">全国主要城市分布服务网点,国际航线覆盖东南亚、欧美、中东等地区,让您的货物安全送达每一个目的地。</p>
+            <div class="banner-buttons">
+                <a href="{{ url_for('branches_list') }}" class="btn btn-primary">查看网点分布</a>
+                <a href="{{ url_for('hall_list', category='price') }}" class="btn btn-outline">查询价格时效</a>
+            </div>
+        </div>
+    </div>
+    <div class="banner-slide">
+        <div class="banner-decoration"></div>
+        <div class="banner-content">
+            <div class="banner-subtitle">QUALITY SERVICE COMMITMENT</div>
+            <h1 class="banner-title">专业团队<em>贴心</em>服务<br>您的<em>专属</em>物流管家</h1>
+            <p class="banner-desc">一对一客户服务,7×24小时响应,标准化操作流程,让您随时掌控货物动态,体验真正省心无忧的物流服务。</p>
+            <div class="banner-buttons">
+                <a href="{{ url_for('contact_page') }}" class="btn btn-primary">联系我们</a>
+                <a href="{{ url_for('about_page', category='profile') }}" class="btn btn-outline">走进安速通</a>
+            </div>
+        </div>
+    </div>
+    <div class="banner-dots">
+        <span class="active"></span><span></span><span></span>
+    </div>
+</div>
+
+<!-- 快速查询 -->
+<div class="container">
+    <div class="quick-search">
+        <div class="qs-title">
+            <div class="icon">⌖</div>
+            <div>
+                <h3>运单实时查询</h3>
+                <p>输入运单号,获取货物实时位置信息</p>
+            </div>
+        </div>
+        <form class="qs-form" method="post" action="{{ url_for('tracking') }}">
+            <input type="text" name="tracking_no" placeholder="请输入您的运单号,如 AST202401010001" required>
+            <button type="submit">立即查询</button>
+        </form>
+        <div class="qs-tips">支持 7×24 小时查询</div>
+    </div>
+</div>
+
+<!-- 主营产品 -->
+<section class="section">
+    <div class="container">
+        <div class="section-header">
+            <div class="en">MAIN PRODUCTS</div>
+            <h2>主营产品</h2>
+            <div class="divider"></div>
+            <p>我们为您提供多元化的物流服务,满足不同行业、不同场景的运输需求</p>
+        </div>
+        <div class="business-grid">
+            {% for item in (business_main or [])[:6] %}
+            <div class="business-card">
+                <div class="icon">✦</div>
+                <h3>{{ item.get('title', '') }}</h3>
+                <p style="font-size:13px; line-height:1.9;">{% set c = item.get('content') or '' %}{{ c[:100] if c|length > 100 else c }}{% if c|length > 100 %}...{% endif %}</p>
+                <a href="{{ url_for('business_detail', bid=item['id']) }}" class="link-more">了解详情</a>
+            </div>
+            {% else %}
+            <div class="business-card" style="grid-column: 1 / -1;">
+                <h3>国际快递专线</h3>
+                <p>通达全球 200+ 国家和地区,提供快速、稳定、高性价比的国际快递服务</p>
+                <a href="#" class="link-more">了解详情</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- 增值服务 -->
+<section class="section section-gray">
+    <div class="container">
+        <div class="section-header">
+            <div class="en">VALUE-ADDED SERVICES</div>
+            <h2>增值服务</h2>
+            <div class="divider"></div>
+            <p>提供专业增值服务,为您的货物全程保驾护航</p>
+        </div>
+        <div class="advantage-grid">
+            {% for item in (business_value or [])[:4] %}
+            <div class="advantage-card">
+                <div class="num">0{{ loop.index }}</div>
+                <h4>{{ item.get('title', '') }}</h4>
+                <p>{% set s = item.get('content') or '' %}{{ s[:80] if s|length > 80 else s }}</p>
+            </div>
+            {% else %}
+            <div class="advantage-card">
+                <div class="num">01</div>
+                <h4>保价服务</h4>
+                <p>专业保险方案,运输安全无忧,全程保障您的货物价值</p>
+            </div>
+            <div class="advantage-card">
+                <div class="num">02</div>
+                <h4>代收货款</h4>
+                <p>安全便捷的代收货款服务,资金安全快速回笼</p>
+            </div>
+            <div class="advantage-card">
+                <div class="num">03</div>
+                <h4>签收回单</h4>
+                <p>签收信息实时可查,电子回单环保高效</p>
+            </div>
+            <div class="advantage-card">
+                <div class="num">04</div>
+                <h4>包装服务</h4>
+                <p>专业包装方案,针对不同货物提供最优防护措施</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- 关于我们 简介 -->
+<section class="section">
+    <div class="container">
+        <div class="about-layout">
+            <div class="about-text">
+                <div class="en-title">ABOUT ANSU EXPRESS</div>
+                <h2>关于安速通物流</h2>
+                <div class="divider"></div>
+                <p class="lead">专业 · 高效 · 安全 · 可信赖</p>
+                <p>安速通物流是一家集国际国内快递、仓储配送、货运代理、供应链解决方案于一体的综合性物流服务企业。公司秉承"诚信、专业、高效、共赢"的经营理念,致力于为广大客户提供优质的一站式物流服务。</p>
+                <p>经过多年的快速发展,安速通物流在全国主要城市建立了完善的服务网络,并与全球 200 多个国家和地区的物流伙伴建立了稳定的合作关系。我们的目标是:让每一份托付都安全、准时、高效地送达目的地。</p>
+                <div class="about-features">
+                    <div class="f-item">
+                        <div class="label">服务宗旨</div>
+                        <div class="value">客户至上</div>
+                    </div>
+                    <div class="f-item">
+                        <div class="label">企业愿景</div>
+                        <div class="value">行业领先</div>
+                    </div>
+                    <div class="f-item">
+                        <div class="label">核心价值</div>
+                        <div class="value">专业诚信</div>
+                    </div>
+                    <div class="f-item">
+                        <div class="label">服务承诺</div>
+                        <div class="value">准时送达</div>
+                    </div>
+                </div>
+                <div style="margin-top:30px;">
+                    <a href="{{ url_for('about_page', category='profile') }}" class="btn btn-primary btn-sm">了解更多 →</a>
+                    <a href="{{ url_for('contact_page') }}" class="btn btn-sm"
+                        style="border-color:var(--primary);color:var(--primary); margin-left:10px;">联系我们</a>
+                </div>
+            </div>
+            <div class="about-image">
+                <div class="overlay-text">
+                    ANSU<br>EXPRESS
+                    <div class="sub">PROFESSIONAL LOGISTICS</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 新闻资讯 -->
+<section class="section section-gray">
+    <div class="container">
+        <div class="section-header">
+            <div class="en">NEWS & INFORMATION</div>
+            <h2>新闻资讯</h2>
+            <div class="divider"></div>
+            <p>了解公司最新动态,掌握行业前沿资讯</p>
+        </div>
+        <div class="news-grid">
+            {% for item in (news_latest or [])[:3] %}
+            <div class="news-card" onclick="location.href='{{ url_for('news_detail', nid=item['id']) }}'"
+                style="cursor:pointer;">
+                <div class="cover">
+                    <div class="icon-decor">NEWS</div>
+                    <div class="date-tag">
+                        <div class="d">{% set d = item.get('created_at') or '' %}{% if d and d|string|length >= 10 %}{{ (d|string)[8:10] }}{% else %}01{% endif %}</div>
+                        <div class="ym">{% set d = item.get('created_at') or '' %}{% if d and d|string|length >= 7 %}{{ (d|string)[:7] }}{% else %}2024-01{% endif %}</div>
+                    </div>
+                    <div class="cat-tag">{{ '公司新闻' if item.get('category')=='company' else '行业资讯' }}</div>
+                </div>
+                <div class="body">
+                    <h3>{{ item.get('title', '') }}</h3>
+                    <p>{% set s = item.get('content') or '' %}{{ s[:80] if s|length > 80 else s }}</p>
+                    <div class="meta">
+                        <span>来源: 安速通物流</span>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            {% for i in range(3) %}
+            <div class="news-card">
+                <div class="cover">
+                    <div class="icon-decor">NEWS</div>
+                    <div class="date-tag">
+                        <div class="d">15</div>
+                        <div class="ym">2024-01</div>
+                    </div>
+                    <div class="cat-tag">公司新闻</div>
+                </div>
+                <div class="body">
+                    <h3>安速通物流新增东南亚国际快递专线正式开通</h3>
+                    <p>为更好地服务跨境电商客户,公司新增东南亚多条国际精品快递专线,时效与价格均具有显著优势。</p>
+                    <div class="meta"><span>来源: 安速通物流</span></div>
+                </div>
+            </div>
+            {% endfor %}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{% endblock %}

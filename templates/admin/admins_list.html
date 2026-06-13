@@ -1,0 +1,39 @@
+{% extends "admin/base.html" %}
+{% block page_title %}管理员管理{% endblock %}
+{% block content %}
+<div class="card">
+    <div class="card-title">
+        管理员列表
+        <span class="actions"><a href="{{ url_for('admin_admins_new') }}" class="btn btn-sm btn-accent">➕ 新增管理员</a></span>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>账号</th>
+                <th>姓名</th>
+                <th>角色</th>
+                <th>状态</th>
+                <th>最后登录</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td>{{ item['id'] }}</td>
+                <td><strong>{{ item['username'] }}</strong></td>
+                <td>{{ item['real_name'] or '-' }}</td>
+                <td>{% if item['role'] == 'super' %}<span class="badge badge-info">超级管理员</span>{% else %}<span class="badge badge-active">编辑员</span>{% endif %}</td>
+                <td>{% if item.get('status', 1) == 1 %}<span class="badge badge-active">启用</span>{% else %}<span class="badge badge-inactive">禁用</span>{% endif %}</td>
+                <td>{{ item['last_login'] or '未登录' }}</td>
+                <td>
+                    <a href="{{ url_for('admin_admins_edit', item_id=item['id']) }}" class="btn btn-sm btn-default">编辑</a>
+                    <a href="{{ url_for('admin_admins_delete', item_id=item['id']) }}" class="btn btn-sm btn-danger" onclick="return confirm('确定删除该管理员?')">删除</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

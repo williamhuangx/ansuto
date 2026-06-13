@@ -1,0 +1,46 @@
+{% extends "admin/base.html" %}
+{% block page_title %}Banner - {% if item and item.get('id') %}编辑{% else %}新增{% endif %}{% endblock %}
+{% block content %}
+<div class="card">
+    <div class="card-title">
+        {% if item and item.get('id') %}编辑 Banner{% else %}新增 Banner{% endif %}
+        <span class="actions"><a href="{{ url_for('admin_banner') }}" class="btn btn-sm btn-default">← 返回</a></span>
+    </div>
+    <form method="post">
+        <div class="form-row">
+            <div><label>标题</label><input type="text" name="title" value="{{ item['title'] if item else '' }}"></div>
+            <div>
+                <label>位置</label>
+                <select name="position">
+                    <option value="home" {% if not item or item.get('position') == 'home' %}selected{% endif %}>首页</option>
+                    <option value="about" {% if item and item.get('position') == 'about' %}selected{% endif %}>关于</option>
+                    <option value="news" {% if item and item.get('position') == 'news' %}selected{% endif %}>新闻</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-row full">
+            <div><label>副标题</label><input type="text" name="subtitle" value="{{ item['subtitle'] if item else '' }}"></div>
+        </div>
+        <div class="form-row full">
+            <div><label>图片地址 *</label><input type="text" name="image_url" value="{{ item['image_url'] if item else '' }}" required placeholder="https://example.com/banner.jpg"></div>
+        </div>
+        <div class="form-row full">
+            <div><label>跳转链接</label><input type="text" name="link_url" value="{{ item['link_url'] if item else '' }}" placeholder="https:// 或 /index"></div>
+        </div>
+        <div class="form-row">
+            <div><label>排序</label><input type="number" name="sort_order" value="{{ item['sort_order'] if item else 0 }}"></div>
+            <div>
+                <label>状态</label>
+                <select name="status">
+                    <option value="1" {% if not item or item.get('status', 1) == 1 %}selected{% endif %}>启用</option>
+                    <option value="0" {% if item and item.get('status') == 0 %}selected{% endif %}>禁用</option>
+                </select>
+            </div>
+        </div>
+        <div style="text-align:center; padding:16px 0;">
+            <button type="submit" class="btn btn-primary">保存</button>
+            <a href="{{ url_for('admin_banner') }}" class="btn btn-default">取消</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

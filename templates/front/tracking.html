@@ -1,0 +1,152 @@
+{% extends "front/base.html" %}
+{% block content %}
+<div class="page-banner">
+    <div class="container">
+        <h1>货物追踪</h1>
+        <div class="en">TRACK YOUR SHIPMENT</div>
+    </div>
+</div>
+<div class="page-breadcrumb">
+    <div class="container">
+        <a href="{{ url_for('index') }}">首页</a>
+        <span class="sep">/</span>
+        <span style="color:var(--accent);">货物追踪</span>
+    </div>
+</div>
+<div class="container">
+    <div class="page-layout">
+        <aside>
+            <div class="side-menu">
+                <h3>货物追踪<span class="en">Tracking</span></h3>
+                <ul>
+                    <li class="active"><a href="#">运单查询</a></li>
+                    <li><a href="{{ url_for('hall_list', category='price') }}">价格时效</a></li>
+                </ul>
+            </div>
+            <div class="side-contact">
+                <div class="label">客服热线</div>
+                <div class="tel">{{ hotline or '400-888-8888' }}</div>
+                <div class="small">查询中遇到问题请随时拨打客服电话,我们将为您专业解答。</div>
+            </div>
+        </aside>
+        <div class="page-content">
+            <h2>运单查询</h2>
+            <div
+                style="padding: 30px; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%); color:#fff; border-radius:8px; margin-top:20px;">
+                <p style="margin-bottom:18px; font-size:15px;">请在下方输入您的运单号,点击查询按钮,系统将为您展示详细的物流信息。</p>
+                <form method="post" style="display:flex; gap:14px; flex-wrap: wrap;">
+                    <input type="text" name="tracking_no" value="{{ tracking_no }}"
+                        placeholder="请输入运单号,如:AST202401010001"
+                        style="flex:1; min-width:220px; padding:14px 18px; border:none; border-radius:4px; font-size:15px; outline:none; color:#333;">
+                    <button type="submit"
+                        style="padding:14px 34px; background: var(--accent); border:none; color:#fff; font-size:15px; font-weight:600; border-radius:4px; cursor:pointer;">立即查询</button>
+                </form>
+                <p style="font-size:12px; margin-top:16px; opacity:.85;">※ 运单号可在快递单右上角查找,如有疑问请拨打客服热线</p>
+            </div>
+
+            {% if result %}
+            <div style="margin-top:30px;">
+                <h3 style="color:var(--primary); border-bottom:2px solid var(--border); padding-bottom:14px;">✓ 运单信息
+                </h3>
+                <!-- <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:14px 22px; margin-top:20px; padding:24px; background:var(--bg-gray); border-radius:6px;">
+                    <div><strong>快递单号:</strong> <span style="color:var(--accent); font-weight:600;">{{ result['main']['tracking_no'] }}</span></div>
+                    <div><strong>托运时间:</strong> {{ result['main']['shipping_time'] or '-' }}</div>
+                    <div><strong>运输类型:</strong> {{ result['main']['transport_type'] or '-' }}</div>
+                    <div><strong>送货方式:</strong> {{ result['main']['delivery_method'] or '-' }}</div>
+                    <div><strong>始发地:</strong> {{ result['main']['origin'] or '-' }}</div>
+                    <div><strong>目的地:</strong> {{ result['main']['destination'] or '-' }}</div>
+                    <div><strong>寄件公司:</strong> {{ result['main']['sender_company'] or '-' }}</div>
+                    <div><strong>发件人:</strong> {{ result['main']['sender'] or '-' }} ({{ result['main']['sender_phone'] or '-' }})</div>
+                    <div><strong>收件公司:</strong> {{ result['main']['receiver_company'] or '-' }}</div>
+                    <div><strong>收件人:</strong> {{ result['main']['receiver'] or '-' }} ({{ result['main']['receiver_phone'] or '-' }})</div>
+                    <div><strong>品名:</strong> {{ result['main']['goods_name'] or '-' }}</div>
+                    <div><strong>重量:</strong> {% if result['main']['weight'] %}{{ result['main']['weight'] }} kg{% else %}-{% endif %}</div>
+                    <div><strong>体积:</strong> {% if result['main']['volume'] %}{{ result['main']['volume'] }} m³{% else %}-{% endif %}</div>
+                    <div><strong>件数:</strong> {{ result['main']['pieces'] or '-' }}</div>
+                    <div><strong>包装:</strong> {{ result['main']['package'] or '-' }}</div>
+                    <div><strong>计费重量:</strong> {% if result['main']['charge_weight'] %}{{ result['main']['charge_weight'] }} kg{% else %}-{% endif %}</div>
+                    <div><strong>运费:</strong> {% if result['main']['freight'] %}¥{{ result['main']['freight'] }}{% elif result['main'].get('fee') %}¥{{ result['main']['fee'] }}{% else %}-{% endif %}</div>
+                    <div><strong>到付金额:</strong> {% if result['main']['cod_amount'] %}¥{{ result['main']['cod_amount'] }}{% else %}-{% endif %}</div>
+                    <div><strong>付款方式:</strong> {{ result['main']['payment_method'] or '-' }}</div>
+                    <div><strong>保险:</strong> {% if result['main']['insurance'] %}¥{{ result['main']['insurance'] }}{% else %}-{% endif %}</div>
+                    <div><strong>目前状态:</strong>
+                        {% if result['main']['status'] == 'delivered' %}<span style="color:#1a9641; font-weight:600;">● 已送达</span>
+                        {% elif result['main']['status'] == 'transit' %}<span style="color:#2b8cbe; font-weight:600;">● 运输中</span>
+                        {% elif result['main']['status'] == 'lost' %}<span style="color:#d7191c; font-weight:600;">● 异常</span>
+                        {% else %}<span style="color:#fdae61; font-weight:600;">● 待发货</span>{% endif %}
+                    </div>
+                    <div><strong>签回单:</strong> {{ result['main']['need_receipt'] or '-' }}</div>
+                    <div><strong>回单情况:</strong> {{ result['main']['receipt_status'] or '-' }}</div>
+                    {% if result['main']['pickup_request'] %}<div><strong>提货要求:</strong> {{ result['main']['pickup_request'] }}</div>{% endif %}
+                    {% if result['main']['remark'] %}<div style="grid-column: 1 / -1;"><strong>备注:</strong><br><span style="white-space: pre-wrap;">{{ result['main']['remark'] }}</span></div>{% endif %}
+                </div> -->
+
+
+                <div
+                    style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:14px 22px; margin-top:20px; padding:24px; background:var(--bg-gray); border-radius:6px;">
+                    <div><strong>快递单号:</strong> <span style="color:var(--accent); font-weight:600;">{{
+                            result['main']['tracking_no'] }}</span></div>
+                    <div><strong></strong></div>
+                    <div><strong></strong></div>
+                    <div><strong>发件人:</strong> {{ result['main']['sender'] or '-' }} </div>
+                    <div><strong>收件人:</strong> {{ result['main']['receiver'] or '-' }} </div>
+                    <div><strong>目前状态:</strong>
+                        {% if result['main']['status'] == 'delivered' %}<span style="color:#1a9641; font-weight:600;">●
+                            已送达</span>
+                        {% elif result['main']['status'] == 'transit' %}<span style="color:#2b8cbe; font-weight:600;">●
+                            运输中</span>
+                        {% elif result['main']['status'] == 'lost' %}<span style="color:#d7191c; font-weight:600;">●
+                            异常</span>
+                        {% else %}<span style="color:#fdae61; font-weight:600;">● 待发货</span>{% endif %}
+                    </div>
+                </div>
+
+                <h3
+                    style="color:var(--primary); margin-top:34px; border-bottom:2px solid var(--border); padding-bottom:14px;">
+                    ⏱ 物流轨迹</h3>
+                <div style="margin-top:20px; position:relative; padding-left:30px;">
+                    {% for detail in result['details'] %}
+                    {% if loop.first %}
+                    {% set dot_color = 'var(--accent)' %}
+                    {% else %}
+                    {% set dot_color = '#999' %}
+                    {% endif %}
+                    <div style="padding:14px 0; border-bottom:1px dashed var(--border); position:relative;">
+                        <div
+                            style="position:absolute; left:-30px; top:18px; width:14px; height:14px; background:{{ dot_color }}; border-radius:50%; border:3px solid #fff; box-shadow:0 0 0 2px {{ dot_color }};">
+                        </div>
+                        <div style="font-size:14px; color:var(--text-light); margin-bottom:4px;">{{ detail['node_time']
+                            }}</div>
+                        <div style="font-size:15px; color:#333; font-weight:500;">【{{ detail['location'] }}】{{
+                            detail['status_text'] }}</div>
+                        {% if detail['operator'] %}<div
+                            style="font-size:12px; color:var(--text-muted); margin-top:4px;">操作员: {{ detail['operator']
+                            }}</div>{% endif %}
+                    </div>
+                    {% else %}
+                    <div style="padding:30px; color:var(--text-muted);">
+                        <p style="font-size:15px;">暂无物流轨迹信息</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% elif not_found %}
+            <div
+                style="margin-top:30px; padding:40px; background:#fff5f0; border:1px solid #f5c89e; border-radius:6px; text-align:center;">
+                <div style="font-size:60px; margin-bottom:14px;">⚠</div>
+                <h3 style="color: var(--accent);">未查询到该运单</h3>
+                <p>请核对您输入的运单号是否正确,或稍后再试。</p>
+                <p style="font-size:13px; color:var(--text-muted); margin-top:10px;">您输入的运单号: <strong>{{ tracking_no
+                        }}</strong></p>
+            </div>
+            {% else %}
+            <div
+                style="margin-top:30px; padding:40px; background:var(--bg-gray); border-radius:6px; text-align:center; color:var(--text-muted);">
+                <p style="font-size:50px; margin-bottom:14px;">📦</p>
+                <p>请在上方输入您的运单号进行查询</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

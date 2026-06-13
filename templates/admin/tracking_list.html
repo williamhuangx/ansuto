@@ -1,0 +1,88 @@
+{% extends "admin/base.html" %}
+{% block page_title %}货物追踪 - 运单管理{% endblock %}
+{% block content %}
+
+<div class="card">
+    <div class="card-title">
+        运单列表
+        <span class="actions"><a href="{{ url_for('admin_tracking_new') }}" class="btn btn-sm btn-accent">➕ 新增运单</a></span>
+    </div>
+    <div class="toolbar">
+        <form method="get" class="search">
+            <input type="text" name="keyword" placeholder="快递单号 / 发件人 / 收件人 / 寄件公司" value="{{ keyword }}">
+            <select name="status">
+                <option value="">全部状态</option>
+                <option value="pending" {% if status == 'pending' %}selected{% endif %}>待发货</option>
+                <option value="transit" {% if status == 'transit' %}selected{% endif %}>运输中</option>
+                <option value="delivered" {% if status == 'delivered' %}selected{% endif %}>已送达</option>
+                <option value="lost" {% if status == 'lost' %}selected{% endif %}>异常</option>
+            </select>
+            <button type="submit" class="btn btn-sm btn-primary">🔍 搜索</button>
+        </form>
+        <span style="color:#999; font-size:13px;">共 {{ total }} 条记录</span>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>快递单号</th>
+                <th>托运时间</th>
+                <th>始发地</th>
+                <th>目的地</th>
+                <th>寄件公司/发件人</th>
+                <th>收件人</th>
+                <th>品名</th>
+                <th>重量</th>
+                <th>运费</th>
+                <th>状态</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td>{{ item['id'] }}</td>
+                <td><strong style="color:var(--accent);">{{ item['tracking_no'] }}</strong></td>
+                <td style="font-size:12px;">{{ item['shipping_time'] or '-' }}</td>
+                <td>{{ item['origin'] or '-' }}</td>
+                <td>{{ item['destination'] or '-' }}</td>
+                <td>
+                    {% if item['sender_company'] %}{{ item['sender_company'] }}<br>{% endif %}
+                    {% if item['sender'] %}{{ item['sender'] }} ({{ item['sender_phone'] or '-' }}){% endif %}
+                </td>
+                <td>
+                    {% if item['receiver_company'] %}{{ item['receiver_company'] }}<br>{% endif %}
+                    {% if item['receiver'] %}{{ item['receiver'] }} ({{ item['receiver_phone'] or '-' }}){% endif %}
+                </td>
+                <td>{{ item['goods_name'] or '-' }}</td>
+                <td>{% if item['weight'] %}{{ item['weight'] }} kg{% else %}-{% endif %}</td>
+                <td>{% if item['freight'] %}¥{{ item['freight'] }}{% else %}-{% endif %}</td>
+                <td>
+                    {% if item['status'] == 'delivered' %}<span class="badge badge-active">已送达</span>
+                    {% elif item['status'] == 'transit' %}<span class="badge badge-info">运输中</span>
+                    {% elif item['status'] == 'lost' %}<span class="badge badge-inactive">异常</span>
+                    {% else %}<span class="badge badge-warn">待发货</span>{% endif %}
+                </td>
+                <td>
+                    <a href="{{ url_for('admin_tracking_detail', tid=item['id']) }}" class="btn btn-sm btn-default">节点</a>
+                    <a href="{{ url_for('admin_tracking_edit', tid=item['id']) }}" class="btn btn-sm btn-primary">编辑</a>
+                    <a href="{{ url_for('admin_tracking_delete', tid=item['id']) }}" class="btn btn-sm btn-danger" onclick="return confirm('确定删除?')">删除</a>
+                </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="12" style="text-align:center; padding: 40px; color: #999;">暂无运单,请先添加</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% if total_pages > 1 %}
+    <div class="pagination">
+        <span class="pagination-info">共 {{ total }} 条 / 第 {{ page }} 页</span>
+        {% if has_prev %}<a href="?page={{ prev_num }}{% if status %}&status={{ status }}{% endif %}{% if keyword %}&keyword={{ keyword }}{% endif %}">上一页</a>{% endif %}
+        {% for p in range(1, total_pages + 1) %}
+        {% if p == page %}<span class="current">{{ p }}</span>{% else %}<a href="?page={{ p }}{% if status %}&status={{ status }}{% endif %}{% if keyword %}&keyword={{ keyword }}{% endif %}">{{ p }}</a>{% endif %}
+        {% endfor %}
+        {% if has_next %}<a href="?page={{ next_num }}{% if status %}&status={{ status }}{% endif %}{% if keyword %}&keyword={{ keyword }}{% endif %}">下一页</a>{% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

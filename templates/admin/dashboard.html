@@ -1,0 +1,63 @@
+{% extends "admin/base.html" %}
+{% block page_title %}仪表盘 - 数据概览{% endblock %}
+{% block content %}
+
+<div class="stats-grid">
+    {% for label, value in stats.items() %}
+    <div class="stat-card">
+        <div class="icon">📊</div>
+        <div>
+            <div class="num">{{ value }}</div>
+            <div class="label">{{ label }}</div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="card">
+    <div class="card-title">
+        最新客户留言
+        <span class="actions"><a href="{{ url_for('admin_contacts') }}" class="btn btn-sm btn-primary">查看全部</a></span>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>姓名</th>
+                <th>电话</th>
+                <th>主题</th>
+                <th>留言时间</th>
+                <th>状态</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for m in inquiries %}
+            <tr>
+                <td>{{ m['name'] }}</td>
+                <td>{{ m['phone'] }}</td>
+                <td>{{ m['subject'] }}</td>
+                <td>{{ m['created_at'] }}</td>
+                <td>
+                    {% if m['is_read'] %}<span class="badge badge-active">已读</span>{% else %}<span class="badge badge-warn">未读</span>{% endif %}
+                    {% if m['is_replied'] %}<span class="badge badge-info">已回复</span>{% endif %}
+                </td>
+                <td><a href="{{ url_for('admin_contacts_detail', cid=m['id']) }}" class="btn btn-sm btn-default">查看</a></td>
+            </tr>
+            {% else %}
+            <tr><td colspan="6" style="text-align: center; padding: 30px; color: #999;">暂无留言</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="card">
+    <div class="card-title">快捷操作</div>
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
+        <a href="{{ url_for('admin_business_new') }}" class="btn btn-default" style="padding: 20px; text-align: center;">➕ 新增业务介绍</a>
+        <a href="{{ url_for('admin_news_new') }}" class="btn btn-default" style="padding: 20px; text-align: center;">📰 发布新闻</a>
+        <a href="{{ url_for('admin_tracking_new') }}" class="btn btn-default" style="padding: 20px; text-align: center;">🚚 新增运单</a>
+        <a href="{{ url_for('admin_branches_new') }}" class="btn btn-default" style="padding: 20px; text-align: center;">🏢 新增网点</a>
+    </div>
+</div>
+
+{% endblock %}

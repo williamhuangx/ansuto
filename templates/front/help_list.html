@@ -1,0 +1,76 @@
+{% extends "front/base.html" %}
+{% block content %}
+<div class="page-banner">
+    <div class="container">
+        <h1>{{ title or '帮助与支持' }}</h1>
+        <div class="en">Help & Support</div>
+    </div>
+</div>
+<div class="page-breadcrumb">
+    <div class="container">
+        <a href="{{ url_for('index') }}">首页</a>
+        <span class="sep">/</span>
+        <span>帮助与支持</span>
+        <span class="sep">/</span>
+        <span style="color:var(--accent);">{{ title }}</span>
+    </div>
+</div>
+<div class="container">
+    <div class="page-layout">
+        <aside>
+            <div class="side-menu">
+                <h3>帮助中心<span class="en">Help Center</span></h3>
+                <ul>
+                    <li class="{% if category=='knowledge' %}active{% endif %}"><a href="{{ url_for('help_list', category='knowledge') }}">基本常识</a></li>
+                    <li class="{% if category=='download' %}active{% endif %}"><a href="{{ url_for('help_list', category='download') }}">下载中心</a></li>
+                </ul>
+            </div>
+            <div class="side-contact">
+                <div class="label">SERVICE HOTLINE</div>
+                <div class="tel">{{ hotline or '400-888-8888' }}</div>
+                <div class="small">更多帮助请联系客服</div>
+            </div>
+        </aside>
+        <div class="page-content">
+            <h2>{{ title }}</h2>
+            {% if category == 'download' %}
+            <table style="width:100%; border-collapse:collapse; margin-top:20px;">
+                <thead>
+                    <tr style="background:var(--primary); color:#fff;">
+                        <th style="padding:14px; text-align:left;">文件名称</th>
+                        <th style="padding:14px; text-align:left;">文件说明</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                    <tr style="border-bottom:1px solid var(--border);">
+                        <td style="padding:12px;">📄 {{ item.get('title', '') }}</td>
+                        <td style="padding:12px; color:var(--text-light); font-size:14px;">{% set s = item.get('content') or '' %}{{ s[:60] if s|length > 60 else s }}</td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="2" style="padding:40px; text-align:center; color:var(--text-muted);">暂无下载文件</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div style="margin-top:20px;">
+                {% for item in items %}
+                <a href="{{ url_for('help_detail', hid=item['id']) }}" style="display:block; text-decoration:none; color:#333; padding:20px; border-bottom:1px dashed var(--border); transition:all .2s;">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <h3 style="font-size:17px; color:var(--primary); margin:0;">{{ item.get('title', '') }}</h3>
+                        <span style="color:var(--accent); font-size:13px;">查看详情 →</span>
+                    </div>
+                    <p style="margin:10px 0 0; font-size:14px; color:var(--text-light); line-height:1.8;">{% set s = item.get('content') or '' %}{{ s[:120] if s|length > 120 else s }}...</p>
+                </a>
+                {% else %}
+                <div style="text-align:center; padding:60px 0; color:var(--text-muted);">
+                    <p style="font-size:50px; margin-bottom:10px;">📚</p>
+                    <p>暂无内容,敬请期待</p>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

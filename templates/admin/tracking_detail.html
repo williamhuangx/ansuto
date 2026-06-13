@@ -1,0 +1,567 @@
+{% extends "admin/base.html" %}
+{% block page_title %}运单详情 - {{ item['tracking_no'] }}{% endblock %}
+{% block content %}
+<style>
+.waybill-wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+.waybill {
+    background: #f7f7f7;
+    border: 3px solid #1f2937;
+    border-radius: 6px;
+    padding: 0;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+    overflow: hidden;
+    font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+}
+.waybill-header {
+    background: linear-gradient(135deg, #1e40af 0%, #b91c1c 100%);
+    color: #fff;
+    padding: 18px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 3px solid #1f2937;
+}
+.waybill-header .brand { font-size: 22px; font-weight: 800; letter-spacing: 2px; }
+.waybill-header .brand-en { font-size: 11px; opacity: 0.85; letter-spacing: 1px; margin-top: 4px; }
+.waybill-header .no-box {
+    background: #fff;
+    color: #1f2937;
+    padding: 12px 24px;
+    border-radius: 4px;
+    text-align: right;
+    min-width: 280px;
+}
+.waybill-header .no-box .label { font-size: 11px; color: #6b7280; letter-spacing: 2px; }
+.waybill-header .no-box .no { font-size: 24px; font-weight: 800; letter-spacing: 2px; font-family: "Consolas", monospace; color: #b91c1c; }
+.waybill-header .status-tag {
+    display: inline-block;
+    margin-top: 6px;
+    padding: 3px 10px;
+    background: {% if item['status'] == 'delivered' %}#16a34a{% elif item['status'] == 'transit' %}#1e40af{% elif item['status'] == 'lost' %}#dc2626{% else %}#ea580c{% endif %};
+    color: #fff;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.waybill-info-bar {
+    background: #fff;
+    padding: 12px 24px;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 2px dashed #9ca3af;
+    font-size: 13px;
+    color: #374151;
+    flex-wrap: wrap;
+    gap: 16px 22px;
+}
+.waybill-info-bar .item { display: flex; flex-direction: column; }
+.waybill-info-bar .item .lbl { color: #6b7280; font-size: 11px; font-weight: 600; letter-spacing: 1px; }
+.waybill-info-bar .item .val { font-size: 14px; color: #111827; font-weight: 600; margin-top: 2px; }
+
+.waybill-main {
+    display: grid;
+    grid-template-columns: 1fr 30px 1fr;
+    background: #fff;
+    border-bottom: 2px dashed #9ca3af;
+}
+.waybill-part {
+    padding: 22px 24px;
+}
+.waybill-divider {
+    background: repeating-linear-gradient(0deg, #f7f7f7 0, #f7f7f7 8px, #fff 8px, #fff 16px);
+    border-left: 1px dashed #9ca3af;
+    border-right: 1px dashed #9ca3af;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    writing-mode: vertical-rl;
+    font-size: 12px;
+    color: #6b7280;
+    letter-spacing: 4px;
+}
+.waybill-part h3 {
+    margin: 0 0 14px 0;
+    padding: 4px 10px;
+    background: #1f2937;
+    color: #fff;
+    font-size: 13px;
+    letter-spacing: 3px;
+    display: inline-block;
+    border-radius: 3px;
+}
+.waybill-part .sender-tag { background: #1e40af; }
+.waybill-part .receiver-tag { background: #b91c1c; }
+
+.waybill-row {
+    display: flex;
+    margin-bottom: 8px;
+    padding: 4px 0;
+}
+.waybill-row .lbl {
+    min-width: 70px;
+    color: #6b7280;
+    font-size: 12px;
+    font-weight: 600;
+    padding-top: 2px;
+}
+.waybill-row .val {
+    flex: 1;
+    font-size: 14px;
+    color: #111827;
+    font-weight: 500;
+}
+.waybill-row .val.big { font-size: 17px; font-weight: 700; color: #111827; }
+.waybill-row .val.phone { font-family: "Consolas", monospace; color: #1e40af; }
+
+.waybill-address {
+    border: 1px solid #d1d5db;
+    border-radius: 3px;
+    padding: 10px 12px;
+    margin-top: 8px;
+    background: #fafafa;
+    font-size: 14px;
+    color: #111827;
+    line-height: 1.7;
+    font-weight: 500;
+}
+
+.waybill-section {
+    background: #fff;
+    padding: 18px 22px;
+    border-bottom: 2px dashed #9ca3af;
+}
+.waybill-section h4 {
+    margin: 0 0 12px 0;
+    font-size: 13px;
+    color: #1f2937;
+    letter-spacing: 2px;
+    border-left: 4px solid #b91c1c;
+    padding-left: 10px;
+}
+.waybill-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+.waybill-grid .field {
+    background: #fafafa;
+    border: 1px solid #e5e7eb;
+    border-radius: 3px;
+    padding: 8px 10px;
+}
+.waybill-grid .field .lbl {
+    display: block;
+    font-size: 11px;
+    color: #6b7280;
+    margin-bottom: 4px;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+.waybill-grid .field .val { font-size: 15px; color: #111827; font-weight: 600; font-family: inherit; }
+.waybill-grid .field .val.money { color: #b91c1c; font-family: "Consolas", monospace; }
+.waybill-grid .field .val.num { font-family: "Consolas", monospace; }
+
+.waybill-bottom {
+    background: #fff;
+    padding: 16px 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+}
+.waybill-bottom .remark-box {
+    flex: 1;
+    border: 1px solid #d1d5db;
+    padding: 12px;
+    border-radius: 3px;
+}
+.waybill-bottom .remark-box .lbl { font-size: 11px; color: #6b7280; font-weight: 600; letter-spacing: 1px; display: block; margin-bottom: 6px; }
+.waybill-bottom .remark-box .val { font-size: 13px; color: #111827; line-height: 1.7; white-space: pre-wrap; }
+.waybill-bottom .remark-box .empty { color: #9ca3af; font-size: 12px; }
+.waybill-bottom .receipt-box {
+    width: 260px;
+    border: 2px dashed #b91c1c;
+    background: #fef2f2;
+    padding: 12px 14px;
+    border-radius: 3px;
+}
+.waybill-bottom .receipt-box .lbl { font-size: 11px; color: #b91c1c; font-weight: 700; letter-spacing: 2px; display: block; margin-bottom: 6px; }
+.waybill-bottom .receipt-box .val { font-size: 13px; color: #374151; margin-bottom: 8px; }
+.waybill-bottom .receipt-box .line { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px; }
+.waybill-bottom .receipt-box .line .k { color: #6b7280; }
+.waybill-bottom .receipt-box .line .v { color: #111827; font-weight: 600; }
+
+.waybill-barcode {
+    text-align: center;
+    padding: 14px 0 10px;
+    background: #fff;
+    border-top: 2px solid #1f2937;
+}
+.waybill-barcode .bar {
+    letter-spacing: 3px;
+    font-size: 48px;
+    line-height: 1;
+    color: #111;
+    font-weight: bold;
+    letter-spacing: 3px;
+    opacity: 0.85;
+    font-family: "Consolas", monospace;
+    background: repeating-linear-gradient(90deg, transparent 0, transparent 2px, #111 2px, #111 3px, transparent 3px, transparent 5px, #111 5px, #111 8px, transparent 8px, transparent 10px);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: inline-block;
+}
+.waybill-barcode .no-text {
+    font-size: 13px;
+    letter-spacing: 3px;
+    color: #374151;
+    font-family: "Consolas", monospace;
+    margin-top: 6px;
+}
+
+.waybill-toolbar {
+    padding: 14px 24px;
+    background: #fff;
+    border-bottom: 2px solid #1f2937;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.waybill-toolbar .actions a,
+.waybill-toolbar .actions button {
+    padding: 8px 18px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    margin-left: 6px;
+}
+.waybill-toolbar .actions .btn-edit {
+    background: #1e40af;
+    color: #fff;
+}
+.waybill-toolbar .actions .btn-back {
+    background: #e5e7eb;
+    color: #374151;
+}
+.waybill-toolbar .actions .btn-del {
+    background: #dc2626;
+    color: #fff;
+}
+
+/* 节点区域 */
+.nodes-card {
+    margin-top: 24px;
+    background: #fff;
+    border: 2px solid #1f2937;
+    border-radius: 6px;
+    overflow: hidden;
+}
+.nodes-card .nodes-header {
+    background: linear-gradient(135deg, #1e40af 0%, #b91c1c 100%);
+    color: #fff;
+    padding: 14px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.nodes-card .nodes-header .title {
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+.nodes-card .nodes-header .subtitle { font-size: 11px; opacity: 0.85; letter-spacing: 1px; margin-top: 4px; }
+.nodes-card .add-node {
+    padding: 18px 22px;
+    background: #fff8f0;
+    border-bottom: 1px dashed #d1d5db;
+}
+.nodes-card .add-node .row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 10px;
+}
+.nodes-card .add-node .row .field label { font-size: 11px; color: #6b7280; font-weight: 600; display: block; margin-bottom: 4px; letter-spacing: 1px; }
+.nodes-card .add-node .row .field input {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 3px;
+    font-size: 13px;
+    box-sizing: border-box;
+}
+.nodes-card .add-node .row.full { grid-template-columns: 1fr; }
+.nodes-card .add-node .row .submit {
+    text-align: center;
+    padding-top: 8px;
+}
+.nodes-card .add-node .row .submit button {
+    padding: 10px 36px;
+    background: linear-gradient(135deg, #1e40af 0%, #b91c1c 100%);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.nodes-list {
+    padding: 20px 24px;
+    background: #fff;
+    position: relative;
+}
+.node-item {
+    display: grid;
+    grid-template-columns: 140px 1fr 80px;
+    gap: 14px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+    border: 1px solid #e5e7eb;
+    border-left: 4px solid #1e40af;
+    border-radius: 4px;
+    background: #fafafa;
+    align-items: center;
+}
+.node-item.latest {
+    border-left-color: #b91c1c;
+    background: #fef2f2;
+}
+.node-item .node-time {
+    font-size: 12px;
+    color: #374151;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    line-height: 1.6;
+    font-family: "Consolas", monospace;
+}
+.node-item .node-time .date { font-size: 13px; color: #111; display: block; }
+.node-item .node-time .clock { font-size: 12px; color: #6b7280; }
+.node-item .node-body .loc { font-size: 13px; color: #1e40af; font-weight: 700; margin-bottom: 4px; }
+.node-item .node-body .desc { font-size: 13px; color: #111827; line-height: 1.6; }
+.node-item .node-body .op { font-size: 11px; color: #9ca3af; margin-top: 4px; }
+.node-item .node-actions {
+    text-align: right;
+}
+.node-item .node-actions a {
+    padding: 5px 10px;
+    background: #fee2e2;
+    color: #b91c1c;
+    border-radius: 3px;
+    font-size: 11px;
+    text-decoration: none;
+    font-weight: 600;
+}
+.node-item .node-actions a:hover { background: #fecaca; }
+
+.empty-nodes {
+    padding: 40px;
+    text-align: center;
+    color: #9ca3af;
+    font-size: 14px;
+}
+
+.back-link {
+    display: block;
+    margin-bottom: 14px;
+    color: var(--primary);
+    font-size: 13px;
+    text-decoration: none;
+}
+.back-link:hover { text-decoration: underline; }
+
+@media (max-width: 860px) {
+    .waybill-main { grid-template-columns: 1fr; }
+    .waybill-divider { display: none; }
+    .waybill-grid { grid-template-columns: repeat(2, 1fr); }
+    .waybill-bottom { flex-direction: column; }
+    .waybill-bottom .receipt-box { width: 100%; }
+    .nodes-card .add-node .row { grid-template-columns: 1fr; }
+    .node-item { grid-template-columns: 1fr; }
+    .node-item .node-actions { text-align: left; }
+}
+</style>
+
+<div class="waybill-wrap">
+    <a href="{{ url_for('admin_tracking') }}" class="back-link">← 返回运单列表</a>
+
+    <div class="waybill">
+        <!-- 顶部 -->
+        <div class="waybill-header">
+            <div>
+                <div class="brand">安速通物流 ANSUTO EXPRESS</div>
+                <div class="brand-en">国际空运 · 海运 · 陆运 · 专线</div>
+            </div>
+            <div class="no-box">
+                <div class="label">TRACKING NO. / 运单号</div>
+                <div class="no">{{ item['tracking_no'] }}</div>
+                <div class="status-tag">
+                    {% if item['status'] == 'delivered' %}已送达 DELIVERED{% elif item['status'] == 'transit' %}运输中 IN TRANSIT{% elif item['status'] == 'lost' %}异常 EXCEPTION{% else %}待发货 PENDING{% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- 工具栏 -->
+        <div class="waybill-toolbar">
+            <div style="font-size: 12px; color: #6b7280;">
+                <strong style="color: #374151;">托运时间:</strong> {{ item['shipping_time'] or '-' }} &nbsp;|&nbsp;
+                <strong style="color: #374151;">运输类型:</strong> {{ item['transport_type'] or '-' }} &nbsp;|&nbsp;
+                <strong style="color: #374151;">送货方式:</strong> {{ item['delivery_method'] or '-' }} &nbsp;|&nbsp;
+                <strong style="color: #374151;">付款方式:</strong> {{ item['payment_method'] or '-' }}
+            </div>
+            <div class="actions">
+                <a href="{{ url_for('admin_tracking_edit', tid=item['id']) }}" class="btn-edit">✎ 编辑运单</a>
+                <a href="{{ url_for('admin_tracking') }}" class="btn-back">返回列表</a>
+            </div>
+        </div>
+
+        <!-- 主区: 寄件人/收件人 -->
+        <div class="waybill-main">
+            <div class="waybill-part">
+                <h3 class="sender-tag">FROM / 寄件人</h3>
+                <div class="waybill-row"><span class="lbl">寄件公司</span><span class="val">{{ item['sender_company'] or '-' }}</span></div>
+                <div class="waybill-row"><span class="lbl">发件人</span><span class="val big">{{ item['sender'] or '-' }}</span></div>
+                <div class="waybill-row"><span class="lbl">联系电话</span><span class="val phone">{{ item['sender_phone'] or '-' }}</span></div>
+                <div class="waybill-address">
+                    <strong style="color: #1e40af; font-size: 12px;">始发地 / ORIGIN:</strong><br>
+                    {{ item['origin'] or '-' }}
+                </div>
+            </div>
+
+            <div class="waybill-divider">↗ 送达 TO ↗</div>
+
+            <div class="waybill-part">
+                <h3 class="receiver-tag">TO / 收件人</h3>
+                <div class="waybill-row"><span class="lbl">收件公司</span><span class="val">{{ item['receiver_company'] or '-' }}</span></div>
+                <div class="waybill-row"><span class="lbl">收件人</span><span class="val big">{{ item['receiver'] or '-' }}</span></div>
+                <div class="waybill-row"><span class="lbl">联系电话</span><span class="val phone">{{ item['receiver_phone'] or '-' }}</span></div>
+                <div class="waybill-address">
+                    <strong style="color: #b91c1c; font-size: 12px;">目的地 / DESTINATION:</strong><br>
+                    {{ item['destination'] or '-' }}
+                </div>
+            </div>
+        </div>
+
+        <!-- 货物信息 -->
+        <div class="waybill-section">
+            <h4>CARGO DETAILS / 货物信息</h4>
+            <div class="waybill-grid">
+                <div class="field"><span class="lbl">品名 / DESCRIPTION</span><div class="val">{{ item['goods_name'] or '-' }}</div></div>
+                <div class="field"><span class="lbl">包装 / PACKAGE</span><div class="val">{{ item['package'] or '-' }}</div></div>
+                <div class="field"><span class="lbl">件数 / PIECES</span><div class="val num">{{ item['pieces'] or '-' }}</div></div>
+                <div class="field"><span class="lbl">签回单 / RECEIPT</span><div class="val">{{ item['need_receipt'] or '否' }}</div></div>
+                <div class="field"><span class="lbl">重量(kg)</span><div class="val num">{{ item['weight'] or '-' }}</div></div>
+                <div class="field"><span class="lbl">体积(m³)</span><div class="val num">{{ item['volume'] or '-' }}</div></div>
+                <div class="field"><span class="lbl">计费重量(kg)</span><div class="val num">{{ item['charge_weight'] or '-' }}</div></div>
+                <div class="field"><span class="lbl">回单情况</span><div class="val">{{ item['receipt_status'] or '-' }}</div></div>
+            </div>
+        </div>
+
+        <!-- 费用信息 -->
+        <div class="waybill-section">
+            <h4>CHARGES / 费用明细 (¥)</h4>
+            <div class="waybill-grid">
+                <div class="field"><span class="lbl">运费 / FREIGHT</span><div class="val money">{{ item['freight'] or '-' }}</div></div>
+                <div class="field"><span class="lbl">到付金额 / COD</span><div class="val money">{{ item['cod_amount'] or '-' }}</div></div>
+                <div class="field"><span class="lbl">保险费</span><div class="val money">{{ item['insurance'] or '-' }}</div></div>
+                <div class="field"><span class="lbl">包装费</span><div class="val money">{{ item['package_fee'] or '-' }}</div></div>
+                <div class="field"><span class="lbl">卸货费</span><div class="val money">{{ item['unload_fee'] or '-' }}</div></div>
+                <div class="field"><span class="lbl">其它费用</span><div class="val money">{{ item['other_fee'] or '-' }}</div></div>
+                <div class="field"><span class="lbl">提货要求</span><div class="val" style="font-size: 13px;">{{ item['pickup_request'] or '-' }}</div></div>
+                <div class="field"><span class="lbl">回单备注</span><div class="val" style="font-size: 13px;">{{ item['receipt_remark'] or '-' }}</div></div>
+            </div>
+        </div>
+
+        <!-- 备注 + 签收区 -->
+        <div class="waybill-bottom">
+            <div class="remark-box">
+                <span class="lbl">REMARK / 备注</span>
+                {% if item['remark'] %}<span class="val">{{ item['remark'] }}</span>{% else %}<span class="empty">(无备注)</span>{% endif %}
+            </div>
+            <div class="receipt-box">
+                <span class="lbl">SIGNATURE / 签收区</span>
+                <span class="val">本人确认收到上述运单货物,外包装完好,数量相符。</span>
+                <div class="line"><span class="k">签收人签名</span><span class="v">_____________</span></div>
+                <div class="line"><span class="k">日期 Date</span><span class="v">_____________</span></div>
+                <div class="line"><span class="k">快递员</span><span class="v">_____________</span></div>
+            </div>
+        </div>
+
+        <!-- 条形码 -->
+        <div class="waybill-barcode">
+            <div class="bar">||| | || | ||| || | | |||</div>
+            <div class="no-text">{{ item['tracking_no'] }}</div>
+        </div>
+    </div>
+
+    <!-- 节点管理 -->
+    <div class="nodes-card">
+        <div class="nodes-header">
+            <div>
+                <div class="title">物流轨迹 / TRACKING LOG</div>
+                <div class="subtitle">共 {{ details|length }} 条记录 · 最新节点在上方</div>
+            </div>
+        </div>
+
+        <form method="post" class="add-node">
+            <div class="row">
+                <div class="field">
+                    <label>节点时间 * / NODE TIME</label>
+                    <input type="text" name="node_time" required placeholder="如: 2024-06-15 14:30:00">
+                </div>
+                <div class="field">
+                    <label>所在地 / LOCATION</label>
+                    <input type="text" name="location" placeholder="如: 杭州萧山转运中心">
+                </div>
+                <div class="field">
+                    <label>操作员 / OPERATOR</label>
+                    <input type="text" name="operator" placeholder="选填">
+                </div>
+            </div>
+            <div class="row full">
+                <div class="field">
+                    <label>状态描述 * / STATUS DESCRIPTION</label>
+                    <input type="text" name="status_text" required placeholder="如: 货物已到达,正在分拣">
+                </div>
+            </div>
+            <div class="row full">
+                <div class="submit">
+                    <button type="submit">＋ 添加物流节点</button>
+                </div>
+            </div>
+        </form>
+
+        <div class="nodes-list">
+            {% for d in details %}
+            <div class="node-item {% if loop.first %}latest{% endif %}">
+                <div class="node-time">
+                    <span class="date">{{ (d['node_time']|string)[:10] }}</span>
+                    <span class="clock">{{ (d['node_time']|string)[11:19] }}</span>
+                </div>
+                <div class="node-body">
+                    <div class="loc">📍 {{ d['location'] }} {% if loop.first %}<span style="background: #b91c1c; color: #fff; padding: 2px 8px; font-size: 10px; border-radius: 3px; margin-left: 6px; letter-spacing: 1px;">最新 LATEST</span>{% endif %}</div>
+                    <div class="desc">{{ d['status_text'] }}</div>
+                    {% if d['operator'] %}<div class="op">操作员: {{ d['operator'] }}</div>{% endif %}
+                </div>
+                <div class="node-actions">
+                    <a href="{{ url_for('admin_tracking_detail_delete', did=d['id']) }}" onclick="return confirm('确定删除该节点?');">删除</a>
+                </div>
+            </div>
+            {% else %}
+            <div class="empty-nodes">
+                📦 暂无物流节点,请在上方添加节点记录运单动态。
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

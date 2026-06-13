@@ -1,0 +1,18 @@
+{% extends "front/base.html" %}
+{% block content %}
+<div class="page-banner">
+    <div class="container">
+        <h1>页面未找到</h1>
+        <div class="en">404 PAGE NOT FOUND</div>
+    </div>
+</div>
+<div class="container">
+    <div style="padding: 80px 40px; text-align:center; margin:40px 0;">
+        <div style="font-size: 120px; font-weight: 800; color: var(--primary); letter-spacing:10px; margin-bottom: 20px;">404</div>
+        <h2 style="color: var(--accent); margin-bottom:14px;">抱歉,您访问的页面不存在</h2>
+        <p style="color: var(--text-light); font-size:15px; margin-bottom:30px;">可能由于链接错误或页面已被删除/移动</p>
+        <a href="{{ url_for('index') }}" class="btn btn-primary">返回首页</a>
+        <a href="{{ url_for('contact_page') }}" class="btn" style="border:2px solid var(--primary); color:var(--primary); margin-left:10px;">联系我们</a>
+    </div>
+</div>
+{% endblock %}

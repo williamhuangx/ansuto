@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}安速通物流 - 管理后台{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+
+<body>
+    <div class="admin-layout">
+        <aside class="sidebar">
+            <div class="side-brand">
+                安速通物流
+                <span class="small">ADMINISTRATION</span>
+            </div>
+            <ul class="side-menu">
+                <!-- <li class="group-title">主菜单</li> -->
+                <li class="{% if request.endpoint == 'admin_dashboard' %}active{% endif %}">
+                    <a href="{{ url_for('admin_dashboard') }}">📊 仪表盘</a>
+                </li>
+                <!-- <li class="group-title">业务介绍</li> -->
+                <li class="{% if '/admin/business' in request.path %}active{% endif %}">
+                    <a href="{{ url_for('admin_business') }}">📦 业务介绍</a>
+                </li>
+                <!-- <li class="group-title">网上营业厅</li> -->
+                <li class="{% if '/admin/hall' in request.path %}active{% endif %}">
+                    <a href="{{ url_for('admin_hall') }}">🏷 价格与时效</a>
+                </li>
+                <!-- <li class="group-title">货物追踪</li> -->
+                <li class="{% if '/admin/tracking' in request.path %}active{% endif %}">
+                    <a href="{{ url_for('admin_tracking') }}">🚚 货物管理</a>
+                </li>
+                <!-- <li class="group-title">帮助支持</li> -->
+                <li class="{% if '/admin/help' in request.path %}active{% endif %}">
+                    <a href="{{ url_for('admin_help') }}">📚 帮助中心</a>
+                </li>
+                <!-- <li class="group-title">新闻资讯</li> -->
+                <li class="{% if '/admin/news' in request.path %}active{% endif %}">
+                    <a href="{{ url_for('admin_news') }}">📰 新闻资讯</a>
+                </li>
+                <!-- <li class="group-title">网点分布</li> -->
+                <li class="{% if '/admin/branches' in request.path %}active{% endif %}">
+                    <a href="{{ url_for('admin_branches') }}">🏢 网点管理</a>
+                </li>
+                <!-- <li class="group-title">关于安速通</li> -->
+                <li class="{% if '/admin/abouts' in request.path %}active{% endif %}">
+                    <a href="{{ url_for('admin_abouts') }}">📑 公司信息</a>
+                </li>
+                <!-- <li class="group-title">联系与互动</li> -->
+                <li class="{% if '/admin/contacts' in request.path %}active{% endif %}">
+                    <a href="{{ url_for('admin_contacts') }}">✉ 客户留言</a>
+                </li>
+                <!-- <li class="group-title">站点管理</li> -->
+                <li class="{% if '/admin/banner' in request.path %}active{% endif %}">
+                    <a href="{{ url_for('admin_banner') }}">🖼 Banner 管理</a>
+                </li>
+                <li class="{% if '/admin/config' in request.path %}active{% endif %}">
+                    <a href="{{ url_for('admin_config') }}">⚙ 站点配置</a>
+                </li>
+                {% if session.get('role') == 'super' %}
+                <!-- <li class="group-title">系统管理</li> -->
+                <li class="{% if '/admin/admins' in request.path %}active{% endif %}">
+                    <a href="{{ url_for('admin_admins') }}">👤 管理员</a>
+                </li>
+                <li class="{% if '/admin/logs' in request.path %}active{% endif %}">
+                    <a href="{{ url_for('admin_logs') }}">📝 操作日志</a>
+                </li>
+                {% endif %}
+                <!-- <li class="group-title">其他</li> -->
+                <li class="{% if '/admin/admins/password' in request.path %}active{% endif %}">
+                    <a href="{{ url_for('admin_admins_password') }}">🔑 修改密码</a>
+                </li>
+            </ul>
+        </aside>
+
+        <div class="main">
+            <div class="topbar">
+                <div class="page-title">
+                    {% block page_title %}管理后台{% endblock %}
+                </div>
+                <div class="user">
+                    <span>👤 {{ session.get('username', 'admin') }} ({{ session.get('role', 'editor') }})</span>
+                    <a href="{{ url_for('index') }}" target="_blank">前台</a>
+                    <a href="{{ url_for('admin_logout') }}">退出登录</a>
+                </div>
+            </div>
+            <div class="content">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category if category in ['success','danger','warning','info'] else 'success' }}"
+                    style="margin-bottom: 16px;">
+                    {{ message }}
+                </div>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
+
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

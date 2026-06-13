@@ -1,0 +1,66 @@
+{% extends "admin/base.html" %}
+{% block page_title %}客户留言{% endblock %}
+{% block content %}
+
+<div class="card">
+    <div class="card-title">
+        客户留言 / 咨询列表
+        <span class="actions"><a href="{{ url_for('admin_contacts_company') }}" class="btn btn-sm btn-accent">公司联系方式</a></span>
+    </div>
+    <div class="toolbar">
+        <form method="get" class="search">
+            <input type="text" name="keyword" placeholder="姓名 / 电话 / 主题" value="{{ keyword }}">
+            <button type="submit" class="btn btn-sm btn-primary">🔍 搜索</button>
+        </form>
+        <span style="color:#999; font-size:13px;">共 {{ total }} 条留言</span>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>姓名</th>
+                <th>公司</th>
+                <th>电话</th>
+                <th>邮箱</th>
+                <th>主题</th>
+                <th>状态</th>
+                <th>时间</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td>{{ item['id'] }}</td>
+                <td><strong>{{ item['name'] or '-' }}</strong></td>
+                <td>{{ item['company'] or '-' }}</td>
+                <td>{{ item['phone'] or '-' }}</td>
+                <td>{{ item['email'] or '-' }}</td>
+                <td>{{ item['subject'] or '-' }}</td>
+                <td>
+                    {% if item.get('is_read') %}<span class="badge badge-active">已读</span>{% else %}<span class="badge badge-warn">未读</span>{% endif %}
+                    {% if item.get('is_replied') %}<span class="badge badge-info">已回复</span>{% endif %}
+                </td>
+                <td>{{ item['created_at'] }}</td>
+                <td>
+                    <a href="{{ url_for('admin_contacts_detail', cid=item['id']) }}" class="btn btn-sm btn-default">查看</a>
+                    <a href="{{ url_for('admin_contacts_delete', cid=item['id']) }}" class="btn btn-sm btn-danger" onclick="return confirm('确定删除?')">删除</a>
+                </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="9" style="text-align:center; padding:40px; color:#999;">暂无留言</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% if total_pages > 1 %}
+    <div class="pagination">
+        <span class="pagination-info">共 {{ total }} 条 / 第 {{ page }} 页</span>
+        {% if has_prev %}<a href="?page={{ prev_num }}">上一页</a>{% endif %}
+        {% for p in range(1, total_pages + 1) %}
+        {% if p == page %}<span class="current">{{ p }}</span>{% else %}<a href="?page={{ p }}">{{ p }}</a>{% endif %}
+        {% endfor %}
+        {% if has_next %}<a href="?page={{ next_num }}">下一页</a>{% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

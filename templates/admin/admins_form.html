@@ -1,0 +1,52 @@
+{% extends "admin/base.html" %}
+{% block page_title %}管理员 - {% if item and item.get('id') %}编辑{% else %}新增{% endif %}{% endblock %}
+{% block content %}
+<div class="card">
+    <div class="card-title">
+        {% if item and item.get('id') %}编辑管理员{% else %}新增管理员{% endif %}
+        <span class="actions"><a href="{{ url_for('admin_admins') }}" class="btn btn-sm btn-default">← 返回</a></span>
+    </div>
+    <form method="post">
+        <div class="form-row">
+            <div><label>账号 *</label><input type="text" name="username" value="{{ item['username'] if item else '' }}" required></div>
+            <div><label>姓名</label><input type="text" name="real_name" value="{{ item['real_name'] if item else '' }}"></div>
+        </div>
+        {% if not item or not item.get('id') %}
+        <div class="form-row">
+            <div><label>密码 *</label><input type="password" name="password" required minlength="6"></div>
+            <div><label>确认密码 *</label><input type="password" name="confirm_password" required minlength="6"></div>
+        </div>
+        {% else %}
+        <div class="form-row full">
+            <div style="background:#f5f7fa; padding:10px 14px; border-radius:4px; font-size:13px; color:#666;">
+                ⓘ 如需要修改密码,请填写以下两项;不修改请留空
+            </div>
+        </div>
+        <div class="form-row">
+            <div><label>新密码(留空则不修改)</label><input type="password" name="password" minlength="6"></div>
+            <div><label>确认新密码</label><input type="password" name="confirm_password" minlength="6"></div>
+        </div>
+        {% endif %}
+        <div class="form-row">
+            <div>
+                <label>角色</label>
+                <select name="role">
+                    <option value="editor" {% if not item or item.get('role') == 'editor' %}selected{% endif %}>编辑员</option>
+                    <option value="super" {% if item and item.get('role') == 'super' %}selected{% endif %}>超级管理员</option>
+                </select>
+            </div>
+            <div>
+                <label>状态</label>
+                <select name="status">
+                    <option value="1" {% if not item or item.get('status', 1) == 1 %}selected{% endif %}>启用</option>
+                    <option value="0" {% if item and item.get('status') == 0 %}selected{% endif %}>禁用</option>
+                </select>
+            </div>
+        </div>
+        <div style="text-align:center; padding:16px 0;">
+            <button type="submit" class="btn btn-primary">保存</button>
+            <a href="{{ url_for('admin_admins') }}" class="btn btn-default">取消</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

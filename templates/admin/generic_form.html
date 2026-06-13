@@ -1,0 +1,51 @@
+{% extends "admin/base.html" %}
+{% block page_title %}{{ module_name }} - {% if item and item.get('id') %}编辑{% else %}新增{% endif %}{% endblock %}
+{% block content %}
+<div class="card">
+    <div class="card-title">
+        {{ module_name }} - {% if item and item.get('id') %}编辑{% else %}新增{% endif %}
+        <span class="actions">
+            <a href="{{ url_for('admin_' + module_key) }}" class="btn btn-sm btn-default">← 返回列表</a>
+        </span>
+    </div>
+    <form method="post">
+        <div class="form-row">
+            <div>
+                <label>分类 *</label>
+                <select name="category" required>
+                    {% for k, label in categories %}
+                    <option value="{{ k }}" {% if item and item.get('category') == k %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label>状态</label>
+                <select name="status">
+                    <option value="1" {% if item and item.get('status', 1) == 1 %}selected{% endif %}>启用</option>
+                    <option value="0" {% if item and item.get('status') == 0 %}selected{% endif %}>禁用</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-row">
+            <div>
+                <label>标题 *</label>
+                <input type="text" name="title" value="{{ item['title'] if item else '' }}" required>
+            </div>
+            <div>
+                <label>排序(小在前)</label>
+                <input type="number" name="sort_order" value="{{ item['sort_order'] if item else 0 }}">
+            </div>
+        </div>
+        <div class="form-row full">
+            <div>
+                <label>正文内容 * (支持换行)</label>
+                <textarea name="content" rows="15" required>{{ item['content'] if item else '' }}</textarea>
+            </div>
+        </div>
+        <div style="text-align:center; padding: 16px 0;">
+            <button type="submit" class="btn btn-primary">保存</button>
+            <a href="{{ url_for('admin_' + module_key) }}" class="btn btn-default">取消</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

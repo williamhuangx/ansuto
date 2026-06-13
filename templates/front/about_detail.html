@@ -1,0 +1,44 @@
+{% extends "front/base.html" %}
+{% block content %}
+<div class="page-banner">
+    <div class="container">
+        <h1>详情</h1>
+        <div class="en">Detail</div>
+    </div>
+</div>
+<div class="page-breadcrumb">
+    <div class="container">
+        <a href="{{ url_for('index') }}">首页</a>
+        <span class="sep">/</span>
+        <a href="{{ url_for('about_page', category=item.get('category')) }}">{{ item.get('category', '') }}</a>
+        <span class="sep">/</span>
+        <span style="color:var(--accent);">详情</span>
+    </div>
+</div>
+<div class="container">
+    <div class="page-layout">
+        <aside>
+            <div class="side-menu">
+                <h3>关于安速通<span class="en">About</span></h3>
+                <ul>
+                    <li><a href="{{ url_for('about_page', category='profile') }}">公司简介</a></li>
+                    <li><a href="{{ url_for('about_page', category='history') }}">发展历程</a></li>
+                    <li><a href="{{ url_for('about_page', category='culture') }}">企业文化</a></li>
+                    <li><a href="{{ url_for('about_page', category='notice') }}">公司公告</a></li>
+                    <li><a href="{{ url_for('about_page', category='recruit') }}">人才招聘</a></li>
+                </ul>
+            </div>
+        </aside>
+        <div class="page-content">
+            <div class="article-title">{{ item.get('title', '') }}</div>
+            <div class="article-meta">
+                <span>发布时间: {{ item.get('created_at', '') }}</span>
+                <span>分类: {{ item.get('category', '') }}</span>
+            </div>
+            <div class="article-content">
+                <p style="white-space: pre-line;">{{ item.get('content') or '内容待完善...' }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

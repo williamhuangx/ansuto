@@ -1,0 +1,58 @@
+{% extends "front/base.html" %}
+{% block content %}
+<div class="page-banner">
+    <div class="container">
+        <h1>{{ title or '业务介绍' }}</h1>
+        <div class="en">Business Introduction</div>
+    </div>
+</div>
+<div class="page-breadcrumb">
+    <div class="container">
+        <a href="{{ url_for('index') }}">首页</a>
+        <span class="sep">/</span>
+        <span>业务介绍</span>
+        <span class="sep">/</span>
+        <span style="color:var(--accent);">{{ title }}</span>
+    </div>
+</div>
+<div class="container">
+    <div class="page-layout">
+        <aside>
+            <div class="side-menu">
+                <h3>业务介绍<span class="en">Our Services</span></h3>
+                <ul>
+                    <li class="{% if category=='main' %}active{% endif %}"><a href="{{ url_for('business_list', category='main') }}">主营产品</a></li>
+                    <li class="{% if category=='value_added' %}active{% endif %}"><a href="{{ url_for('business_list', category='value_added') }}">增值服务</a></li>
+                    <li class="{% if category=='marketing' %}active{% endif %}"><a href="{{ url_for('business_list', category='marketing') }}">市场活动</a></li>
+                </ul>
+            </div>
+            <div class="side-contact">
+                <div class="label">SERVICE HOTLINE</div>
+                <div class="tel">{{ hotline or '400-888-8888' }}</div>
+                <div class="small">
+                    7×24 小时专业服务<br>
+                    客服在线为您解答
+                </div>
+            </div>
+        </aside>
+        <div class="page-content">
+            <h2>{{ title }}</h2>
+            <div class="business-grid" style="grid-template-columns: 1fr 1fr; margin-top:20px;">
+                {% for item in items %}
+                <div class="business-card" onclick="location.href='{{ url_for('business_detail', bid=item['id']) }}'" style="cursor:pointer;">
+                    <div class="icon">✦</div>
+                    <h3>{{ item.get('title', '') }}</h3>
+                    <p style="font-size:13px; line-height:1.9;">{% set c = item.get('content') or '' %}{{ c[:100] if c|length > 100 else c }}...</p>
+                    <a href="{{ url_for('business_detail', bid=item['id']) }}" class="link-more">查看详情</a>
+                </div>
+                {% else %}
+                <div style="grid-column:1/-1; text-align:center; padding:60px 0; color:var(--text-muted);">
+                    <p style="font-size:50px; margin-bottom:10px;">📦</p>
+                    <p>暂无内容,管理员正在紧张录入中...</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
