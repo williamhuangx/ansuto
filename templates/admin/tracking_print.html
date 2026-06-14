@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>运单面单 - {{ item['tracking_no'] }}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @page {
+            size: A4 portrait;
+            margin: 8mm;
+        }
+
+        body {
+            font-family: "Microsoft YaHei", "PingFang SC", "Heiti SC", sans-serif;
+            font-size: 11pt;
+            color: #000;
+            background: #fff;
+            line-height: 1.4;
+        }
+
+        .page {
+            width: 100%;
+            page-break-after: always;
+        }
+
+        .page:last-child {
+            page-break-after: auto;
+        }
+
+        /* 操作栏(屏幕显示用,打印时隐藏) */
+        .action-bar {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            padding: 12px 0;
+            margin-bottom: 10px;
+            background: #f3f4f6;
+            border-radius: 6px;
+        }
+
+        .action-bar button,
+        .action-bar a {
+            padding: 8px 24px;
+            font-size: 13px;
+            font-weight: 600;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            color: #fff;
+            background: #b91c1c;
+        }
+
+        .action-bar .btn-sec {
+            background: #374151;
+        }
+
+        .action-bar .btn-third {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        /* 面单主体 */
+        .waybill {
+            background: #fff;
+            border: 3px solid #000;
+            border-radius: 4px;
+            padding: 0;
+            page-break-inside: avoid;
+        }
+
+        /* 顶部品牌区 */
+        .waybill-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 22px;
+            background: #fff;
+            border-bottom: 3px double #000;
+        }
+
+        .waybill-header .brand-left {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .waybill-header .brand {
+            font-size: 22pt;
+            font-weight: 900;
+            letter-spacing: 3px;
+            color: #b91c1c;
+        }
+
+        .waybill-header .brand-en {
+            font-size: 9pt;
+            color: #374151;
+            letter-spacing: 2px;
+            margin-top: 4px;
+        }
+
+        .waybill-header .waybill-no {
+            text-align: right;
+        }
+
+        .waybill-header .waybill-no .label {
+            font-size: 9pt;
+            color: #374151;
+            font-weight: 600;
+            letter-spacing: 2px;
+        }
+
+        .waybill-header .waybill-no .no {
+            font-size: 26pt;
+            font-weight: 900;
+            color: #000;
+            letter-spacing: 3px;
+            font-family: "Consolas", "Courier New", monospace;
+            margin-top: 2px;
+        }
+
+        .waybill-header .status-bar {
+            display: inline-block;
+            margin-top: 6px;
+            padding: 4px 14px;
+
+            background: {
+                % if item['status']=='delivered' %
+            }
+
+            #16a34a {
+                % elif item['status']=='transit' %
+            }
+
+            #1e40af {
+                % elif item['status']=='lost' %
+            }
+
+            #dc2626 {
+                % else %
+            }
+
+            #ea580c {
+                % endif %
+            }
+
+            ;
+            color: #fff;
+            font-size: 10pt;
+            font-weight: 700;
+            border-radius: 3px;
+            letter-spacing: 1px;
+        }
+
+        /* 信息横条 */
+        .info-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            padding: 10px 22px;
+            background: #f9fafb;
+            border-bottom: 2px dashed #000;
+            gap: 14px;
+        }
+
+        .info-bar .item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .info-bar .item .lbl {
+            font-size: 9pt;
+            color: #374151;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .info-bar .item .val {
+            font-size: 11pt;
+            color: #000;
+            font-weight: 700;
+        }
+
+        /* 主区域 - 寄件人/收件人 */
+        .sender-receiver {
+            display: grid;
+            grid-template-columns: 1fr 2mm 1fr;
+            min-height: 130px;
+            border-bottom: 2px dashed #000;
+        }
+
+        .sender-receiver .side {
+            padding: 18px 22px;
+            position: relative;
+        }
+
+        .sender-receiver .divider {
+            border-left: 1px dashed #000;
+            border-right: 1px dashed #000;
+            background: #f9fafb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10pt;
+            color: #374151;
+            letter-spacing: 3px;
+            writing-mode: vertical-rl;
+        }
+
+        .sender-receiver .side h3 {
+            display: inline-block;
+            padding: 4px 10px;
+
+            background: {
+                % if 'sender' in 'sender' %
+            }
+
+            #1e40af {
+                % endif %
+            }
+
+            #1e40af;
+            color: #fff;
+            font-size: 11pt;
+            font-weight: 700;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+            border-radius: 2px;
+        }
+
+        .sender-receiver .side.right h3 {
+            background: #b91c1c;
+        }
+
+        .info-row {
+            display: flex;
+            margin-bottom: 6px;
+            align-items: flex-start;
+        }
+
+        .info-row .label {
+            min-width: 70px;
+            font-size: 9pt;
+            color: #374151;
+            font-weight: 600;
+            letter-spacing: 1px;
+            padding-top: 2px;
+        }
+
+        .info-row .value {
+            flex: 1;
+            font-size: 11pt;
+            color: #000;
+            font-weight: 500;
+        }
+
+        .info-row .value.big {
+            font-size: 14pt;
+            font-weight: 800;
+        }
+
+        .info-row .value.phone {
+            font-family: "Consolas", monospace;
+            color: #1e40af;
+        }
+
+        .address-box {
+            border: 1px solid #000;
+            border-radius: 2px;
+            padding: 10px 12px;
+            margin-top: 8px;
+            font-size: 11pt;
+            background: #f9fafb;
+            font-weight: 500;
+        }
+
+        .address-box .label-tag {
+            font-size: 9pt;
+            color: #374151;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 3px;
+            display: block;
+        }
+
+        /* 货物信息 */
+        .cargo-section {
+            padding: 14px 22px;
+            border-bottom: 2px dashed #000;
+        }
+
+        .cargo-section .section-title {
+            font-size: 11pt;
+            font-weight: 700;
+            color: #000;
+            letter-spacing: 2px;
+            border-left: 4px solid #b91c1c;
+            padding-left: 8px;
+            margin-bottom: 10px;
+        }
+
+        .cargo-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1px;
+            background: #000;
+            border: 1px solid #000;
+        }
+
+        .cargo-grid .cell {
+            background: #fff;
+            padding: 10px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .cargo-grid .cell .label {
+            font-size: 9pt;
+            color: #374151;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .cargo-grid .cell .value {
+            font-size: 12pt;
+            color: #000;
+            font-weight: 700;
+            font-family: inherit;
+        }
+
+        .cargo-grid .cell .value.money {
+            color: #b91c1c;
+            font-family: "Consolas", monospace;
+        }
+
+        .cargo-grid .cell .value.num {
+            font-family: "Consolas", monospace;
+        }
+
+        /* 费用信息 */
+        .charge-section {
+            padding: 14px 22px;
+            border-bottom: 2px dashed #000;
+        }
+
+        .charge-section .section-title {
+            font-size: 11pt;
+            font-weight: 700;
+            color: #000;
+            letter-spacing: 2px;
+            border-left: 4px solid #1e40af;
+            padding-left: 8px;
+            margin-bottom: 10px;
+        }
+
+        /* 底部 - 备注+签收 */
+        .bottom-section {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 10px;
+            padding: 14px 22px;
+            border-bottom: 3px solid #000;
+        }
+
+        .bottom-section .remark-box {
+            border: 1px solid #000;
+            border-radius: 2px;
+            padding: 10px 12px;
+            background: #f9fafb;
+        }
+
+        .bottom-section .remark-box .label {
+            font-size: 9pt;
+            color: #374151;
+            font-weight: 700;
+            letter-spacing: 2px;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .bottom-section .remark-box .value {
+            font-size: 10pt;
+            color: #000;
+            line-height: 1.6;
+        }
+
+        .bottom-section .sign-box {
+            border: 2px dashed #b91c1c;
+            background: #fef2f2;
+            padding: 10px 12px;
+            border-radius: 2px;
+        }
+
+        .bottom-section .sign-box .label {
+            font-size: 10pt;
+            color: #b91c1c;
+            font-weight: 800;
+            letter-spacing: 2px;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .bottom-section .sign-box .note {
+            font-size: 9pt;
+            color: #374151;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .bottom-section .sign-box .sign-line {
+            display: flex;
+            justify-content: space-between;
+            font-size: 9pt;
+            color: #374151;
+            margin-bottom: 3px;
+        }
+
+        .bottom-section .sign-box .sign-line .val {
+            color: #000;
+            font-weight: 600;
+        }
+
+        /* 条形码区 */
+        .barcode-area {
+            padding: 14px 22px 20px;
+            text-align: center;
+            background: #fff;
+        }
+
+        .barcode-area .bar {
+            font-family: "Libre Barcode 39", "Libre Barcode 128", "Consolas", monospace;
+            font-size: 56pt;
+            line-height: 1;
+            letter-spacing: 0;
+            color: #000;
+            font-weight: bold;
+            height: 60px;
+            background: repeating-linear-gradient(90deg,
+                    #000 0px, #000 2px,
+                    #fff 2px, #fff 4px,
+                    #000 4px, #000 7px,
+                    #fff 7px, #fff 12px,
+                    #000 12px, #000 15px,
+                    #fff 15px, #fff 20px);
+            background-size: 200px 100%;
+            background-repeat: repeat-x;
+            width: 100%;
+            margin: 0 auto;
+            opacity: 0.95;
+        }
+
+        .barcode-area .no-text {
+            font-size: 14pt;
+            font-family: "Consolas", monospace;
+            letter-spacing: 4px;
+            color: #000;
+            font-weight: 700;
+            margin-top: 8px;
+        }
+
+        /* 第二页 - 节点 */
+        .nodes-page {
+            padding: 10px 0;
+        }
+
+        .nodes-page .nodes-title {
+            text-align: center;
+            font-size: 16pt;
+            font-weight: 800;
+            color: #000;
+            letter-spacing: 3px;
+            padding: 10px 0;
+            border-bottom: 3px double #000;
+            margin-bottom: 14px;
+        }
+
+        .nodes-page .nodes-subtitle {
+            text-align: center;
+            font-size: 10pt;
+            color: #374151;
+            margin-top: 4px;
+            letter-spacing: 1px;
+        }
+
+        .nodes-page .node-item {
+            display: grid;
+            grid-template-columns: 130px 1fr 80px;
+            gap: 12px;
+            padding: 10px 14px;
+            margin-bottom: 6px;
+            border: 1px solid #000;
+            border-radius: 2px;
+            align-items: center;
+            page-break-inside: avoid;
+        }
+
+        .nodes-page .node-item.latest {
+            border-left: 4px solid #b91c1c;
+            background: #fef2f2;
+        }
+
+        .nodes-page .node-item .node-time {
+            font-size: 10pt;
+            color: #000;
+            font-weight: 700;
+            line-height: 1.4;
+            font-family: "Consolas", monospace;
+        }
+
+        .nodes-page .node-item .node-time .date {
+            font-size: 11pt;
+            display: block;
+            color: #000;
+        }
+
+        .nodes-page .node-item .node-time .clock {
+            font-size: 9pt;
+            color: #374151;
+        }
+
+        .nodes-page .node-item .node-body .loc {
+            font-size: 11pt;
+            color: #1e40af;
+            font-weight: 700;
+            margin-bottom: 3px;
+        }
+
+        .nodes-page .node-item .node-body .desc {
+            font-size: 10pt;
+            color: #000;
+            line-height: 1.5;
+        }
+
+        .nodes-page .node-item .node-body .op {
+            font-size: 9pt;
+            color: #374151;
+            margin-top: 3px;
+        }
+
+        .nodes-page .node-item .node-seq {
+            text-align: center;
+            font-size: 14pt;
+            font-weight: 900;
+            color: #b91c1c;
+            font-family: "Consolas", monospace;
+        }
+
+        /* 底部盖章区 */
+        .footer-stamp {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px dashed #000;
+            font-size: 9pt;
+            color: #374151;
+        }
+
+        .footer-stamp .stamp-item {
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .footer-stamp .stamp-item .label {
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: #000;
+        }
+
+        .footer-stamp .stamp-item .line {
+            border-bottom: 1px solid #000;
+            width: 120px;
+            margin: 10px auto 4px;
+        }
+
+        /* 打印专用样式 */
+        @media print {
+            body {
+                font-size: 10pt;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .action-bar {
+                display: none !important;
+            }
+
+            /* 打印时隐藏物流轨迹节点 */
+            .nodes-page {
+                display: none !important;
+            }
+
+            @page {
+                size: A4;
+                margin: 6mm;
+            }
+
+            .waybill {
+                border-width: 2px;
+            }
+
+            .waybill-header .brand {
+                font-size: 18pt;
+            }
+
+            .waybill-header .waybill-no .no {
+                font-size: 22pt;
+            }
+
+            .sender-receiver .side h3 {
+                font-size: 10pt;
+            }
+
+            .cargo-grid {
+                gap: 1px;
+            }
+
+            .cargo-grid .cell {
+                padding: 6px 8px;
+            }
+
+            .cargo-grid .cell .label {
+                font-size: 8pt;
+            }
+
+            .cargo-grid .cell .value {
+                font-size: 10pt;
+            }
+
+            .nodes-page .node-item {
+                padding: 6px 8px;
+            }
+        }
+
+        /* 屏幕浏览时也隐藏节点,只保留面单 */
+        .nodes-page {
+            display: none;
+        }
+
+        /* 第二联-小面单(客户联,粘贴用) */
+        .mini-waybill {
+            margin-top: 20px;
+            border: 2px dashed #000;
+            padding: 12px 16px;
+            page-break-inside: avoid;
+            background: #f9fafb;
+        }
+
+        .mini-waybill .mini-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px dashed #000;
+            padding-bottom: 8px;
+            margin-bottom: 10px;
+        }
+
+        .mini-waybill .mini-header .brand {
+            font-size: 14pt;
+            font-weight: 800;
+            color: #b91c1c;
+            letter-spacing: 2px;
+        }
+
+        .mini-waybill .mini-header .no {
+            font-size: 16pt;
+            font-weight: 900;
+            font-family: "Consolas", monospace;
+            color: #000;
+            letter-spacing: 2px;
+        }
+
+        .mini-waybill .mini-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .mini-waybill .mini-info .box {
+            padding: 6px 8px;
+            font-size: 9pt;
+            border: 1px solid #000;
+            border-radius: 2px;
+            background: #fff;
+        }
+
+        .mini-waybill .mini-info .box .label {
+            font-size: 8pt;
+            color: #374151;
+            font-weight: 700;
+            letter-spacing: 1px;
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        .mini-waybill .mini-info .box .value {
+            font-size: 10pt;
+            font-weight: 600;
+            color: #000;
+        }
+
+        .mini-waybill .mini-bottom {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            padding-top: 8px;
+            border-top: 1px dashed #000;
+            font-size: 9pt;
+            color: #374151;
+        }
+
+        /* label */
+        .label-tag {
+            font-size: 8pt;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 操作栏(屏幕显示,不打印) -->
+    <div class="action-bar">
+        <button onclick="window.print()">🖨 打印面单</button>
+        <a href="{{ url_for('admin_tracking_detail', tid=item['id']) }}" class="btn-sec">← 返回详情</a>
+        <a href="{{ url_for('admin_tracking') }}" class="btn-third">返回列表</a>
+    </div>
+
+    <!-- 第一页 - 正式面单(A4) -->
+    <div class="page">
+        <div class="waybill">
+
+            <!-- 顶部品牌+运单号 -->
+            <div class="waybill-header">
+                <div class="brand-left">
+                    <div class="brand">安速通物流</div>
+                    <div class="brand-en">ANSUTO EXPRESS · 国际物流服务专家</div>
+                </div>
+                <div class="waybill-no">
+                    <div class="label">TRACKING NO. / 运单号</div>
+                    <div class="no">{{ item['tracking_no'] }}</div>
+                    <div class="status-bar">
+                        {% if item['status'] == 'delivered' %}已送达 DELIVERED
+                        {% elif item['status'] == 'transit' %}运输中 IN TRANSIT
+                        {% elif item['status'] == 'lost' %}异常 EXCEPTION
+                        {% else %}待发货 PENDING{% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- 信息横条 -->
+            <div class="info-bar">
+                <div class="item">
+                    <span class="lbl">托运时间</span>
+                    <span class="val">{{ item['shipping_time'] or '-' }}</span>
+                </div>
+                <div class="item">
+                    <span class="lbl">运输类型</span>
+                    <span class="val">{{ item['transport_type'] or '-' }}</span>
+                </div>
+                <div class="item">
+                    <span class="lbl">送货方式</span>
+                    <span class="val">{{ item['delivery_method'] or '-' }}</span>
+                </div>
+                <div class="item">
+                    <span class="lbl">付款方式</span>
+                    <span class="val">{{ item['payment_method'] or '-' }}</span>
+                </div>
+            </div>
+
+            <!-- 寄件人/收件人 -->
+            <div class="sender-receiver">
+                <div class="side left">
+                    <h3>FROM / 寄件人</h3>
+                    <div class="info-row"><span class="label">寄件公司</span><span class="value">{{ item['sender_company']
+                            or '-' }}</span></div>
+                    <div class="info-row"><span class="label">发件人</span><span class="value big">{{ item['sender'] or '-'
+                            }}</span></div>
+                    <div class="info-row"><span class="label">联系电话</span><span class="value phone">{{
+                            item['sender_phone'] or '-' }}</span></div>
+                    <div class="address-box">
+                        <span class="label-tag">ORIGIN / 始发地</span>
+                        {{ item['origin'] or '-' }}
+                    </div>
+                </div>
+
+                <div class="divider">↗ 送达 TO ↗</div>
+
+                <div class="side right">
+                    <h3>TO / 收件人</h3>
+                    <div class="info-row"><span class="label">收件公司</span><span class="value">{{ item['receiver_company']
+                            or '-' }}</span></div>
+                    <div class="info-row"><span class="label">收件人</span><span class="value big">{{ item['receiver'] or
+                            '-' }}</span></div>
+                    <div class="info-row"><span class="label">联系电话</span><span class="value phone">{{
+                            item['receiver_phone'] or '-' }}</span></div>
+                    <div class="address-box">
+                        <span class="label-tag" style="color:#b91c1c;">DESTINATION / 目的地</span>
+                        {{ item['destination'] or '-' }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- 货物信息 -->
+            <div class="cargo-section">
+                <div class="section-title">CARGO DETAILS / 货物信息</div>
+                <div class="cargo-grid">
+                    <div class="cell"><span class="label">品名 / DESCRIPTION</span>
+                        <div class="value">{{ item['goods_name'] or '-' }}</div>
+                    </div>
+                    <div class="cell"><span class="label">包装 / PACKAGE</span>
+                        <div class="value">{{ item['package'] or '-' }}</div>
+                    </div>
+                    <div class="cell"><span class="label">件数 / PIECES</span>
+                        <div class="value num">{{ item['pieces'] or '-' }}</div>
+                    </div>
+                    <div class="cell"><span class="label">签回单 / RECEIPT</span>
+                        <div class="value">{{ item['need_receipt'] or '否' }}</div>
+                    </div>
+                    <div class="cell"><span class="label">重量 (kg)</span>
+                        <div class="value num">{{ item['weight'] or '-' }}</div>
+                    </div>
+                    <div class="cell"><span class="label">体积 (m³)</span>
+                        <div class="value num">{{ item['volume'] or '-' }}</div>
+                    </div>
+                    <div class="cell"><span class="label">计费重量 (kg)</span>
+                        <div class="value num">{{ item['charge_weight'] or '-' }}</div>
+                    </div>
+                    <div class="cell"><span class="label">回单情况</span>
+                        <div class="value">{{ item['receipt_status'] or '-' }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 费用信息 -->
+            <div class="charge-section">
+                <div class="section-title">CHARGES / 费用明细 (¥)</div>
+                <div class="cargo-grid">
+                    <div class="cell"><span class="label">运费 / FREIGHT</span>
+                        <div class="value money">{{ item['freight'] or '-' }}</div>
+                    </div>
+                    <div class="cell"><span class="label">到付金额 / COD</span>
+                        <div class="value money">{{ item['cod_amount'] or '-' }}</div>
+                    </div>
+                    <div class="cell"><span class="label">保险费</span>
+                        <div class="value money">{{ item['insurance'] or '-' }}</div>
+                    </div>
+                    <div class="cell"><span class="label">包装费</span>
+                        <div class="value money">{{ item['package_fee'] or '-' }}</div>
+                    </div>
+                    <div class="cell"><span class="label">卸货费</span>
+                        <div class="value money">{{ item['unload_fee'] or '-' }}</div>
+                    </div>
+                    <div class="cell"><span class="label">其它费用</span>
+                        <div class="value money">{{ item['other_fee'] or '-' }}</div>
+                    </div>
+                    <div class="cell"><span class="label">提货要求</span>
+                        <div class="value">{{ item['pickup_request'] or '-' }}</div>
+                    </div>
+                    <div class="cell"><span class="label">回单备注</span>
+                        <div class="value">{{ item['receipt_remark'] or '-' }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 备注+签收 -->
+            <div class="bottom-section">
+                <div class="remark-box">
+                    <span class="label">REMARK / 备注</span>
+                    <span class="value">{% if item['remark'] %}{{ item['remark'] }}{% else %}（无备注）{% endif %}</span>
+                </div>
+                <div class="sign-box">
+                    <span class="label">SIGNATURE / 签收区</span>
+                    <div class="note">本人确认收到上述运单货物,外包装完好,数量相符。</div>
+                    <div class="sign-line"><span class="key">签收人签名</span><span class="val">_____________</span></div>
+                    <div class="sign-line"><span class="key">日期 Date</span><span class="val">_____________</span></div>
+                    <div class="sign-line"><span class="key">快递员</span><span class="val">_____________</span></div>
+                </div>
+            </div>
+
+            <!-- 条形码 -->
+            <!-- <div class="barcode-area">
+            <div class="bar">&nbsp;</div>
+            <div class="no-text">{{ item['tracking_no'] }}</div>
+        </div> -->
+
+            <!-- 底部盖章区 -->
+            <div class="footer-stamp">
+                <div class="stamp-item">
+                    <div class="label">寄件人签名 / SENDER</div>
+                    <div class="line">&nbsp;</div>
+                    <div>日期: _____________</div>
+                </div>
+                <div class="stamp-item">
+                    <div class="label">收件公司盖章 / RECEIVER STAMP</div>
+                    <div class="line">&nbsp;</div>
+                    <div>日期: _____________</div>
+                </div>
+                <div class="stamp-item">
+                    <div class="label">快递公司盖章 / ANSUTO STAMP</div>
+                    <div class="line">&nbsp;</div>
+                    <div>日期: _____________</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 第二页 - 客户联(小面单) -->
+    <div class="page">
+        <div class="mini-waybill">
+            <div class="mini-header">
+                <div class="brand">安速通物流 · 客户联</div>
+                <div class="no">{{ item['tracking_no'] }}</div>
+            </div>
+            <div class="mini-info">
+                <div class="box">
+                    <span class="label">寄件人 / FROM</span>
+                    <div class="value">{{ item['sender'] or '-' }}</div>
+                    <div class="value" style="font-size:9pt; color:#374151;">{{ item['sender_company'] or '' }} {{
+                        item['sender_phone'] or '' }}</div>
+                    <div class="value" style="font-size:9pt; color:#374151; margin-top:3px;">{{ item['origin'] or '' }}
+                    </div>
+                </div>
+                <div class="box">
+                    <span class="label">收件人 / TO</span>
+                    <div class="value">{{ item['receiver'] or '-' }}</div>
+                    <div class="value" style="font-size:9pt; color:#374151;">{{ item['receiver_company'] or '' }} {{
+                        item['receiver_phone'] or '' }}</div>
+                    <div class="value" style="font-size:9pt; color:#374151; margin-top:3px;">{{ item['destination'] or
+                        '' }}</div>
+                </div>
+                <div class="box">
+                    <span class="label">货物 / CARGO</span>
+                    <div class="value">{{ item['goods_name'] or '-' }} · {{ item['weight'] or '-' }}kg · {{
+                        item['pieces'] or '-' }}件</div>
+                </div>
+                <div class="box">
+                    <span class="label">运输 / TRANSPORT</span>
+                    <div class="value">{{ item['transport_type'] or '-' }} · {{ item['delivery_method'] or '-' }}</div>
+                </div>
+            </div>
+            <div class="mini-bottom">
+                <span>托运时间: {{ item['shipping_time'] or '-' }}</span>
+                <span>运费: ¥{{ item['freight'] or '-' }}</span>
+                <span>付款方式: {{ item['payment_method'] or '-' }}</span>
+            </div>
+        </div>
+
+        <!-- 节点信息 -->
+        {% if details %}
+        <div class="nodes-page">
+            <div class="nodes-title">
+                物流轨迹 / TRACKING LOG
+                <div class="nodes-subtitle">共 {{ details|length }} 条节点记录 · 打印时间: {{ now }}</div>
+            </div>
+
+            {% for d in details %}
+            <div class="node-item {% if loop.first %}latest{% endif %}">
+                <div class="node-seq">#{{ loop.length - loop.index0 }}</div>
+                <div class="node-time">
+                    <span class="date">{{ (d['node_time']|string)[:10] }}</span>
+                    <span class="clock">{{ (d['node_time']|string)[11:19] }}</span>
+                </div>
+                <div class="node-body">
+                    <div class="loc">{% if loop.first %}【最新节点】{% endif %} {{ d['location'] }}</div>
+                    <div class="desc">{{ d['status_text'] }}</div>
+                    {% if d['operator'] %}<div class="op">操作员: {{ d['operator'] }}</div>{% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- 操作栏(底部) -->
+    <div class="action-bar">
+        <button onclick="window.print()">🖨 打印面单</button>
+        <a href="{{ url_for('admin_tracking_detail', tid=item['id']) }}" class="btn-sec">← 返回详情</a>
+        <a href="{{ url_for('admin_tracking') }}" class="btn-third">返回列表</a>
+    </div>
+
+    <script>
+        // 页面加载完成后自动提示打印
+        window.addEventListener('load', function () {
+            console.log('面单准备就绪,点击打印按钮或按 Ctrl+P 打印');
+        });
+
+        // 快捷键 Ctrl+P 保留浏览器原生打印
+        document.addEventListener('keydown', function (e) {
+            if (e.ctrlKey && e.key === 'p') {
+                // 保留默认打印行为
+            }
+        });
+    </script>
+
+</body>
+
+</html>

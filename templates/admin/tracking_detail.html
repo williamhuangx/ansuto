@@ -419,6 +419,7 @@
                 <strong style="color: #374151;">付款方式:</strong> {{ item['payment_method'] or '-' }}
             </div>
             <div class="actions">
+                <a href="{{ url_for('admin_tracking_print', tid=item['id']) }}" class="btn-print" style="padding:8px 18px; border-radius:4px; text-decoration:none; font-size:13px; font-weight:600; background:#b91c1c; color:#fff; margin-right:6px;">🖨 打印面单</a>
                 <a href="{{ url_for('admin_tracking_edit', tid=item['id']) }}" class="btn-edit">✎ 编辑运单</a>
                 <a href="{{ url_for('admin_tracking') }}" class="btn-back">返回列表</a>
             </div>
