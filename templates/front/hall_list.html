@@ -27,31 +27,28 @@
                 </ul>
             </div>
             <div class="side-contact">
-                <div class="label">SERVICE HOTLINE</div>
+                <div class="label">客服热线</div>
                 <div class="tel">{{ hotline or '400-888-8888' }}</div>
-                <div class="small">欢迎来电咨询价格时效</div>
+                <div class="small">如需详细信息欢迎来电咨询</div>
             </div>
         </aside>
         <div class="page-content">
             <h2>{{ title }}</h2>
-            <div class="business-grid" style="grid-template-columns: 1fr; margin-top:20px;">
+            <div style="margin-top:20px;">
                 {% for item in items %}
-                <div class="business-card">
-                    <div class="icon">✦</div>
-                    <h3>{{ item.get('title', '') }}</h3>
-                    <p style="font-size:14px; line-height:2; white-space: pre-line;">{{ item.get('content') or '' }}</p>
-                </div>
+                <a href="{{ url_for('hall_detail', hid=item['id']) }}" style="display:block; text-decoration:none; color:#333; padding:20px; border-bottom:1px dashed var(--border); transition:all .2s;">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <h3 style="font-size:17px; color:var(--primary); margin:0;">{{ item.get('title', '') }}</h3>
+                        <span style="color:var(--accent); font-size:13px;">查看详情 →</span>
+                    </div>
+                    <p style="margin:10px 0 0; font-size:14px; color:var(--text-light); line-height:1.8;">{% set s = item.get('content') or '' %}{{ s[:120] if s|length > 120 else s }}...</p>
+                </a>
                 {% else %}
-                <div style="grid-column:1/-1; text-align:center; padding:60px 0; color:var(--text-muted);">
-                    <p style="font-size:50px; margin-bottom:10px;">📦</p>
-                    <p>暂无内容,敬请期待...</p>
+                <div style="text-align:center; padding:60px 0; color:var(--text-muted);">
+                    <p style="font-size:50px; margin-bottom:10px;">📰</p>
+                    <p>暂无内容,敬请期待</p>
                 </div>
                 {% endfor %}
-            </div>
-
-            <div style="margin-top:40px; padding:26px; background:var(--bg-gray); border-radius:6px; border-left:4px solid var(--accent);">
-                <h3 style="color:var(--primary); margin-top:0;">温馨提示</h3>
-                <p style="font-size:14px; line-height:2; margin:0;">价格与时效会因季节、目的地及重量不同有所调整,以上内容仅供参考,具体请以客服实时报价为准。如需精确报价,请拨打服务热线或联系专属业务员。</p>
             </div>
         </div>
     </div>

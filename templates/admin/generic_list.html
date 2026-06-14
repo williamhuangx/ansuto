@@ -4,7 +4,7 @@
 <div class="card">
     <div class="card-title">
         {{ module_name }} 列表
-        <span class="actions"><a href="{{ url_for('admin_' + module_key + '_new') }}" class="btn btn-sm btn-accent">➕ 新增</a></span>
+        <span class="actions"><a href="{{ url_for('admin_module_new', module=module_key) }}" class="btn btn-sm btn-accent">➕ 新增</a></span>
     </div>
     <div class="toolbar">
         <form method="get" class="search">
@@ -43,8 +43,8 @@
                 </td>
                 <td>{{ item.get('created_at', '') }}</td>
                 <td>
-                    <a href="{{ url_for('admin_' + module_key + '_edit', item_id=item['id']) }}" class="btn btn-sm btn-default">编辑</a>
-                    <a href="{{ url_for('admin_' + module_key + '_delete', item_id=item['id']) }}" class="btn btn-sm btn-danger" onclick="return confirm('确定删除该条记录吗?')">删除</a>
+                    <a href="{{ url_for('admin_module_edit', module=module_key, item_id=item['id']) }}" class="btn btn-sm btn-default">编辑</a>
+                    <a href="{{ url_for('admin_module_delete', module=module_key, item_id=item['id']) }}" class="btn btn-sm btn-danger" onclick="return confirm('确定删除该条记录吗?')">删除</a>
                 </td>
             </tr>
             {% else %}

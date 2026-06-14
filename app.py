@@ -200,6 +200,9 @@ def business_detail(bid):
     item = query_sql("SELECT * FROM business_intros WHERE id=%s", (bid,))
     if not item:
         abort(404)
+    category = item[0].get('category', '')
+    titles = {'main': '主营产品', 'value_added': '增值服务', 'marketing': '市场活动'}
+    ctx['title'] = titles.get(category, '业务介绍')
     ctx['item'] = item[0]
     return render_template('front/business_detail.html', **ctx)
 
@@ -215,6 +218,22 @@ def hall_list(category):
     ctx['items'] = query_sql(
         "SELECT * FROM online_halls WHERE category=%s AND status=1 ORDER BY sort_order, id DESC", (category,))
     return render_template('front/hall_list.html', **ctx)
+
+
+@app.route('/hall/detail/<int:hid>')
+def hall_detail(hid):
+    ctx = common_context()
+    item = query_sql("SELECT * FROM online_halls WHERE id=%s", (hid,))
+    if not item:
+        abort(404)
+    category = item[0].get('category', '')
+    titles = {'price': '价格与时效', 'wechat': '微信服务', 'forbidden': '禁运品'}
+    ctx['title'] = titles.get(category, '网上营业厅')
+    ctx['category'] = category
+    ctx['item'] = item[0]
+    ctx['back_url'] = '/hall/' + category
+    ctx['back_name'] = '返回列表'
+    return render_template('front/news_detail.html', **ctx)
 
 
 @app.route('/tracking', methods=['GET', 'POST'])
@@ -517,7 +536,7 @@ def admin_generic_form(module_key, item_id=None):
             new_id = insert_sql(sql, values)
             record_log(mod_name, '新增', new_id)
         flash('保存成功', 'success')
-        return redirect(url_for(f'admin_{module_key}'))
+        return redirect(url_for('admin_module_list', module=module_key))
     return render_template(f'admin/{tpl_prefix}_form.html', item=item, categories=cats,
                            module_key=module_key, module_name=mod_name)
 
@@ -527,55 +546,46 @@ def admin_generic_delete(module_key, item_id):
     update_sql(f"DELETE FROM {table} WHERE id=%s", (item_id,))
     record_log(mod_name, '删除', item_id)
     flash('删除成功', 'success')
-    return redirect(request.referrer or url_for(f'admin_{module_key}'))
+    return redirect(request.referrer or url_for('admin_module_list', module=module_key))
 
 
 # ============================================================
-# 后台 - 业务介绍
+# 后台 - 通用 CRUD 路由（business / hall / help / news / abouts）
 # ============================================================
-@app.route('/admin/business')
-@login_required
-def admin_business():
-    return admin_generic_list('business')
-
-@app.route('/admin/business/new', methods=['GET', 'POST'])
-@login_required
-def admin_business_new():
-    return admin_generic_form('business')
-
-@app.route('/admin/business/edit/<int:item_id>', methods=['GET', 'POST'])
-@login_required
-def admin_business_edit(item_id):
-    return admin_generic_form('business', item_id)
-
-@app.route('/admin/business/delete/<int:item_id>')
-@login_required
-def admin_business_delete(item_id):
-    return admin_generic_delete('business', item_id)
+_CRUD_MODULES = {'business', 'hall', 'help', 'news', 'abouts'}
 
 
-# ============================================================
-# 后台 - 网上营业厅
-# ============================================================
-@app.route('/admin/hall')
+@app.route('/admin/<module>/')
 @login_required
-def admin_hall():
-    return admin_generic_list('hall')
+def admin_module_list(module):
+    """通用列表: /admin/business, /admin/news, /admin/help, /admin/hall, /admin/abouts"""
+    if module not in _CRUD_MODULES:
+        abort(404)
+    return admin_generic_list(module)
 
-@app.route('/admin/hall/new', methods=['GET', 'POST'])
-@login_required
-def admin_hall_new():
-    return admin_generic_form('hall')
 
-@app.route('/admin/hall/edit/<int:item_id>', methods=['GET', 'POST'])
+@app.route('/admin/<module>/new', methods=['GET', 'POST'])
 @login_required
-def admin_hall_edit(item_id):
-    return admin_generic_form('hall', item_id)
+def admin_module_new(module):
+    if module not in _CRUD_MODULES:
+        abort(404)
+    return admin_generic_form(module)
 
-@app.route('/admin/hall/delete/<int:item_id>')
+
+@app.route('/admin/<module>/edit/<int:item_id>', methods=['GET', 'POST'])
 @login_required
-def admin_hall_delete(item_id):
-    return admin_generic_delete('hall', item_id)
+def admin_module_edit(module, item_id):
+    if module not in _CRUD_MODULES:
+        abort(404)
+    return admin_generic_form(module, item_id)
+
+
+@app.route('/admin/<module>/delete/<int:item_id>')
+@login_required
+def admin_module_delete(module, item_id):
+    if module not in _CRUD_MODULES:
+        abort(404)
+    return admin_generic_delete(module, item_id)
 
 
 # ============================================================
@@ -760,54 +770,6 @@ def admin_tracking_print(tid):
 
 
 # ============================================================
-# 后台 - 帮助与支持
-# ============================================================
-@app.route('/admin/help')
-@login_required
-def admin_help():
-    return admin_generic_list('help')
-
-@app.route('/admin/help/new', methods=['GET', 'POST'])
-@login_required
-def admin_help_new():
-    return admin_generic_form('help')
-
-@app.route('/admin/help/edit/<int:item_id>', methods=['GET', 'POST'])
-@login_required
-def admin_help_edit(item_id):
-    return admin_generic_form('help', item_id)
-
-@app.route('/admin/help/delete/<int:item_id>')
-@login_required
-def admin_help_delete(item_id):
-    return admin_generic_delete('help', item_id)
-
-
-# ============================================================
-# 后台 - 公司新闻
-# ============================================================
-@app.route('/admin/news')
-@login_required
-def admin_news():
-    return admin_generic_list('news')
-
-@app.route('/admin/news/new', methods=['GET', 'POST'])
-@login_required
-def admin_news_new():
-    return admin_generic_form('news')
-
-@app.route('/admin/news/edit/<int:item_id>', methods=['GET', 'POST'])
-@login_required
-def admin_news_edit(item_id):
-    return admin_generic_form('news', item_id)
-
-@app.route('/admin/news/delete/<int:item_id>')
-@login_required
-def admin_news_delete(item_id):
-    return admin_generic_delete('news', item_id)
-
-
-# ============================================================
 # 后台 - 网点分布
 # ============================================================
 @app.route('/admin/branches')
@@ -893,26 +855,8 @@ def admin_branches_delete(item_id):
 
 # ============================================================
 # 后台 - 关于安速通
+# （使用动态路由 admin_module_list/form/delete）
 # ============================================================
-@app.route('/admin/abouts')
-@login_required
-def admin_abouts():
-    return admin_generic_list('abouts')
-
-@app.route('/admin/abouts/new', methods=['GET', 'POST'])
-@login_required
-def admin_abouts_new():
-    return admin_generic_form('abouts')
-
-@app.route('/admin/abouts/edit/<int:item_id>', methods=['GET', 'POST'])
-@login_required
-def admin_abouts_edit(item_id):
-    return admin_generic_form('abouts', item_id)
-
-@app.route('/admin/abouts/delete/<int:item_id>')
-@login_required
-def admin_abouts_delete(item_id):
-    return admin_generic_delete('abouts', item_id)
 
 
 # ============================================================

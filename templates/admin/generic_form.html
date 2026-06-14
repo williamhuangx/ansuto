@@ -5,7 +5,7 @@
     <div class="card-title">
         {{ module_name }} - {% if item and item.get('id') %}编辑{% else %}新增{% endif %}
         <span class="actions">
-            <a href="{{ url_for('admin_' + module_key) }}" class="btn btn-sm btn-default">← 返回列表</a>
+            <a href="{{ url_for('admin_module_list', module=module_key) }}" class="btn btn-sm btn-default">← 返回列表</a>
         </span>
     </div>
     <form method="post">
@@ -44,7 +44,7 @@
         </div>
         <div style="text-align:center; padding: 16px 0;">
             <button type="submit" class="btn btn-primary">保存</button>
-            <a href="{{ url_for('admin_' + module_key) }}" class="btn btn-default">取消</a>
+            <a href="{{ url_for('admin_module_list', module=module_key) }}" class="btn btn-default">取消</a>
         </div>
     </form>
 </div>

@@ -53,8 +53,8 @@
 <div class="card">
     <div class="card-title">快捷操作</div>
     <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
-        <a href="{{ url_for('admin_business_new') }}" class="btn btn-default" style="padding: 20px; text-align: center;">➕ 新增业务介绍</a>
-        <a href="{{ url_for('admin_news_new') }}" class="btn btn-default" style="padding: 20px; text-align: center;">📰 发布新闻</a>
+        <a href="{{ url_for('admin_module_new', module='business') }}" class="btn btn-default" style="padding: 20px; text-align: center;">➕ 新增业务介绍</a>
+        <a href="{{ url_for('admin_module_new', module='news') }}" class="btn btn-default" style="padding: 20px; text-align: center;">📰 发布新闻</a>
         <a href="{{ url_for('admin_tracking_new') }}" class="btn btn-default" style="padding: 20px; text-align: center;">🚚 新增运单</a>
         <a href="{{ url_for('admin_branches_new') }}" class="btn btn-default" style="padding: 20px; text-align: center;">🏢 新增网点</a>
     </div>
