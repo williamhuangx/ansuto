@@ -74,9 +74,10 @@
         <div class="business-grid">
             {% for item in (business_main or [])[:6] %}
             <div class="business-card">
-                <div class="icon">✦</div>
+                <!-- <div class="icon">✦</div> -->
                 <h3>{{ item.get('title', '') }}</h3>
-                <p style="font-size:13px; line-height:1.9;">{% set c = item.get('content') or '' %}{{ c[:100] if c|length > 100 else c }}{% if c|length > 100 %}...{% endif %}</p>
+                <p style="font-size:13px; line-height:1.9;">{% set c = item.get('content') or '' %}{{ c[:100] if
+                    c|length > 100 else c }}{% if c|length > 100 %}...{% endif %}</p>
                 <a href="{{ url_for('business_detail', bid=item['id']) }}" class="link-more">了解详情</a>
             </div>
             {% else %}
@@ -193,8 +194,10 @@
                 <div class="cover">
                     <div class="icon-decor">NEWS</div>
                     <div class="date-tag">
-                        <div class="d">{% set d = item.get('created_at') or '' %}{% if d and d|string|length >= 10 %}{{ (d|string)[8:10] }}{% else %}01{% endif %}</div>
-                        <div class="ym">{% set d = item.get('created_at') or '' %}{% if d and d|string|length >= 7 %}{{ (d|string)[:7] }}{% else %}2024-01{% endif %}</div>
+                        <div class="d">{% set d = item.get('created_at') or '' %}{% if d and d|string|length >= 10 %}{{
+                            (d|string)[8:10] }}{% else %}01{% endif %}</div>
+                        <div class="ym">{% set d = item.get('created_at') or '' %}{% if d and d|string|length >= 7 %}{{
+                            (d|string)[:7] }}{% else %}2024-01{% endif %}</div>
                     </div>
                     <div class="cat-tag">{{ '公司新闻' if item.get('category')=='company' else '行业资讯' }}</div>
                 </div>
