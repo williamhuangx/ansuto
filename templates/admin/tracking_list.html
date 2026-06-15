@@ -33,8 +33,8 @@
                 <th>寄件公司/发件人</th>
                 <th>收件人</th>
                 <th>品名</th>
-                <th>重量</th>
-                <th>运费</th>
+                <!-- <th>重量</th>
+                <th>运费</th> -->
                 <th>状态</th>
                 <th>操作</th>
             </tr>
@@ -56,8 +56,8 @@
                     {% if item['receiver'] %}{{ item['receiver'] }} ({{ item['receiver_phone'] or '-' }}){% endif %}
                 </td>
                 <td>{{ item['goods_name'] or '-' }}</td>
-                <td>{% if item['weight'] %}{{ item['weight'] }} kg{% else %}-{% endif %}</td>
-                <td>{% if item['freight'] %}¥{{ item['freight'] }}{% else %}-{% endif %}</td>
+                <!-- <td>{% if item['weight'] %}{{ item['weight'] }} kg{% else %}-{% endif %}</td>
+                <td>{% if item['freight'] %}¥{{ item['freight'] }}{% else %}-{% endif %}</td> -->
                 <td>
                     {% if item['status'] == 'delivered' %}<span class="badge badge-active">已送达</span>
                     {% elif item['status'] == 'transit' %}<span class="badge badge-info">运输中</span>
