@@ -25,7 +25,7 @@
     <table>
         <thead>
             <tr>
-                <th>ID</th>
+                <!-- <th>ID</th> -->
                 <th>快递单号</th>
                 <th>托运时间</th>
                 <th>始发地</th>
@@ -42,7 +42,7 @@
         <tbody>
             {% for item in items %}
             <tr>
-                <td>{{ item['id'] }}</td>
+                <!-- <td>{{ item['id'] }}</td> -->
                 <td><strong style="color:var(--accent);">{{ item['tracking_no'] }}</strong></td>
                 <td style="font-size:12px;">{{ item['shipping_time'] or '-' }}</td>
                 <td>{{ item['origin'] or '-' }}</td>
