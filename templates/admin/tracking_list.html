@@ -28,8 +28,8 @@
                 <th>ID</th>
                 <th>快递单号</th>
                 <th>托运时间</th>
-                <!-- <th>始发地</th>
-                <th>目的地</th> -->
+                <th>始发地</th>
+                <th>目的地</th>
                 <th>寄件公司/发件人</th>
                 <th>收件人</th>
                 <th>品名</th>
@@ -45,8 +45,8 @@
                 <td>{{ item['id'] }}</td>
                 <td><strong style="color:var(--accent);">{{ item['tracking_no'] }}</strong></td>
                 <td style="font-size:12px;">{{ item['shipping_time'] or '-' }}</td>
-                <!-- <td>{{ item['origin'] or '-' }}</td>
-                <td>{{ item['destination'] or '-' }}</td> -->
+                <td>{{ item['origin'] or '-' }}</td>
+                <td>{{ item['destination'] or '-' }}</td>
                 <td>
                     {% if item['sender_company'] %}{{ item['sender_company'] }}<br>{% endif %}
                     {% if item['sender'] %}{{ item['sender'] }} ({{ item['sender_phone'] or '-' }}){% endif %}
