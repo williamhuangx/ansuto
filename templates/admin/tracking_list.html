@@ -18,8 +18,8 @@
                 <option value="delivered" {% if status=='delivered' %}selected{% endif %}>已送达</option>
                 <option value="lost" {% if status=='lost' %}selected{% endif %}>异常</option>
             </select>
-            <button type="submit" class="btn btn-sm btn-primary">🔍 搜索</button>
-            <button type="" class="btn btn-sm btn-primary" onclick="tableToExcel('tableToExcel','william','下载')" value="导出Excel">导出EXCEL</button>
+            <button type="submit" class="btn btn-sm btn-primary">搜索</button>
+            <button type="" class="btn btn-sm btn-primary" onclick="tableToExcel('tableToExcel','william','下载')">导出</button>
         </form>
         <span style="color:#999; font-size:13px;">共 {{ total }} 条记录</span>
     </div>
