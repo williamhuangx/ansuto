@@ -70,6 +70,8 @@
                         class="btn btn-sm btn-default">节点</a>
                     <a href="{{ url_for('admin_tracking_print', tid=item['id']) }}" class="btn btn-sm btn-default"
                         target="_blank">打印</a>
+                    <a href="{{ url_for('admin_tracking_print2', tid=item['id']) }}" class="btn btn-sm btn-default"
+                        target="_blank">老版</a>
                     <a href="{{ url_for('admin_tracking_edit', tid=item['id']) }}" class="btn btn-sm btn-default">编辑</a>
                     <a href="{{ url_for('admin_tracking_delete', tid=item['id']) }}" class="btn btn-sm btn-danger"
                         onclick="return confirm('确定删除?')">删除</a>

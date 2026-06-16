@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>运单面单 - {{ item['tracking_no'] }}</title>
+<style>
+pre{margin: 0px;padding: 0px;font-family: Arial}
+div{/*border: 1px solid #000099;*/height: 22px;font-size: 12px;font-weight:bold;text-align: center;float: left;position: fixed;display: inline-block;}
+#ke{background-image:url({{ url_for('static', filename='images/aa.png') }}) ;width: 811px;height:530px;clear: both}
+#div1{width: 65px;top: 60px;left: 630px;}
+#div2{width: 47px;top: 60px;left: 692px;}
+#div3{width: 47px;top: 60px;left: 740px;}
+#div4{width: 138px;top: 98px;left: 98px;}
+#div5{width: 40px;top: 98px;left: 154px;}
+#div6{width: 40px;top: 98px;left: 198px;}
+#div7{width: 250px;top: 125px;left: 125px;text-align: left;}
+#div8{width: 250px;top: 125px;left: 490px;text-align: left;}
+#div9{width: 70px;top: 150px;left: 125px;text-align: left;}
+#div10{width: 80px;top: 150px;left: 200px;text-align: left;}
+#div11{width: 100px;top: 150px;left: 278px;text-align: left;}
+#div12{width: 70px;top: 150px;left: 490px;text-align: left;}
+#div13{width: 80px;top: 150px;left: 565px;text-align: left;}
+#div14{width: 100px;top: 150px;left:646px;text-align: left;}
+#div15{width: 250px;top: 170px;left: 125px;text-align: left;}
+#div16{width: 250px;top: 170px;left: 490px;text-align: left;}
+#div17{width:110px;top: 193px;left: 125px;text-align: left;}
+#div18{width: 125px;top: 193px;left: 278px;text-align: left;}
+#div19{width:110px;top: 193px;left: 490px;text-align: left;}
+#div20{width: 125px;top: 193px;left: 646px;text-align: left;}
+#div21{width: 60px;top: 279px;left: 51px;}
+#div22{width: 60px;top: 279px;left: 111px;}
+#div23{width: 60px;top: 279px;left: 171px;}
+#div24{width: 60px;top: 279px;left: 238px;}
+#div25{width: 60px;top: 279px;left: 307px;}
+#div26{width: 42px;top: 254px;left:583px;}
+#div27{width: 42px;top: 254px;left:667px;}
+#div28{width: 42px;top: 254px;left:748px;}
+#div29{width: 42px;top: 283px;left:583px;}
+#div30{width: 42px;top: 283px;left:667px;}
+#div31{width: 42px;top: 283px;left:748px;}
+#div32{width: 200px;top: 402px;left: 602px;text-align: left;}
+#div33{width: 42px;top: 311px;left:667px;}
+#div34{width: 42px;top: 311px;left:748px;}
+#div35{width: 200px;top: 333px;left: 600px;text-align: left;}
+#div36{width: 180px;top: 358px;left:604px;}
+#div37{width: 180px;top: 331px;left: 70px;text-align: left;}
+#div38{width: 79px;top: 348px;left: 299px;text-align: left;}
+#div39{width: 145px;top: 397px;left: 211px;text-align: left;display: inline-block;}
+#div40{width: 79px;top: 402px;left: 380px;text-align: left;}
+#div41{width: 79px;top: 383px;left: 752px;text-align: left;}
+#div42{width: 45px;top: 395px;left: 57px;text-align: left;}
+#div43{width: 124px;top: 413px;left: 139px;text-align: left;}
+#div44{width: 37px;top: 466px;left: 416px;}
+#div45{width: 79px;top: 383px;left: 661px;text-align: left;}
+#div46{width: 79px;top: 383px;left: 710px;text-align: left;}
+#div47{width: 79px;top: 384px;left: 380px;text-align: left;}
+#div48{width: 190px;top: 415px;left: 417px;text-align: left;}
+#div49{width: 132px;top: 486px;left: 371px;}
+</style>
+<style type="print">
+.v-h {display:none;}
+</style>
+</head>
+
+<body>
+    <div id="ke">
+	<div id="div1">{{ item['transport_type'] or '-' }}</div>
+	<div id="div2">{{ city or '-' }}</div>
+	<div id="div3">{{ s_city or '-' }}</div>
+	<div id="div4">{{ item['shipping_time'] or '-' }}</div>
+	<div id="div7">{{ item['sender_company'] or '-' }}</div>
+	<div id="div8">{{ item['receiver_company'] or '-' }}</div>
+	<div id="div9">{{ sf or '-' }}</div>
+	<div id="div10">{{ city or '-' }}</div>
+	<div id="div11">{{ dist or '-' }}</div>
+	<div id="div12">{{ s_sf or '-' }}</div>
+	<div id="div13">{{ s_city or '-' }}</div>
+	<div id="div14">{{ s_dist or '-' }}</div>
+	<div id="div15">{{ detail or '-' }}</div>
+	<div id="div16">{{ s_detail or '-' }}</div>
+	<div id="div17">{{ item['sender'] or '-'}}</div>
+	<div id="div18">{{item['sender_phone'] or '-' }}</div>
+	<div id="div19">{{ item['receiver'] or '-' }}</div>
+	<div id="div20">{{item['receiver_phone'] or '-' }}</div>
+	<div id="div21">{{ item['goods_name'] or '-' }}</div>
+	<div id="div22">{{ item['pieces'] or '-' }}</div>
+	<div id="div23">{{ item['package'] or '-' }}</div>
+	<div id="div24">{{ item['weight'] or '-' }}</div>
+	<div id="div25">{{ item['charge_weight'] or '-' }}</div>
+	<div id="div26">{{ item['freight'] or '-' }}</div>
+	<div id="div27">{{ item['cod_amount'] or '-' }}</div>
+	<!-- <div id="div28">28</div> -->
+	<div id="div29">{{ item['package_fee'] or '-' }}</div>
+	<div id="div30">{{ item['unload_fee'] or '-' }}</div>
+	<!-- <div id="div31">31</div> -->
+	<!-- <div id="div32">32</div> -->
+	<div id="div33">{{ item['other_fee'] or '-' }}</div>
+	<div id="div34">{{ item['insurance'] or '-' }}</div>
+	<!-- <div id="div35">35</div> -->
+	<!-- <div id="div36"></div> -->
+	<!-- <div id="div37">37</div> -->
+	<div id="div38">{{ item['volume'] or '-' }}</div>
+	<div id="div39">{{ item['receipt_remark'] or '-' }}</div>
+	<!-- <div id="div40">40</div> -->
+	<div id="div41">{{ item['payment_method'] or '-' }}</div>
+	<div id="div42">{{ item['receipt_status'] or '-' }}</div>
+	<!-- <div id="div43">43</div>
+	<div id="div44">44</div>
+	<div id="div45">45</div>
+	<div id="div46">46</div>
+	<div id="div47">47</div> -->
+	<div id="div48">{{ item['delivery_method'] or '-' }}</div>
+</div>
+<div class="v-h" ><button type="button" onclick="javascript:window.print();"  style="height: 24px;vertical-align: middle;" />打印</button></div>
+
+
+
+
+
+    <!-- 操作栏(屏幕显示,不打印) -->
+    <div class="action-bar">
+        <button onclick="window.print()">🖨 打印面单</button>
+        <a href="{{ url_for('admin_tracking_detail', tid=item['id']) }}" class="btn-sec">← 返回详情</a>
+        <a href="{{ url_for('admin_tracking') }}" class="btn-third">返回列表</a>
+    </div>
+
+ 
+</body>
+
+</html>
