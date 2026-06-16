@@ -57,9 +57,7 @@ div{/*border: 1px solid #000099;*/height: 22px;font-size: 12px;font-weight:bold;
 #div47{width: 79px;top: 384px;left: 380px;text-align: left;}
 #div48{width: 190px;top: 415px;left: 417px;text-align: left;}
 #div49{width: 132px;top: 486px;left: 371px;}
-</style>
-<style type="print">
-.v-h {display:none;}
+@media print {.v-h {display:none;}}
 </style>
 </head>
 
@@ -119,7 +117,7 @@ div{/*border: 1px solid #000099;*/height: 22px;font-size: 12px;font-weight:bold;
 
 
     <!-- 操作栏(屏幕显示,不打印) -->
-    <div class="action-bar">
+    <div class="v-h">
         <button onclick="window.print()">🖨 打印面单</button>
         <a href="{{ url_for('admin_tracking_detail', tid=item['id']) }}" class="btn-sec">← 返回详情</a>
         <a href="{{ url_for('admin_tracking') }}" class="btn-third">返回列表</a>
