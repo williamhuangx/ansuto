@@ -1086,8 +1086,15 @@ def admin_admins_new():
         d = request.form
         username = d.get('username', '').strip()
         password = d.get('password', '')
+        confirm_password = d.get('confirm_password', '')
         if not username or not password:
             flash('账号密码不能为空', 'danger')
+            return render_template('admin/admins_form.html', item={})
+        if password != confirm_password:
+            flash('两次输入的密码不一致', 'danger')
+            return render_template('admin/admins_form.html', item={})
+        if len(password) < 6:
+            flash('密码至少6位', 'danger')
             return render_template('admin/admins_form.html', item={})
         exists = query_sql("SELECT id FROM admins WHERE username=%s", (username,))
         if exists:
@@ -1114,7 +1121,14 @@ def admin_admins_edit(item_id):
     if request.method == 'POST':
         d = request.form
         password = d.get('password', '')
+        confirm_password = d.get('confirm_password', '')
         if password:
+            if password != confirm_password:
+                flash('两次输入的密码不一致', 'danger')
+                return render_template('admin/admins_form.html', item=r[0])
+            if len(password) < 6:
+                flash('密码至少6位', 'danger')
+                return render_template('admin/admins_form.html', item=r[0])
             hashed = generate_password_hash(password)
             update_sql(
                 "UPDATE admins SET password=%s, real_name=%s, role=%s, status=%s WHERE id=%s",
@@ -1151,10 +1165,13 @@ def admin_admins_password():
         confirm = request.form.get('confirm_password', '')
         if not old or not new or not confirm:
             flash('请填写完整', 'danger')
+            return render_template('admin/password.html')
         elif new != confirm:
             flash('两次输入的新密码不一致', 'danger')
+            return render_template('admin/password.html')
         elif len(new) < 6:
             flash('新密码至少6位', 'danger')
+            return render_template('admin/password.html')
         else:
             r = query_sql("SELECT password FROM admins WHERE id=%s", (session['admin_id'],))
             if r and check_password_hash(r[0]['password'], old):
@@ -1164,6 +1181,7 @@ def admin_admins_password():
                 return redirect(url_for('admin_dashboard'))
             else:
                 flash('原密码错误', 'danger')
+                return render_template('admin/password.html')
     return render_template('admin/password.html')
 
 
