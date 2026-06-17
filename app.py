@@ -809,6 +809,34 @@ def admin_tracking_print2(tid):
     return render_template('admin/tracking_print2.html', item=item[0], details=details, now=now, sf=sf, city=city, dist=dist, detail=detail, s_sf=s_sf, s_city=s_city, s_dist=s_dist, s_detail=s_detail)
 
 
+@app.route('/admin/tracking/print3/<int:tid>')
+@login_required
+def admin_tracking_print3(tid): 
+    """运单面单打印 - 独立的运单打印页面 """
+    item = query_sql("SELECT * FROM trackings WHERE id=%s", (tid,))
+    if not item:
+        flash('运单不存在', 'error')
+        return redirect(url_for('admin_tracking'))
+    details = query_sql("SELECT * FROM tracking_details WHERE tracking_id=%s ORDER BY id DESC", (tid,))
+
+    # 获取当前时间用于打印页
+    from datetime import datetime
+    now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    fj = get_addr(item[0]['origin'])
+    sf = fj[0]
+    city = fj[1]
+    dist = fj[2]
+    detail = fj[3]
+
+    s_addr = get_addr(item[0]['destination'])
+    s_sf = s_addr[0]
+    s_city = s_addr[1]
+    s_dist = s_addr[2]
+    s_detail = s_addr[3]
+
+    return render_template('admin/tracking_print3.html', item=item[0], details=details, now=now, sf=sf, city=city, dist=dist, detail=detail, s_sf=s_sf, s_city=s_city, s_dist=s_dist, s_detail=s_detail)
+
+
 # ============================================================
 # 后台 - 网点分布
 # ============================================================

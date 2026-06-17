@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>运单面单 - {{ item['tracking_no'] }}</title>
+<style>
+pre{margin: 0px;padding: 0px;font-family: Arial}
+div{border: 0px solid #000099;height: 22px;font-size: 12px;font-weight:bold;text-align: center;float: left;position: fixed;/*display: inline-block;*/}
+#ke{background-image:url({{ url_for('static', filename='images/aaa.png') }}) ;width: 340px;height:252px;}
+#div1{ width: 65px;top: 32px;left: 276px;font-size: 16px;}
+#div2{width: 80px; top: 133px; left: 25px; font-size: 23px;}
+#div3{width: 80px;top: 133px;left: 254px;font-size: 23px;}
+#div4{width: 85px;top: 182px;left: 48px;font-size: 13px;}
+#div5{width: 40px;top: 233px;left: 93px;}
+#div6{    width: 54px; top: 191px; left: 178px; font-size: 13px;}
+#div7{width: 250px;top: 82px;left: 60px;text-align: left;font-size: 13px;}
+#div8{width: 250px;top: 82px;left: 156px;text-align: left;font-size: 13px;}
+#div9{    width: 70px; top: 82px; left: 267px; text-align: left; font-size: 13px;}
+#div_t1{width: 65px;top: 82px;left: 3px;font-size: 13px;}
+#div_t2{width: 65px;top: 82px;left: 100px;font-size: 13px;}
+#div_t3{ width: 65px;top: 82px;left: 204px;font-size: 13px;}
+#div_t4{ width: 38px; top: 182px; left: 15px; font-size: 13px;}
+#div_t5{ width: 40px;top: 191px;left: 135px;font-size: 13px;}
+#div_t6{ width: 100px;top: 125px;left: 128px;font-size: 22px;}
+
+@media print {.v-h {display:none;}}
+</style>
+</head>
+
+<body>
+<div id="ke">
+	<div id="div1">{{ item['transport_type'] or '-' }}</div>
+	<div id="div_t1">品名</div>
+	<div id="div_t2">重量</div>
+	<div id="div_t3">件数</div>
+	<div id="div_t4">发货日期</div>
+	<div id="div_t5">收货人</div>
+	<div id="div_t6">次日达</div>
+	<div id="div2">{{ city or '-' }}</div>
+	<div id="div3">{{ s_city or '-' }}</div>
+	<div id="div4">{{ item['shipping_time'] or '-' }}</div>
+	<div id="div5">{{ item['tracking_no'] or '-' }}</div>
+	<div id="div6">{{ item['receiver'] or '-' }}</div>
+	<div id="div7">{{ item['goods_name'] or '-' }}</div>
+	<div id="div8">{{ item['weight'] or '-' }}</div>
+	<div id="div9">1/{{ item['pieces'] or '-' }}</div>
+</div>
+<div class="v-h" ><button type="button" onclick="javascript:window.print();"  style="height: 24px;vertical-align: middle;" />打印</button></div>
+
+    <!-- 操作栏(屏幕显示,不打印) -->
+    <div class="v-h">
+        <button onclick="window.print()">🖨 打印面单</button>
+        <a href="{{ url_for('admin_tracking_detail', tid=item['id']) }}" class="btn-sec">← 返回详情</a>
+        <a href="{{ url_for('admin_tracking') }}" class="btn-third">返回列表</a>
+    </div>
+
+ 
+</body>
+
+</html>
