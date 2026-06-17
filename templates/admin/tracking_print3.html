@@ -29,6 +29,8 @@ div{border: 0px solid #000099;height: 22px;font-size: 12px;font-weight:bold;text
 </head>
 
 <body>
+{% set pieces = item['pieces'] | int or 1 %}
+{% for i in range(1, pieces + 1) %}
 <div id="ke">
 	<div id="div1">{{ item['transport_type'] or '-' }}</div>
 	<div id="div_t1">品名</div>
@@ -44,8 +46,9 @@ div{border: 0px solid #000099;height: 22px;font-size: 12px;font-weight:bold;text
 	<div id="div6">{{ item['receiver'] or '-' }}</div>
 	<div id="div7">{{ item['goods_name'] or '-' }}</div>
 	<div id="div8">{{ item['weight'] or '-' }}</div>
-	<div id="div9">1/{{ item['pieces'] or '-' }}</div>
+	<div id="div9">{{ i }}/{{ pieces }}</div>
 </div>
+{% endfor %}
 <div class="v-h" ><button type="button" onclick="javascript:window.print();"  style="height: 24px;vertical-align: middle;" />打印</button></div>
 
     <!-- 操作栏(屏幕显示,不打印) -->
