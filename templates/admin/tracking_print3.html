@@ -5,60 +5,82 @@
     <meta charset="UTF-8">
     <title>运单面单 - {{ item['tracking_no'] }}</title>
 <style>
-pre{margin: 0px;padding: 0px;font-family: Arial}
-div{border: 0px solid #000099;height: 22px;font-size: 12px;font-weight:bold;text-align: center;float: left;position: fixed;/*display: inline-block;*/}
-#ke{background-image:url({{ url_for('static', filename='images/aaa.png') }}) ;width: 340px;height:252px;}
-#div1{ width: 65px;top: 32px;left: 276px;font-size: 16px;}
-#div2{width: 80px; top: 133px; left: 25px; font-size: 23px;}
-#div3{width: 80px;top: 133px;left: 254px;font-size: 23px;}
-#div4{width: 85px;top: 182px;left: 48px;font-size: 13px;}
-#div5{width: 40px;top: 233px;left: 93px;}
-#div6{    width: 54px; top: 191px; left: 178px; font-size: 13px;}
-#div7{width: 250px;top: 82px;left: 60px;text-align: left;font-size: 13px;}
-#div8{width: 250px;top: 82px;left: 156px;text-align: left;font-size: 13px;}
-#div9{    width: 70px; top: 82px; left: 267px; text-align: left; font-size: 13px;}
-#div_t1{width: 65px;top: 82px;left: 3px;font-size: 13px;}
-#div_t2{width: 65px;top: 82px;left: 100px;font-size: 13px;}
-#div_t3{ width: 65px;top: 82px;left: 204px;font-size: 13px;}
-#div_t4{ width: 38px; top: 182px; left: 15px; font-size: 13px;}
-#div_t5{ width: 40px;top: 191px;left: 135px;font-size: 13px;}
-#div_t6{ width: 100px;top: 125px;left: 128px;font-size: 22px;}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: Arial, sans-serif; background: #f0f0f0; padding: 20px; }
+.page { display: flex; flex-wrap: wrap; gap: 20px; justify-content: flex-start; }
+.label-container { position: relative; width: 340px; height: 252px; }
+.label-bg { position: absolute; top: 0; left: 0; width: 340px; height: 252px; background-image: url({{ url_for('static', filename='images/aaa.png') }}); background-size: cover; background-position: center; }
+.label-content { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+.label-content > div { position: absolute; font-weight: bold; }
 
-@media print {.v-h {display:none;}}
+.div1 { width: 65px; top: 32px; left: 276px; font-size: 16px; text-align: center; }
+.div2 { width: 80px; top: 133px; left: 25px; font-size: 23px; text-align: center; }
+.div3 { width: 80px; top: 133px; left: 254px; font-size: 23px; text-align: center; }
+.div4 { width: 85px; top: 182px; left: 48px; font-size: 13px; text-align: center; }
+.div5 { width: 40px; top: 233px; left: 93px; font-size: 12px; text-align: center; }
+.div6 { width: 54px; top: 191px; left: 178px; font-size: 13px; text-align: center; }
+.div7 { width: 250px; top: 82px; left: 60px; font-size: 13px; text-align: left; }
+.div8 { width: 250px; top: 82px; left: 156px; font-size: 13px; text-align: left; }
+.div9 { width: 70px; top: 82px; left: 267px; font-size: 13px; text-align: left; }
+.div_t1 { width: 65px; top: 82px; left: 3px; font-size: 13px; text-align: center; }
+.div_t2 { width: 65px; top: 82px; left: 100px; font-size: 13px; text-align: center; }
+.div_t3 { width: 65px; top: 82px; left: 204px; font-size: 13px; text-align: center; }
+.div_t4 { width: 38px; top: 182px; left: 15px; font-size: 13px; text-align: center; }
+.div_t5 { width: 40px; top: 191px; left: 135px; font-size: 13px; text-align: center; }
+.div_t6 { width: 100px; top: 125px; left: 128px; font-size: 22px; text-align: center; }
+
+.v-h { display: flex; gap: 12px; margin-top: 30px; align-items: center; padding: 15px 20px; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+.v-h button { padding: 8px 20px; background: #4a90d9; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; }
+.v-h button:hover { background: #3a80c9; }
+.v-h a { padding: 8px 16px; text-decoration: none; border-radius: 4px; font-size: 14px; }
+.btn-sec { background: #e8e8e8; color: #333; }
+.btn-sec:hover { background: #d8d8d8; }
+.btn-third { background: #f5f5f5; color: #666; }
+.btn-third:hover { background: #e5e5e5; }
+
+@media print {
+    body { background: #fff; padding: 0; }
+    .v-h { display: none !important; }
+    .page { gap: 0; }
+    .label-container { page-break-inside: avoid; }
+    @page { margin: 5mm; size: auto; }
+}
 </style>
 </head>
 
 <body>
+<div class="page">
 {% set pieces = item['pieces'] | int or 1 %}
 {% for i in range(1, pieces + 1) %}
-<div id="ke">
-	<div id="div1">{{ item['transport_type'] or '-' }}</div>
-	<div id="div_t1">品名</div>
-	<div id="div_t2">重量</div>
-	<div id="div_t3">件数</div>
-	<div id="div_t4">发货日期</div>
-	<div id="div_t5">收货人</div>
-	<div id="div_t6">次日达</div>
-	<div id="div2">{{ city or '-' }}</div>
-	<div id="div3">{{ s_city or '-' }}</div>
-	<div id="div4">{{ item['shipping_time'] or '-' }}</div>
-	<div id="div5">{{ item['tracking_no'] or '-' }}</div>
-	<div id="div6">{{ item['receiver'] or '-' }}</div>
-	<div id="div7">{{ item['goods_name'] or '-' }}</div>
-	<div id="div8">{{ item['weight'] or '-' }}</div>
-	<div id="div9">{{ i }}/{{ pieces }}</div>
+<div class="label-container">
+    <div class="label-bg"></div>
+    <div class="label-content">
+        <div class="div1">{{ item['transport_type'] or '-' }}</div>
+        <div class="div_t1">品名</div>
+        <div class="div_t2">重量</div>
+        <div class="div_t3">件数</div>
+        <div class="div_t4">发货日期</div>
+        <div class="div_t5">收货人</div>
+        <div class="div_t6">次日达</div>
+        <div class="div2">{{ city or '-' }}</div>
+        <div class="div3">{{ s_city or '-' }}</div>
+        <div class="div4">{{ item['shipping_time'] or '-' }}</div>
+        <div class="div5">{{ item['tracking_no'] or '-' }}</div>
+        <div class="div6">{{ item['receiver'] or '-' }}</div>
+        <div class="div7">{{ item['goods_name'] or '-' }}</div>
+        <div class="div8">{{ item['weight'] or '-' }}</div>
+        <div class="div9">{{ i }}/{{ pieces }}</div>
+    </div>
 </div>
 {% endfor %}
-<div class="v-h" ><button type="button" onclick="javascript:window.print();"  style="height: 24px;vertical-align: middle;" />打印</button></div>
+</div>
 
-    <!-- 操作栏(屏幕显示,不打印) -->
-    <div class="v-h">
-        <button onclick="window.print()">🖨 打印面单</button>
-        <a href="{{ url_for('admin_tracking_detail', tid=item['id']) }}" class="btn-sec">← 返回详情</a>
-        <a href="{{ url_for('admin_tracking') }}" class="btn-third">返回列表</a>
-    </div>
+<div class="v-h">
+    <button onclick="window.print()">🖨 打印面单</button>
+    <a href="{{ url_for('admin_tracking_detail', tid=item['id']) }}" class="btn-sec">← 返回详情</a>
+    <a href="{{ url_for('admin_tracking') }}" class="btn-third">返回列表</a>
+</div>
 
- 
 </body>
 
 </html>
