@@ -435,6 +435,7 @@
                 <div class="waybill-address">
                     <strong style="color: #1e40af; font-size: 12px;">始发地 / ORIGIN:</strong><br>
                     {{ item['origin'] or '-' }}
+                    {% if item['origin_city'] %}<br><span style="font-size: 12px; color: #6b7280;">始发市: {{ item['origin_city'] }}</span>{% endif %}
                 </div>
             </div>
 
@@ -448,6 +449,7 @@
                 <div class="waybill-address">
                     <strong style="color: #b91c1c; font-size: 12px;">目的地 / DESTINATION:</strong><br>
                     {{ item['destination'] or '-' }}
+                    {% if item['dest_city'] %}<br><span style="font-size: 12px; color: #6b7280;">目的地市: {{ item['dest_city'] }}</span>{% endif %}
                 </div>
             </div>
         </div>
@@ -476,6 +478,10 @@
                 <div class="field"><span class="lbl">保险费</span><div class="val money">{{ item['insurance'] or '-' }}</div></div>
                 <div class="field"><span class="lbl">包装费</span><div class="val money">{{ item['package_fee'] or '-' }}</div></div>
                 <div class="field"><span class="lbl">卸货费</span><div class="val money">{{ item['unload_fee'] or '-' }}</div></div>
+                <div class="field"><span class="lbl">提货费</span><div class="val money">{{ item['pickup_fee'] or '-' }}</div></div>
+                <div class="field"><span class="lbl">专车费</span><div class="val money">{{ item['special_car_fee'] or '-' }}</div></div>
+                <div class="field"><span class="lbl">保价金额</span><div class="val money">{{ item['declared_value'] or '-' }}</div></div>
+                <div class="field"><span class="lbl">超长超重</span><div class="val">{{ item['oversize_heavy'] or '-' }}</div></div>
                 <div class="field"><span class="lbl">其它费用</span><div class="val money">{{ item['other_fee'] or '-' }}</div></div>
                 <div class="field"><span class="lbl">提货要求</span><div class="val" style="font-size: 13px;">{{ item['pickup_request'] or '-' }}</div></div>
                 <div class="field"><span class="lbl">回单备注</span><div class="val" style="font-size: 13px;">{{ item['receipt_remark'] or '-' }}</div></div>

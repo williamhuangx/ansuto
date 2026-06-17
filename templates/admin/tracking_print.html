@@ -788,6 +788,7 @@
                     <div class="address-box">
                         <span class="label-tag">ORIGIN / 始发地</span>
                         {{ item['origin'] or '-' }}
+                        {% if item['origin_city'] %}<div style="font-size:9pt; color:#374151; margin-top:3px;">始发市: {{ item['origin_city'] }}</div>{% endif %}
                     </div>
                 </div>
 
@@ -804,6 +805,7 @@
                     <div class="address-box">
                         <span class="label-tag" style="color:#b91c1c;">DESTINATION / 目的地</span>
                         {{ item['destination'] or '-' }}
+                        {% if item['dest_city'] %}<div style="font-size:9pt; color:#374151; margin-top:3px;">目的地市: {{ item['dest_city'] }}</div>{% endif %}
                     </div>
                 </div>
             </div>
@@ -857,6 +859,18 @@
                     </div>
                     <div class="cell"><span class="label">卸货费</span>
                         <div class="value money">{{ item['unload_fee'] or '-' }}</div>
+                    </div>
+                    <div class="cell"><span class="label">提货费</span>
+                        <div class="value money">{{ item['pickup_fee'] or '-' }}</div>
+                    </div>
+                    <div class="cell"><span class="label">专车费</span>
+                        <div class="value money">{{ item['special_car_fee'] or '-' }}</div>
+                    </div>
+                    <div class="cell"><span class="label">保价金额</span>
+                        <div class="value money">{{ item['declared_value'] or '-' }}</div>
+                    </div>
+                    <div class="cell"><span class="label">超长超重</span>
+                        <div class="value">{{ item['oversize_heavy'] or '-' }}</div>
                     </div>
                     <div class="cell"><span class="label">其它费用</span>
                         <div class="value money">{{ item['other_fee'] or '-' }}</div>
@@ -927,6 +941,7 @@
                     <div class="value" style="font-size:9pt; color:#374151;">{{ item['sender_company'] or '' }} {{
                         item['sender_phone'] or '' }}</div>
                     <div class="value" style="font-size:9pt; color:#374151; margin-top:3px;">{{ item['origin'] or '' }}
+                        {% if item['origin_city'] %} · {{ item['origin_city'] }}{% endif %}
                     </div>
                 </div>
                 <div class="box">
@@ -935,7 +950,8 @@
                     <div class="value" style="font-size:9pt; color:#374151;">{{ item['receiver_company'] or '' }} {{
                         item['receiver_phone'] or '' }}</div>
                     <div class="value" style="font-size:9pt; color:#374151; margin-top:3px;">{{ item['destination'] or
-                        '' }}</div>
+                        '' }}{% if item['dest_city'] %} · {{ item['dest_city'] }}{% endif %}
+                    </div>
                 </div>
                 <div class="box">
                     <span class="label">货物 / CARGO</span>

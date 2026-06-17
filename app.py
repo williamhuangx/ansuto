@@ -607,7 +607,9 @@ _TRACKING_FIELDS = [
     ('tracking_no', str),          # 快递单号
     ('shipping_time', str),        # 托运时间
     ('origin', str),               # 始发地
+    ('origin_city', str),          # 始发市
     ('destination', str),          # 目的地
+    ('dest_city', str),            # 目的地市
     ('sender_company', str),       # 寄件公司
     ('sender', str),               # 发件人
     ('sender_phone', str),         # 发件人电话
@@ -630,6 +632,10 @@ _TRACKING_FIELDS = [
     ('pickup_request', str),       # 提货要求
     ('unload_fee', float),         # 卸货费
     ('other_fee', float),          # 其它费用
+    ('pickup_fee', float),         # 提货费
+    ('special_car_fee', float),    # 专车费
+    ('oversize_heavy', str),       # 超长超重
+    ('declared_value', float),     # 保价金额
     ('insurance', float),          # 保险
     ('freight', float),            # 运费
     ('cod_amount', float),         # 到付金额

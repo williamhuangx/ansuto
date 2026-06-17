@@ -339,12 +339,7 @@
             </div>
             <div class="item">
                 <label>运输类型</label>
-                <select name="transport_type">
-                    <option value="">-- 选择 --</option>
-                    {% for t in ['空运', '海运', '陆运', '专线', '快递', '铁运', '次日达','隔日达'] %}
-                    <option value="{{ t }}" {% if item and item.get('transport_type') == t %}selected{% endif %}>{{ t }}</option>
-                    {% endfor %}
-                </select>
+                <input type="text" name="transport_type" value="{{ item['transport_type'] if item else '' }}" placeholder="2024-06-15 10:00:00">
             </div>
             <div class="item">
                 <label>送货方式</label>
@@ -397,6 +392,10 @@
                         <span class="lbl">始发地</span>
                         <input type="text" name="origin" value="{{ item['origin'] if item else '' }}" placeholder="省 / 市 / 区 / 详细地址">
                     </div>
+                    <div class="waybill-row" style="border:none; padding:0; margin:4px 0 0 0;">
+                        <span class="lbl">始发市</span>
+                        <input type="text" name="origin_city" value="{{ item['origin_city'] if item else '' }}" placeholder="如：杭州市">
+                    </div>
                 </div>
             </div>
 
@@ -422,6 +421,10 @@
                     <div class="waybill-row" style="border:none; padding:0; margin:0;">
                         <span class="lbl">目的地</span>
                         <input type="text" name="destination" value="{{ item['destination'] if item else '' }}" placeholder="Destination Address">
+                    </div>
+                    <div class="waybill-row" style="border:none; padding:0; margin:4px 0 0 0;">
+                        <span class="lbl">目的地市</span>
+                        <input type="text" name="dest_city" value="{{ item['dest_city'] if item else '' }}" placeholder="如：上海市">
                     </div>
                 </div>
             </div>
@@ -456,6 +459,10 @@
                 <div class="field"><label>保险费</label><input type="number" step="0.01" name="insurance" value="{{ item['insurance'] if item else '' }}"></div>
                 <div class="field"><label>包装费</label><input type="number" step="0.01" name="package_fee" value="{{ item['package_fee'] if item else '' }}"></div>
                 <div class="field"><label>卸货费</label><input type="number" step="0.01" name="unload_fee" value="{{ item['unload_fee'] if item else '' }}"></div>
+                <div class="field"><label>提货费</label><input type="number" step="0.01" name="pickup_fee" value="{{ item['pickup_fee'] if item else '' }}"></div>
+                <div class="field"><label>专车费</label><input type="number" step="0.01" name="special_car_fee" value="{{ item['special_car_fee'] if item else '' }}"></div>
+                <div class="field"><label>保价金额</label><input type="number" step="0.01" name="declared_value" value="{{ item['declared_value'] if item else '' }}"></div>
+                <div class="field"><label>超长超重</label><input type="number" step="0.01" name="oversize_heavy" value="{{ item['oversize_heavy'] if item else '' }}"></div>
                 <div class="field"><label>其它费用</label><input type="number" step="0.01" name="other_fee" value="{{ item['other_fee'] if item else '' }}"></div>
                 <div class="field"><label>提货要求</label><input type="text" name="pickup_request" value="{{ item['pickup_request'] if item else '' }}"></div>
                 <div class="field"><label>回单备注</label><input type="text" name="receipt_remark" value="{{ item['receipt_remark'] if item else '' }}"></div>
