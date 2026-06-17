@@ -33,7 +33,7 @@
                 <th>目的地</th>
                 <th>寄件公司/发件人</th>
                 <th>收件人</th>
-                <th>品名</th>
+                <th>货物</th>
                 <!-- <th>重量</th>
                 <th>运费</th> -->
                 <th>状态</th>
@@ -56,7 +56,7 @@
                     {% if item['receiver_company'] %}{{ item['receiver_company'] }}<br>{% endif %}
                     {% if item['receiver'] %}{{ item['receiver'] }} ({{ item['receiver_phone'] or '-' }}){% endif %}
                 </td>
-                <td>{{ item['goods_name'] or '-' }}</td>
+                <td>{{ item['goods_name'] or '-' }}<br>{{ item['weight'] or '-' }}kg<br>{{ item['volume'] or '-' }}m³<br>{{ item['pieces'] or '-' }}件</td>
                 <!-- <td>{% if item['weight'] %}{{ item['weight'] }} kg{% else %}-{% endif %}</td>
                 <td>{% if item['freight'] %}¥{{ item['freight'] }}{% else %}-{% endif %}</td> -->
                 <td>

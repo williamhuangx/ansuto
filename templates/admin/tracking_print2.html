@@ -8,9 +8,9 @@
 pre{margin: 0px;padding: 0px;font-family: Arial}
 div{/*border: 1px solid #000099;*/height: 22px;font-size: 12px;font-weight:bold;text-align: center;float: left;position: fixed;display: inline-block;}
 #ke{background-image:url({{ url_for('static', filename='images/aa.png') }}) ;width: 811px;height:530px;clear: both}
-#div1{width: 65px;top: 60px;left: 630px;}
-#div2{width: 47px;top: 60px;left: 692px;}
-#div3{width: 47px;top: 60px;left: 740px;}
+#div1{width: 65px;top: 47px;left: 645px;}
+#div2{width: 47px;top: 47px;left: 702px;}
+#div3{width: 47px;top: 47px;left: 744px;}
 #div4{width: 138px;top: 98px;left: 98px;}
 #div5{width: 40px;top: 98px;left: 154px;}
 #div6{width: 40px;top: 98px;left: 198px;}
@@ -42,20 +42,20 @@ div{/*border: 1px solid #000099;*/height: 22px;font-size: 12px;font-weight:bold;
 #div32{width: 200px;top: 402px;left: 602px;text-align: left;}
 #div33{width: 42px;top: 311px;left:667px;}
 #div34{width: 42px;top: 311px;left:748px;}
-#div35{width: 200px;top: 333px;left: 600px;text-align: left;}
-#div36{width: 180px;top: 358px;left:604px;}
+#div35{width: 200px;top: 311px;left: 585px;text-align: left;}
+#div36{width: 180px;top: 355px;left: 604px;}
 #div37{width: 180px;top: 331px;left: 70px;text-align: left;}
 #div38{width: 79px;top: 348px;left: 299px;text-align: left;}
-#div39{width: 145px;top: 397px;left: 211px;text-align: left;display: inline-block;}
+#div39{width: 145px;top: 397px;left: 226px;text-align: left;}
 #div40{width: 79px;top: 402px;left: 380px;text-align: left;}
-#div41{width: 79px;top: 383px;left: 752px;text-align: left;}
+#div41{width: 79px;top: 375px;left: 748px;text-align: left;}
 #div42{width: 45px;top: 395px;left: 57px;text-align: left;}
 #div43{width: 124px;top: 413px;left: 139px;text-align: left;}
 #div44{width: 37px;top: 466px;left: 416px;}
 #div45{width: 79px;top: 383px;left: 661px;text-align: left;}
 #div46{width: 79px;top: 383px;left: 710px;text-align: left;}
 #div47{width: 79px;top: 384px;left: 380px;text-align: left;}
-#div48{width: 190px;top: 415px;left: 417px;text-align: left;}
+#div48{width: 190px;top: 405px;left: 417px;text-align: left;}
 #div49{width: 132px;top: 486px;left: 371px;}
 @media print {.v-h {display:none;}}
 </style>
@@ -64,8 +64,8 @@ div{/*border: 1px solid #000099;*/height: 22px;font-size: 12px;font-weight:bold;
 <body>
     <div id="ke">
 	<div id="div1">{{ item['transport_type'] or '-' }}</div>
-	<div id="div2">{{ city or '-' }}</div>
-	<div id="div3">{{ s_city or '-' }}</div>
+	<div id="div2">{{ item['origin_city'] or '-' }}</div>
+	<div id="div3">{{ item['dest_city'] or '-' }}</div>
 	<div id="div4">{{ item['shipping_time'] or '-' }}</div>
 	<div id="div7">{{ item['sender_company'] or '-' }}</div>
 	<div id="div8">{{ item['receiver_company'] or '-' }}</div>
@@ -88,26 +88,26 @@ div{/*border: 1px solid #000099;*/height: 22px;font-size: 12px;font-weight:bold;
 	<div id="div25">{{ item['charge_weight'] or '-' }}</div>
 	<div id="div26">{{ item['freight'] or '-' }}</div>
 	<div id="div27">{{ item['cod_amount'] or '-' }}</div>
-	<!-- <div id="div28">28</div> -->
+	<div id="div28">{{ item['pickup_fee'] or '-' }}</div>
 	<div id="div29">{{ item['package_fee'] or '-' }}</div>
 	<div id="div30">{{ item['unload_fee'] or '-' }}</div>
-	<!-- <div id="div31">31</div> -->
+	<div id="div31">{{ item['special_car_fee'] or '-' }}</div>
 	<!-- <div id="div32">32</div> -->
 	<div id="div33">{{ item['other_fee'] or '-' }}</div>
 	<div id="div34">{{ item['insurance'] or '-' }}</div>
-	<!-- <div id="div35">35</div> -->
-	<!-- <div id="div36"></div> -->
+	<div id="div35">{{ item['oversize_heavy'] or '-' }}</div>
+	<div id="div36">{{ item['charge_weight'] * item['freight'] + item['cod_amount'] + item['pickup_fee'] + item['package_fee'] + item['unload_fee'] + item['special_car_fee'] + item['other_fee']+item['insurance']+item['oversize_heavy'] }}</div>
 	<!-- <div id="div37">37</div> -->
 	<div id="div38">{{ item['volume'] or '-' }}</div>
 	<div id="div39">{{ item['receipt_remark'] or '-' }}</div>
 	<!-- <div id="div40">40</div> -->
 	<div id="div41">{{ item['payment_method'] or '-' }}</div>
 	<div id="div42">{{ item['receipt_status'] or '-' }}</div>
-	<!-- <div id="div43">43</div>
-	<div id="div44">44</div>
-	<div id="div45">45</div>
-	<div id="div46">46</div>
-	<div id="div47">47</div> -->
+	<!-- <div id="div43">43</div> -->
+	<!-- <div id="div44">44</div> -->
+	<!-- <div id="div45">45</div> -->
+	<!-- <div id="div46">46</div> -->
+	<!-- <div id="div47">47</div> -->
 	<div id="div48">{{ item['delivery_method'] or '-' }}</div>
 </div>
 <div class="v-h" ><button type="button" onclick="javascript:window.print();"  style="height: 24px;vertical-align: middle;" />打印</button></div>

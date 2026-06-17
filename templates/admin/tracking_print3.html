@@ -13,21 +13,21 @@ body { font-family: Arial, sans-serif; background: #f0f0f0; padding: 20px; }
 .label-content { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
 .label-content > div { position: absolute; font-weight: bold; }
 
-.div1 { width: 65px; top: 32px; left: 276px; font-size: 16px; text-align: center; }
-.div2 { width: 80px; top: 133px; left: 25px; font-size: 23px; text-align: center; }
-.div3 { width: 80px; top: 133px; left: 254px; font-size: 23px; text-align: center; }
-.div4 { width: 85px; top: 182px; left: 48px; font-size: 13px; text-align: center; }
-.div5 { width: 40px; top: 233px; left: 93px; font-size: 12px; text-align: center; }
+.div1 { width: 100px;top: 32px;left: 227px;font-size: 16px;text-align: center; }
+.div2 { width: 80px;top: 133px;left: 18px;font-size: 23px;text-align: center;}
+.div3 { width: 80px; top: 133px; left: 248px; font-size: 23px; text-align: center; }
+.div4 { width: 85px; top: 186px; left: 48px; font-size: 13px; text-align: center; }
+.div5 { width: 40px;top: 220px;left: 93px;font-size: 23px;text-align: center; }
 .div6 { width: 54px; top: 191px; left: 178px; font-size: 13px; text-align: center; }
-.div7 { width: 250px; top: 82px; left: 60px; font-size: 13px; text-align: left; }
-.div8 { width: 250px; top: 82px; left: 156px; font-size: 13px; text-align: left; }
-.div9 { width: 70px; top: 82px; left: 267px; font-size: 13px; text-align: left; }
+.div7 { width: 54px;top: 82px;left: 60px;font-size: 13px;text-align: left; }
+.div8 { width: 62px;top: 84px;left: 156px;font-size: 13px;text-align: left;}
+.div9 {width: 70px;top: 84px;left: 267px;font-size: 13px;text-align: left;}
 .div_t1 { width: 65px; top: 82px; left: 3px; font-size: 13px; text-align: center; }
 .div_t2 { width: 65px; top: 82px; left: 100px; font-size: 13px; text-align: center; }
 .div_t3 { width: 65px; top: 82px; left: 204px; font-size: 13px; text-align: center; }
 .div_t4 { width: 38px; top: 182px; left: 15px; font-size: 13px; text-align: center; }
 .div_t5 { width: 40px; top: 191px; left: 135px; font-size: 13px; text-align: center; }
-.div_t6 { width: 100px; top: 125px; left: 128px; font-size: 22px; text-align: center; }
+.div_t6 {width: 100px;top: 117px;left: 120px;font-size: 22px;text-align: center;}
 
 .v-h { display: flex; gap: 12px; margin-top: 30px; align-items: center; padding: 15px 20px; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
 .v-h button { padding: 8px 20px; background: #4a90d9; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; }
@@ -71,8 +71,8 @@ body { font-family: Arial, sans-serif; background: #f0f0f0; padding: 20px; }
         <div class="div_t4">发货日期</div>
         <div class="div_t5">收货人</div>
         <div class="div_t6">{{ item['transport_type'] or '-' }}</div>
-        <div class="div2">{{ city or '-' }}</div>
-        <div class="div3">{{ s_city or '-' }}</div>
+        <div class="div2">{{ item['origin_city'] or '-' }}</div>
+        <div class="div3">{{ item['dest_city'] or '-' }}</div>
         <div class="div4">{{ item['shipping_time'] or '-' }}</div>
         <div class="div5">{{ item['tracking_no'] or '-' }}</div>
         <div class="div6">{{ item['receiver'] or '-' }}</div>
