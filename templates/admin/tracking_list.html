@@ -44,7 +44,7 @@
             {% for item in items %}
             <tr>
                 <!-- <td>{{ item['id'] }}</td> -->
-                <td><strong style="color:var(--accent);">{{ item['tracking_no'] }}</strong></td>
+                <td><a href="{{ url_for('admin_tracking_detail', tid=item['id']) }}"><strong style="color:var(--accent);">{{ item['tracking_no'] }}</strong></a></td>
                 <td style="font-size:12px;">{{ item['shipping_time'] or '-' }}</td>
                 <td>{{ item['origin'] or '-' }}</td>
                 <td>{{ item['destination'] or '-' }}</td>
