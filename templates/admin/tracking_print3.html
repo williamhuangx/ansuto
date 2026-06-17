@@ -39,11 +39,20 @@ body { font-family: Arial, sans-serif; background: #f0f0f0; padding: 20px; }
 .btn-third:hover { background: #e5e5e5; }
 
 @media print {
-    body { background: #fff; padding: 0; }
+    body { background: #fff; padding: 0; margin: 0; }
     .v-h { display: none !important; }
-    .page { gap: 0; }
-    .label-container { page-break-inside: avoid; }
-    @page { margin: 5mm; size: auto; }
+    .page { display: block; }
+    .label-container { 
+        display: block; 
+        margin: 0;
+        page-break-after: always; 
+        page-break-inside: avoid; 
+    }
+    .label-container:last-child { page-break-after: avoid; }
+    @page { 
+        margin: 0; 
+        size: 90mm 66.68mm; 
+    }
 }
 </style>
 </head>
