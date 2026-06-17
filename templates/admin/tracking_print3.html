@@ -64,13 +64,13 @@ body { font-family: Arial, sans-serif; background: #f0f0f0; padding: 20px; }
 <div class="label-container">
     <div class="label-bg"></div>
     <div class="label-content">
-        <div class="div1">{{ item['transport_type'] or '-' }}</div>
+        <div class="div1">{{ item['delivery_method'] or '-' }}</div>
         <div class="div_t1">品名</div>
         <div class="div_t2">重量</div>
         <div class="div_t3">件数</div>
         <div class="div_t4">发货日期</div>
         <div class="div_t5">收货人</div>
-        <div class="div_t6">次日达</div>
+        <div class="div_t6">{{ item['transport_type'] or '-' }}</div>
         <div class="div2">{{ city or '-' }}</div>
         <div class="div3">{{ s_city or '-' }}</div>
         <div class="div4">{{ item['shipping_time'] or '-' }}</div>

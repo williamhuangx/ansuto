@@ -341,7 +341,7 @@
                 <label>运输类型</label>
                 <select name="transport_type">
                     <option value="">-- 选择 --</option>
-                    {% for t in ['空运', '海运', '陆运', '专线', '快递', '铁运'] %}
+                    {% for t in ['空运', '海运', '陆运', '专线', '快递', '铁运', '次日达','隔日达'] %}
                     <option value="{{ t }}" {% if item and item.get('transport_type') == t %}selected{% endif %}>{{ t }}</option>
                     {% endfor %}
                 </select>
