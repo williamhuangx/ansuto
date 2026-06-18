@@ -95,7 +95,7 @@ div{/*border: 1px solid #000099;*/height: 22px;font-size: 12px;font-weight:bold;
 	<div id="div34">{{ item['insurance'] or '-' }}</div>
 	<div id="div35">{{ item['oversize_heavy'] or '-' }}</div>
 	<div id="div36">
-{% set total = item['charge_weight'] * item['freight'] + item['cod_amount'] + item['pickup_fee'] + item['package_fee'] + item['unload_fee'] + item['special_car_fee'] + item['other_fee']+item['insurance']+item['oversize_heavy'] %}
+{% set total = item['freight'] + item['cod_amount'] + item['pickup_fee'] + item['package_fee'] + item['unload_fee'] + item['special_car_fee'] + item['other_fee']+item['insurance']+item['oversize_heavy'] %}
 {{ "%.2f"|format(total) }}</div>
 	<!-- <div id="div37">37</div> -->
 	<div id="div38">{{ item['volume'] or '-' }}</div>
