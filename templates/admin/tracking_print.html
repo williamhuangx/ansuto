@@ -845,42 +845,20 @@
             <div class="charge-section">
                 <div class="section-title">CHARGES / 费用明细 (¥)</div>
                 <div class="cargo-grid">
-                    <div class="cell"><span class="label">运费 / FREIGHT</span>
-                        <div class="value money">{{ item['freight'] or '-' }}</div>
-                    </div>
-                    <div class="cell"><span class="label">到付金额 / COD</span>
-                        <div class="value money">{{ item['cod_amount'] or '-' }}</div>
-                    </div>
-                    <div class="cell"><span class="label">保险费</span>
-                        <div class="value money">{{ item['insurance'] or '-' }}</div>
-                    </div>
-                    <div class="cell"><span class="label">包装费</span>
-                        <div class="value money">{{ item['package_fee'] or '-' }}</div>
-                    </div>
-                    <div class="cell"><span class="label">卸货费</span>
-                        <div class="value money">{{ item['unload_fee'] or '-' }}</div>
-                    </div>
-                    <div class="cell"><span class="label">提货费</span>
-                        <div class="value money">{{ item['pickup_fee'] or '-' }}</div>
-                    </div>
-                    <div class="cell"><span class="label">专车费</span>
-                        <div class="value money">{{ item['special_car_fee'] or '-' }}</div>
-                    </div>
-                    <div class="cell"><span class="label">保价金额</span>
-                        <div class="value money">{{ item['declared_value'] or '-' }}</div>
-                    </div>
-                    <div class="cell"><span class="label">超长超重</span>
-                        <div class="value">{{ item['oversize_heavy'] or '-' }}</div>
-                    </div>
-                    <div class="cell"><span class="label">其它费用</span>
-                        <div class="value money">{{ item['other_fee'] or '-' }}</div>
-                    </div>
-                    <div class="cell"><span class="label">提货要求</span>
-                        <div class="value">{{ item['pickup_request'] or '-' }}</div>
-                    </div>
-                    <div class="cell"><span class="label">回单备注</span>
-                        <div class="value">{{ item['receipt_remark'] or '-' }}</div>
-                    </div>
+                    <div class="cell"><span class="label">运费 / FREIGHT</span><div class="value money">{{ item['freight'] or '-' }}</div></div>
+                    <div class="cell"><span class="label">送货费</span><div class="value money">{{ item['delivery_fee'] or '-' }}</div></div>
+                    <div class="cell"><span class="label">保险费</span><div class="value money">{{ item['insurance'] or '-' }}</div></div>
+                    <div class="cell"><span class="label">包装费</span><div class="value money">{{ item['package_fee'] or '-' }}</div></div>
+                    <div class="cell"><span class="label">卸货费</span><div class="value money">{{ item['unload_fee'] or '-' }}</div></div>
+                    <div class="cell"><span class="label">提货费</span><div class="value money">{{ item['pickup_fee'] or '-' }}</div></div>
+                    <div class="cell"><span class="label">专车费</span><div class="value money">{{ item['special_car_fee'] or '-' }}</div></div>
+                    <div class="cell"><span class="label">超长超重</span><div class="value">{{ item['oversize_heavy'] or '-' }}</div></div>
+                    <div class="cell"><span class="label">其它费用</span><div class="value money">{{ item['other_fee'] or '-' }}</div></div>
+                    <div class="cell"><span class="label">费用合计</span><div class="value money">{{ {{ item['freight'] + item['delivery_fee'] + item['insurance'] + item['package_fee'] + item['unload_fee'] + item['pickup_fee'] + item['special_car_fee'] + item['oversize_heavy']  + item['other_fee'] }} }}</div></div>
+                    <div class="cell"><span class="label">保价金额</span><div class="value money">{{ item['declared_value'] or '-' }}</div></div>
+                    <div class="cell"><span class="label">到付金额 / COD</span><div class="value money">{{ item['cod_amount'] or '-' }}</div></div>
+                    <!-- <div class="cell"><span class="label">提货要求</span><div class="value">{{ item['pickup_request'] or '-' }}</div></div>
+                    <div class="cell"><span class="label">回单备注</span><div class="value">{{ item['receipt_remark'] or '-' }}</div></div> -->
                 </div>
             </div>
 
