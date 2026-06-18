@@ -473,18 +473,20 @@
         <div class="waybill-section">
             <h4>CHARGES / 费用明细 (¥)</h4>
             <div class="waybill-grid">
-                <div class="field"><span class="lbl">运费 / FREIGHT</span><div class="val money">{{ item['freight'] or '-' }}</div></div>
-                <div class="field"><span class="lbl">到付金额 / COD</span><div class="val money">{{ item['cod_amount'] or '-' }}</div></div>
+                <div class="field"><span class="lbl">运费</span><div class="val money">{{ item['freight'] or '-' }}</div></div>
+                <div class="field"><span class="lbl">送货费</span><div class="val money">{{ item['delivery_fee'] or '-' }}</div></div>
                 <div class="field"><span class="lbl">保险费</span><div class="val money">{{ item['insurance'] or '-' }}</div></div>
                 <div class="field"><span class="lbl">包装费</span><div class="val money">{{ item['package_fee'] or '-' }}</div></div>
                 <div class="field"><span class="lbl">卸货费</span><div class="val money">{{ item['unload_fee'] or '-' }}</div></div>
                 <div class="field"><span class="lbl">提货费</span><div class="val money">{{ item['pickup_fee'] or '-' }}</div></div>
                 <div class="field"><span class="lbl">专车费</span><div class="val money">{{ item['special_car_fee'] or '-' }}</div></div>
-                <div class="field"><span class="lbl">保价金额</span><div class="val money">{{ item['declared_value'] or '-' }}</div></div>
-                <div class="field"><span class="lbl">超长超重</span><div class="val">{{ item['oversize_heavy'] or '-' }}</div></div>
-                <div class="field"><span class="lbl">其它费用</span><div class="val money">{{ item['other_fee'] or '-' }}</div></div>
-                <div class="field"><span class="lbl">提货要求</span><div class="val" style="font-size: 13px;">{{ item['pickup_request'] or '-' }}</div></div>
-                <div class="field"><span class="lbl">回单备注</span><div class="val" style="font-size: 13px;">{{ item['receipt_remark'] or '-' }}</div></div>
+                <div class="field"><span class="lbl">超长超重</span><div class="val money">{{ item['oversize_heavy'] if item else 0 }}</div></div>
+                <div class="field"><span class="lbl">其它费用</span><div class="val money">{{ item['other_fee'] if item else 0 }}</div></div>
+                <div class="field"><span class="lbl">费用合计</span><div class="val money">{{ item['freight'] + item['delivery_fee'] + item['insurance'] + item['package_fee'] + item['unload_fee'] + item['pickup_fee'] + item['special_car_fee'] + item['oversize_heavy']  + item['other_fee'] }}</div></div>
+                <div class="field"><span class="lbl">保价金额</span><div class="val money">{{ item['declared_value'] if item else 0 }}</div></div>
+                <div class="field"><span class="lbl">到付金额</span><div class="val money">{{ item['cod_amount'] if item else 0 }}</div></div>
+                <!-- <div class="field"><span class="lbl">提货要求</span><div class="val" style="font-size: 13px;">{{ item['pickup_request'] or '-' }}</div></div>
+                <div class="field"><span class="lbl">回单备注</span><div class="val" style="font-size: 13px;">{{ item['receipt_remark'] or '-' }}</div></div> -->
             </div>
         </div>
 
