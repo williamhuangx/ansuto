@@ -852,9 +852,9 @@
                     <div class="cell"><span class="label">卸货费</span><div class="value money">{{ item['unload_fee'] or '-' }}</div></div>
                     <div class="cell"><span class="label">提货费</span><div class="value money">{{ item['pickup_fee'] or '-' }}</div></div>
                     <div class="cell"><span class="label">专车费</span><div class="value money">{{ item['special_car_fee'] or '-' }}</div></div>
-                    <div class="cell"><span class="label">超长超重</span><div class="value">{{ item['oversize_heavy'] or '-' }}</div></div>
+                    <div class="cell"><span class="label">超长超重</span><div class="value money">{{ item['oversize_heavy'] or '-' }}</div></div>
                     <div class="cell"><span class="label">其它费用</span><div class="value money">{{ item['other_fee'] or '-' }}</div></div>
-                    <div class="cell"><span class="label">费用合计</span><div class="value money">{{ {{ item['freight'] + item['delivery_fee'] + item['insurance'] + item['package_fee'] + item['unload_fee'] + item['pickup_fee'] + item['special_car_fee'] + item['oversize_heavy']  + item['other_fee'] }} }}</div></div>
+                    <div class="cell"><span class="label">费用合计</span><div class="value money">{{ item['freight'] + item['delivery_fee'] + item['insurance'] + item['package_fee'] + item['unload_fee'] + item['pickup_fee'] + item['special_car_fee'] + item['oversize_heavy']  + item['other_fee'] }}</div></div>
                     <div class="cell"><span class="label">保价金额</span><div class="value money">{{ item['declared_value'] or '-' }}</div></div>
                     <div class="cell"><span class="label">到付金额 / COD</span><div class="value money">{{ item['cod_amount'] or '-' }}</div></div>
                     <!-- <div class="cell"><span class="label">提货要求</span><div class="value">{{ item['pickup_request'] or '-' }}</div></div>
@@ -943,7 +943,7 @@
             </div>
             <div class="mini-bottom">
                 <span>托运时间: {{ item['shipping_time'] or '-' }}</span>
-                <span>运费: ¥{{ item['freight'] or '-' }}</span>
+                <span>运费: ¥{{ item['freight'] + item['delivery_fee'] + item['insurance'] + item['package_fee'] + item['unload_fee'] + item['pickup_fee'] + item['special_car_fee'] + item['oversize_heavy']  + item['other_fee'] }}</span>
                 <span>付款方式: {{ item['payment_method'] or '-' }}</span>
             </div>
         </div>
