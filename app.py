@@ -362,32 +362,8 @@ def contact_page():
 # ============================================================
 # 后台管理 - 登录
 # ============================================================
-def _ensure_default_admin():
-    """初始化时确保有 admin / admin123 账号"""
-    try:
-        existing = query_sql("SELECT * FROM admins WHERE username=%s LIMIT 1", ('admin',))
-        if existing:
-            # 已存在admin账号,但检查密码是否仍有效(防止早期遗留的无效hash)
-            stored_pw = existing[0]['password']
-            pw_ok = False
-            try:
-                pw_ok = check_password_hash(stored_pw, 'admin123')
-            except Exception:
-                pw_ok = False
-            if not pw_ok and stored_pw != 'admin123':
-                hashed = generate_password_hash('admin123')
-                update_sql("UPDATE admins SET password=%s WHERE username=%s", (hashed, 'admin'))
-            return
-        hashed = generate_password_hash('admin123')
-        insert_sql("INSERT INTO admins (username, password, real_name, role, status) VALUES (%s, %s, %s, %s, %s)",
-                   ('admin', hashed, '超级管理员', 'super', 1))
-    except Exception:
-        pass
-
-
 @app.route('/admin/login', methods=['GET', 'POST'])
 def admin_login():
-    _ensure_default_admin()
     if request.method == 'POST':
         username = request.form.get('username', '').strip()
         password = request.form.get('password', '')
