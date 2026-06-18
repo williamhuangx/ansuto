@@ -463,8 +463,7 @@
                 <div class="field"><label>专车费</label><input type="number" step="0.01" name="special_car_fee" value="{{ item['special_car_fee'] if item else 0 }}"></div>
                 <div class="field"><label>超长超重</label><input type="number" step="0.01" name="oversize_heavy" value="{{ item['oversize_heavy'] if item else 0 }}"></div>
                 <div class="field"><label>其它费用</label><input type="number" step="0.01" name="other_fee" value="{{ item['other_fee'] if item else 0 }}"></div>
-                <div class="field"><label>费用合计</label><label>费用合计</label>
-    {% set total = item.get('freight', 0)
+                <div class="field"><label>费用合计</label>{% set total = item.get('freight', 0)
         + item.get('delivery_fee', 0)
         + item.get('insurance', 0)
         + item.get('package_fee', 0)
