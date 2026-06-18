@@ -32,18 +32,6 @@ app.config['PERMANENT_SESSION_LIFETIME'] = 3600 * 8  # 8小时
 # ------------------------------------------------------------
 from flask import g
 
-def get_addr(s):
-    p = re.search(r'(.*?(省|自治区|京|沪|津|渝))', s)
-    pro = p.group(1) if p else ''
-    rest = s.replace(pro, '', 1).strip()
-    c = re.search(r'([\u4e00-\u9fa5]+?(市|自治州|地区|盟))', rest)
-    city = c.group(1) if c else ''
-    rest2 = rest.replace(city, '', 1).strip()
-    d = re.search(r'([\u4e00-\u9fa5]+?(区|县|旗))', rest2)
-    dist = d.group(1) if d else ''
-    detail = rest2.replace(dist, '', 1).strip()
-    return pro, city, dist, detail
-
 def get_db():
     """获取当前请求的数据库连接, 同一请求内复用"""
     if 'db_conn' not in g:
@@ -634,7 +622,7 @@ _TRACKING_FIELDS = [
     ('other_fee', float),          # 其它费用
     ('pickup_fee', float),         # 提货费
     ('special_car_fee', float),    # 专车费
-    ('oversize_heavy', str),       # 超长超重
+    ('oversize_heavy', float),       # 超长超重
     ('declared_value', float),     # 保价金额
     ('insurance', float),          # 保险
     ('freight', float),            # 运费
@@ -800,19 +788,8 @@ def admin_tracking_print2(tid):
     # 获取当前时间用于打印页
     from datetime import datetime
     now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    fj = get_addr(item[0]['origin'])
-    sf = fj[0]
-    city = fj[1]
-    dist = fj[2]
-    detail = fj[3]
 
-    s_addr = get_addr(item[0]['destination'])
-    s_sf = s_addr[0]
-    s_city = s_addr[1]
-    s_dist = s_addr[2]
-    s_detail = s_addr[3]
-
-    return render_template('admin/tracking_print2.html', item=item[0], details=details, now=now, sf=sf, city=city, dist=dist, detail=detail, s_sf=s_sf, s_city=s_city, s_dist=s_dist, s_detail=s_detail)
+    return render_template('admin/tracking_print2.html', item=item[0], details=details, now=now)
 
 
 @app.route('/admin/tracking/print3/<int:tid>')
@@ -828,19 +805,8 @@ def admin_tracking_print3(tid):
     # 获取当前时间用于打印页
     from datetime import datetime
     now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    fj = get_addr(item[0]['origin'])
-    sf = fj[0]
-    city = fj[1]
-    dist = fj[2]
-    detail = fj[3]
 
-    s_addr = get_addr(item[0]['destination'])
-    s_sf = s_addr[0]
-    s_city = s_addr[1]
-    s_dist = s_addr[2]
-    s_detail = s_addr[3]
-
-    return render_template('admin/tracking_print3.html', item=item[0], details=details, now=now, sf=sf, city=city, dist=dist, detail=detail, s_sf=s_sf, s_city=s_city, s_dist=s_dist, s_detail=s_detail)
+    return render_template('admin/tracking_print3.html', item=item[0], details=details, now=now)
 
 
 # ============================================================

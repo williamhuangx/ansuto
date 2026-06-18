@@ -23,31 +23,56 @@
         </form>
         <span style="color:#999; font-size:13px;">共 {{ total }} 条记录</span>
     </div>
+    <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
     <table id="tableToExcel">
         <thead>
             <tr>
-                <!-- <th>ID</th> -->
+                <th style="display: none;">ID</th>
                 <th>快递单号</th>
                 <th>托运时间</th>
-                <th>始发地</th>
-                <th>目的地</th>
-                <th>寄件公司/发件人</th>
-                <th>收件人</th>
-                <th>货物</th>
-                <!-- <th>重量</th>
-                <th>运费</th> -->
+                <th style="display: none;">始发地</th>
+                <th>始发市</th>
+                <th style="display: none;">目的地</th>
+                <th>目的地市</th>
+                <th>寄件公司/发件人/发件电话</th>
+                <th>收件公司/收件人/收件电话</th>
+                <th>运输类型</th>
+                <th>品名/重量(kg)/体积(m³)/件数</th>
+                <th style="display: none;">包装</th>
+                <th style="display: none;">送货方式</th>
+                <th style="display: none;">签回单</th>
+                <th style="display: none;">回单备注</th>
+                <th style="display: none;">回单情况</th>
+                <th style="display: none;">备注</th>
+                <th style="display: none;">计费重量</th>
+                <th style="display: none;">包装费</th>
+                <th style="display: none;">提货要求</th>
+                <th style="display: none;">卸货费</th>
+                <th style="display: none;">其它费用</th>
+                <th style="display: none;">提货费</th>
+                <th style="display: none;">专车费</th>
+                <th style="display: none;">超长超重</th>
+                <th style="display: none;">保价金额</th>
+                <th style="display: none;">保险费</th>
+                <th style="display: none;">运费</th>
+                <th style="display: none;">到付金额</th>
+                <th style="display: none;">付款方式</th>
                 <th>状态</th>
+                <th style="display: none;">创建时间</th>
+                <th style="display: none;">更新时间</th>
                 <th>操作</th>
             </tr>
         </thead>
         <tbody>
             {% for item in items %}
             <tr>
-                <!-- <td>{{ item['id'] }}</td> -->
+                <td style="display: none;">{{ item['id'] }}</td>
                 <td><a href="{{ url_for('admin_tracking_detail', tid=item['id']) }}"><strong style="color:var(--accent);">{{ item['tracking_no'] }}</strong></a></td>
                 <td style="font-size:12px;">{{ item['shipping_time'] or '-' }}</td>
-                <td>{{ item['origin'] or '-' }}</td>
-                <td>{{ item['destination'] or '-' }}</td>
+                <td style="display: none;">{{ item['origin'] or '-' }}</td>
+                <td>{{ item['origin_city'] or '-' }}</td>
+                <td style="display: none;">{{ item['destination'] or '-' }}</td>
+                <td>{{ item['dest_city'] or '-' }}</td>
                 <td>
                     {% if item['sender_company'] %}{{ item['sender_company'] }}<br>{% endif %}
                     {% if item['sender'] %}{{ item['sender'] }} ({{ item['sender_phone'] or '-' }}){% endif %}
@@ -56,15 +81,35 @@
                     {% if item['receiver_company'] %}{{ item['receiver_company'] }}<br>{% endif %}
                     {% if item['receiver'] %}{{ item['receiver'] }} ({{ item['receiver_phone'] or '-' }}){% endif %}
                 </td>
-                <td>{{ item['goods_name'] or '-' }}<br>{{ item['weight'] or '-' }}kg<br>{{ item['volume'] or '-' }}m³<br>{{ item['pieces'] or '-' }}件</td>
-                <!-- <td>{% if item['weight'] %}{{ item['weight'] }} kg{% else %}-{% endif %}</td>
-                <td>{% if item['freight'] %}¥{{ item['freight'] }}{% else %}-{% endif %}</td> -->
+                <td>{{ item['transport_type'] or '-' }}</td>
+                <td>{{ item['goods_name'] or '-' }}<br>{{ item['weight'] or '-' }}kg / {{ item['volume'] or '-' }}m³ / {{ item['pieces'] or '-' }}件</td>
+                <td style="display: none;">{{ item['package'] or '-' }}</td>
+                <td style="display: none;">{{ item['delivery_method'] or '-' }}</td>
+                <td style="display: none;">{{ item['need_receipt'] or '-' }}</td>
+                <td style="display: none;">{{ item['receipt_remark'] or '-' }}</td>
+                <td style="display: none;">{{ item['receipt_status'] or '-' }}</td>
+                <td style="display: none;">{{ item['remark'] or '-' }}</td>
+                <td style="display: none;">{{ item['charge_weight'] or '-' }}</td>
+                <td style="display: none;">¥{{ item['package_fee'] or '-' }}</td>
+                <td style="display: none;">{{ item['pickup_request'] or '-' }}</td>
+                <td style="display: none;">¥{{ item['unload_fee'] or '-' }}</td>
+                <td style="display: none;">¥{{ item['other_fee'] or '-' }}</td>
+                <td style="display: none;">¥{{ item['pickup_fee'] or '-' }}</td>
+                <td style="display: none;">¥{{ item['special_car_fee'] or '-' }}</td>
+                <td style="display: none;">{{ item['oversize_heavy'] or '-' }}</td>
+                <td style="display: none;">¥{{ item['declared_value'] or '-' }}</td>
+                <td style="display: none;">¥{{ item['insurance'] or '-' }}</td>
+                <td style="display: none;">¥{{ item['freight'] or '-' }}</td>
+                <td style="display: none;">¥{{ item['cod_amount'] or '-' }}</td>
+                <td style="display: none;">{{ item['payment_method'] or '-' }}</td>
                 <td>
                     {% if item['status'] == 'delivered' %}<span class="badge badge-active">已送达</span>
                     {% elif item['status'] == 'transit' %}<span class="badge badge-info">运输中</span>
                     {% elif item['status'] == 'lost' %}<span class="badge badge-inactive">异常</span>
                     {% else %}<span class="badge badge-warn">待发货</span>{% endif %}
                 </td>
+                <td style="display: none;">{{ item['created_at'] or '-' }}</td>
+                <td style="display: none;">{{ item['updated_at'] or '-' }}</td>
                 <td style="white-space: nowrap;">
                     <a href="{{ url_for('admin_tracking_detail', tid=item['id']) }}"  class="btn btn-sm btn-default">节点</a>
                     <a href="{{ url_for('admin_tracking_print', tid=item['id']) }}" class="btn btn-sm btn-default" target="_blank">打印</a>
@@ -77,11 +122,12 @@
             </tr>
             {% else %}
             <tr>
-                <td colspan="12" style="text-align:center; padding: 40px; color: #999;">暂无运单,请先添加</td>
+                <td colspan="35" style="text-align:center; padding: 40px; color: #999;">暂无运单,请先添加</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
+    </div>
     <script>
 function tableToExcel(tid, sheet, fn){
     const t=document.getElementById(tid),s=`<style>table{border-collapse:collapse;width:380px}td{border:1px solid #000;padding:1px;text-align:center;font-family:"微软雅黑";font-size:12px}</style>`;

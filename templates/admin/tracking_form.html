@@ -339,7 +339,7 @@
             </div>
             <div class="item">
                 <label>运输类型</label>
-                <input type="text" name="transport_type" value="{{ item['transport_type'] if item else '' }}" placeholder="2024-06-15 10:00:00">
+                <input type="text" name="transport_type" value="{{ item['transport_type'] if item else '' }}" placeholder="次日达">
             </div>
             <div class="item">
                 <label>送货方式</label>
@@ -436,16 +436,16 @@
             <div class="waybill-grid">
                 <div class="field"><label>品名 / DESCRIPTION</label><textarea name="goods_name" rows="1">{{ item['goods_name'] if item else '' }}</textarea></div>
                 <div class="field"><label>包装 / PACKAGE</label><input type="text" name="package" value="{{ item['package'] if item else '' }}"></div>
-                <div class="field"><label>件数 / PIECES</label><input type="number" name="pieces" value="{{ item['pieces'] if item else '' }}"></div>
+                <div class="field"><label>件数 / PIECES</label><input type="number" name="pieces" value="{{ item['pieces'] if item else 0 }}"></div>
                 <div class="field"><label>签回单 / RECEIPT</label>
                     <select name="need_receipt">
                         <option value="否" {% if not item or item.get('need_receipt') == '否' %}selected{% endif %}>否</option>
                         <option value="是" {% if item and item.get('need_receipt') == '是' %}selected{% endif %}>是</option>
                     </select>
                 </div>
-                <div class="field"><label>重量(kg) / WEIGHT</label><input type="number" step="0.01" name="weight" value="{{ item['weight'] if item else '' }}"></div>
-                <div class="field"><label>体积(m³) / VOLUME</label><input type="number" step="0.01" name="volume" value="{{ item['volume'] if item else '' }}"></div>
-                <div class="field"><label>计费重量(kg)</label><input type="number" step="0.01" name="charge_weight" value="{{ item['charge_weight'] if item else '' }}"></div>
+                <div class="field"><label>重量(kg) / WEIGHT</label><input type="number" step="0.01" name="weight" value="{{ item['weight'] if item else 0 }}"></div>
+                <div class="field"><label>体积(m³) / VOLUME</label><input type="number" step="0.01" name="volume" value="{{ item['volume'] if item else 0 }}"></div>
+                <div class="field"><label>计费重量(kg)</label><input type="number" step="0.01" name="charge_weight" value="{{ item['charge_weight'] if item else 0 }}"></div>
                 <div class="field"><label>回单情况</label><input type="text" name="receipt_status" value="{{ item['receipt_status'] if item else '' }}"></div>
             </div>
         </div>
@@ -454,16 +454,16 @@
         <div class="waybill-section">
             <h4>CHARGES / 费用明细</h4>
             <div class="waybill-grid">
-                <div class="field"><label>运费(元)</label><input type="number" step="0.01" name="freight" value="{{ item['freight'] if item else '' }}"></div>
-                <div class="field"><label>到付金额</label><input type="number" step="0.01" name="cod_amount" value="{{ item['cod_amount'] if item else '' }}"></div>
-                <div class="field"><label>保险费</label><input type="number" step="0.01" name="insurance" value="{{ item['insurance'] if item else '' }}"></div>
-                <div class="field"><label>包装费</label><input type="number" step="0.01" name="package_fee" value="{{ item['package_fee'] if item else '' }}"></div>
-                <div class="field"><label>卸货费</label><input type="number" step="0.01" name="unload_fee" value="{{ item['unload_fee'] if item else '' }}"></div>
-                <div class="field"><label>提货费</label><input type="number" step="0.01" name="pickup_fee" value="{{ item['pickup_fee'] if item else '' }}"></div>
-                <div class="field"><label>专车费</label><input type="number" step="0.01" name="special_car_fee" value="{{ item['special_car_fee'] if item else '' }}"></div>
-                <div class="field"><label>保价金额</label><input type="number" step="0.01" name="declared_value" value="{{ item['declared_value'] if item else '' }}"></div>
-                <div class="field"><label>超长超重</label><input type="number" step="0.01" name="oversize_heavy" value="{{ item['oversize_heavy'] if item else '' }}"></div>
-                <div class="field"><label>其它费用</label><input type="number" step="0.01" name="other_fee" value="{{ item['other_fee'] if item else '' }}"></div>
+                <div class="field"><label>运费(元)</label><input type="number" step="0.01" name="freight" value="{{ item['freight'] if item else 0 }}"></div>
+                <div class="field"><label>到付金额</label><input type="number" step="0.01" name="cod_amount" value="{{ item['cod_amount'] if item else 0 }}"></div>
+                <div class="field"><label>保险费</label><input type="number" step="0.01" name="insurance" value="{{ item['insurance'] if item else 0 }}"></div>
+                <div class="field"><label>包装费</label><input type="number" step="0.01" name="package_fee" value="{{ item['package_fee'] if item else 0 }}"></div>
+                <div class="field"><label>卸货费</label><input type="number" step="0.01" name="unload_fee" value="{{ item['unload_fee'] if item else 0 }}"></div>
+                <div class="field"><label>提货费</label><input type="number" step="0.01" name="pickup_fee" value="{{ item['pickup_fee'] if item else 0 }}"></div>
+                <div class="field"><label>专车费</label><input type="number" step="0.01" name="special_car_fee" value="{{ item['special_car_fee'] if item else 0 }}"></div>
+                <div class="field"><label>保价金额</label><input type="number" step="0.01" name="declared_value" value="{{ item['declared_value'] if item else 0 }}"></div>
+                <div class="field"><label>超长超重</label><input type="number" step="0.01" name="oversize_heavy" value="{{ item['oversize_heavy'] if item else 0 }}"></div>
+                <div class="field"><label>其它费用</label><input type="number" step="0.01" name="other_fee" value="{{ item['other_fee'] if item else 0 }}"></div>
                 <div class="field"><label>提货要求</label><input type="text" name="pickup_request" value="{{ item['pickup_request'] if item else '' }}"></div>
                 <div class="field"><label>回单备注</label><input type="text" name="receipt_remark" value="{{ item['receipt_remark'] if item else '' }}"></div>
             </div>
