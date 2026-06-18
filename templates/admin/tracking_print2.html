@@ -39,16 +39,16 @@ div{/*border: 1px solid #000099;*/height: 22px;font-size: 12px;font-weight:bold;
 #div29{width: 42px;top: 283px;left:583px;}
 #div30{width: 42px;top: 283px;left:667px;}
 #div31{width: 42px;top: 283px;left:748px;}
-#div32{width: 200px;top: 402px;left: 602px;text-align: left;}
+#div32{width: 182px; top: 327px; left: 592px; text-align: center;}
 #div33{width: 42px;top: 311px;left:667px;}
 #div34{width: 42px;top: 311px;left:748px;}
 #div35{width: 200px;top: 311px;left: 585px;text-align: left;}
 #div36{width: 180px;top: 355px;left: 604px;}
-#div37{width: 180px;top: 331px;left: 70px;text-align: left;}
+#div37{width: 180px;top: 378px;left: 734px;text-align: left;}
 #div38{width: 79px;top: 348px;left: 299px;text-align: left;}
 #div39{width: 145px;top: 397px;left: 226px;text-align: left;}
 #div40{width: 79px;top: 402px;left: 380px;text-align: left;}
-#div41{width: 79px;top: 375px;left: 748px;text-align: left;}
+#div41{width: 79px; top: 379px; left: 646px; text-align: left;}
 #div42{width: 45px;top: 395px;left: 57px;text-align: left;}
 #div43{width: 124px;top: 413px;left: 139px;text-align: left;}
 #div44{width: 37px;top: 466px;left: 416px;}
@@ -69,10 +69,6 @@ div{/*border: 1px solid #000099;*/height: 22px;font-size: 12px;font-weight:bold;
 	<div id="div4">{{ item['shipping_time'] or '-' }}</div>
 	<div id="div7">{{ item['sender_company'] or '-' }}</div>
 	<div id="div8">{{ item['receiver_company'] or '-' }}</div>
-	<!-- <div id="div11">{{ dist or '-' }}</div>
-	<div id="div12">{{ s_sf or '-' }}</div>
-	<div id="div13">{{ s_city or '-' }}</div>
-	<div id="div14">{{ s_dist or '-' }}</div> -->
 	<div id="div15">{{ item['origin'] or '-' }}</div>
 	<div id="div16">{{ item['destination'] or '-' }}</div>
 	<div id="div17">{{ item['sender'] or '-'}}</div>
@@ -85,19 +81,19 @@ div{/*border: 1px solid #000099;*/height: 22px;font-size: 12px;font-weight:bold;
 	<div id="div24">{{ item['weight'] or '-' }}</div>
 	<div id="div25">{{ item['charge_weight'] or '-' }}</div>
 	<div id="div26">{{ item['freight'] or '-' }}</div>
-	<div id="div27">{{ item['cod_amount'] or '-' }}</div>
+	<div id="div27">{{ item['delivery_fee'] or '-' }}</div>
 	<div id="div28">{{ item['pickup_fee'] or '-' }}</div>
 	<div id="div29">{{ item['package_fee'] or '-' }}</div>
 	<div id="div30">{{ item['unload_fee'] or '-' }}</div>
 	<div id="div31">{{ item['special_car_fee'] or '-' }}</div>
-	<!-- <div id="div32">32</div> -->
+	<div id="div32" class="dx">{{ item['declared_value'] if item else '-' }}</div>
 	<div id="div33">{{ item['other_fee'] or '-' }}</div>
 	<div id="div34">{{ item['insurance'] or '-' }}</div>
 	<div id="div35">{{ item['oversize_heavy'] or '-' }}</div>
 	<div id="div36">
-{% set total = item['freight'] + item['cod_amount'] + item['pickup_fee'] + item['package_fee'] + item['unload_fee'] + item['special_car_fee'] + item['other_fee']+item['insurance']+item['oversize_heavy'] %}
+{% set total = item['freight'] + item['delivery_fee'] + item['pickup_fee'] + item['package_fee'] + item['unload_fee'] + item['special_car_fee'] + item['other_fee']+item['insurance']+item['oversize_heavy'] %}
 {{ "%.2f"|format(total) }}</div>
-	<!-- <div id="div37">37</div> -->
+	<div id="div37">{{ item['cod_amount'] or '-' }}</div>
 	<div id="div38">{{ item['volume'] or '-' }}</div>
 	<div id="div39">{{ item['receipt_remark'] or '-' }}</div>
 	<!-- <div id="div40">40</div> -->
@@ -112,7 +108,12 @@ div{/*border: 1px solid #000099;*/height: 22px;font-size: 12px;font-weight:bold;
 </div>
 <div class="v-h" ><button type="button" onclick="javascript:window.print();"  style="height: 24px;vertical-align: middle;" />打印</button></div>
 
-
+<script>
+// 极简人民币大写
+const dx=m=>{let d=['零','壹','贰','叁','肆','伍','陆','柒','捌','玖'],u=['元','拾','佰','仟','万','拾','佰','仟','亿'],f=['角','分'],s=Number(m).toFixed(2),[i,j]=s.split('.'),r=[];i=i.replace(/^0+/,'')||'0';[...i].forEach((v,x)=>{let n=+v,p=i.length-x-1;n?r.push(d[n],u[p]):r.at(-1)!='零'&&r.push('零')});r.at(-1)=='零'&&r.pop();!r.length&&r.push('零元');let j1=+j[0],j2=+j[1];j1&&r.push(d[j1],'角');j2&&(j1==0&&i!='0'&&r.push('零'),r.push(d[j2],'分'));j1==0&&j2==0&&r.push('整');return r.join('')}
+// 渲染
+document.querySelector('.dx').innerText=dx({{ item['declared_value'] if item else '-' }});
+</script>
 
 
 

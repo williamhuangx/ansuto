@@ -48,6 +48,7 @@
                 <th style="display: none;">包装费</th>
                 <th style="display: none;">提货要求</th>
                 <th style="display: none;">卸货费</th>
+                <th style="display: none;">送货费</th>
                 <th style="display: none;">其它费用</th>
                 <th style="display: none;">提货费</th>
                 <th style="display: none;">专车费</th>
@@ -56,6 +57,7 @@
                 <th style="display: none;">保险费</th>
                 <th style="display: none;">运费</th>
                 <th style="display: none;">到付金额</th>
+                <th style="display: none;">总金额</th>
                 <th style="display: none;">付款方式</th>
                 <th>状态</th>
                 <th style="display: none;">创建时间</th>
@@ -93,6 +95,7 @@
                 <td style="display: none;">¥{{ item['package_fee'] or '-' }}</td>
                 <td style="display: none;">{{ item['pickup_request'] or '-' }}</td>
                 <td style="display: none;">¥{{ item['unload_fee'] or '-' }}</td>
+                <td style="display: none;">¥{{ item['delivery_fee'] or '-' }}</td>
                 <td style="display: none;">¥{{ item['other_fee'] or '-' }}</td>
                 <td style="display: none;">¥{{ item['pickup_fee'] or '-' }}</td>
                 <td style="display: none;">¥{{ item['special_car_fee'] or '-' }}</td>
@@ -101,6 +104,7 @@
                 <td style="display: none;">¥{{ item['insurance'] or '-' }}</td>
                 <td style="display: none;">¥{{ item['freight'] or '-' }}</td>
                 <td style="display: none;">¥{{ item['cod_amount'] or '-' }}</td>
+                <td style="display: none;">¥{{ item['freight'] + item['delivery_fee'] + item['insurance'] + item['package_fee'] + item['unload_fee'] + item['pickup_fee'] + item['special_car_fee'] + item['oversize_heavy']  + item['other_fee'] }}</td>
                 <td style="display: none;">{{ item['payment_method'] or '-' }}</td>
                 <td>
                     {% if item['status'] == 'delivered' %}<span class="badge badge-active">已送达</span>

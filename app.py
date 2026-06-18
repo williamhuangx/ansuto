@@ -619,6 +619,7 @@ _TRACKING_FIELDS = [
     ('package_fee', float),        # 包装费
     ('pickup_request', str),       # 提货要求
     ('unload_fee', float),         # 卸货费
+    ('delivery_fee', float),       # 送货费 
     ('other_fee', float),          # 其它费用
     ('pickup_fee', float),         # 提货费
     ('special_car_fee', float),    # 专车费
