@@ -691,25 +691,41 @@ def admin_tracking_edit(tid):
 @app.route('/admin/tracking/detail/<int:tid>', methods=['GET', 'POST'])
 @login_required
 def admin_tracking_detail(tid):
-    r = query_sql("SELECT * FROM trackings WHERE id=%s", (tid,))
+    try:
+        r = query_sql("SELECT * FROM trackings WHERE id=%s", (tid,))
+    except Exception as e:
+        flash(f'数据库查询错误: {str(e)}', 'danger')
+        return redirect(url_for('admin_tracking'))
+    
     if not r:
         flash('记录不存在', 'danger')
         return redirect(url_for('admin_tracking'))
+    
     main = r[0]
+    
     if request.method == 'POST':
-        d = request.form
-        node_time = d.get('node_time') or datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        insert_sql(
-            "INSERT INTO tracking_details (tracking_id, tracking_no, node_time, location, status_text, operator, sort_order) "
-            "VALUES (%s, %s, %s, %s, %s, %s, %s)",
-            (tid, main['tracking_no'], node_time, d.get('location'), d.get('status_text'),
-             d.get('operator'), d.get('sort_order') or 0)
-        )
-        record_log('tracking', '新增节点', tid)
-        flash('节点已添加', 'success')
+        try:
+            d = request.form
+            node_time = d.get('node_time') or datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            insert_sql(
+                "INSERT INTO tracking_details (tracking_id, tracking_no, node_time, location, status_text, operator, sort_order) "
+                "VALUES (%s, %s, %s, %s, %s, %s, %s)",
+                (tid, main['tracking_no'], node_time, d.get('location'), d.get('status_text'),
+                 d.get('operator'), d.get('sort_order') or 0)
+            )
+            record_log('tracking', '新增节点', tid)
+            flash('节点已添加', 'success')
+        except Exception as e:
+            flash(f'添加节点失败: {str(e)}', 'danger')
         return redirect(url_for('admin_tracking_detail', tid=tid))
-    details = query_sql(
-        "SELECT * FROM tracking_details WHERE tracking_id=%s ORDER BY node_time DESC, id DESC", (tid,))
+    
+    try:
+        details = query_sql(
+            "SELECT * FROM tracking_details WHERE tracking_id=%s ORDER BY node_time DESC, id DESC", (tid,))
+    except Exception as e:
+        flash(f'获取物流轨迹失败: {str(e)}', 'danger')
+        details = []
+    
     return render_template('admin/tracking_detail.html', item=main, details=details)
 
 
