@@ -78,23 +78,23 @@ div{/*border: 1px solid #000099;*/height: 22px;font-size: 12px;font-weight:bold;
 	<div id="div21">{{ item['goods_name'] or '-' }}</div>
 	<div id="div22">{{ item['pieces'] or '-' }}</div>
 	<div id="div23">{{ item['package'] or '-' }}</div>
-	<div id="div24">{{ item['weight'] or '-' }}</div>
-	<div id="div25">{{ item['charge_weight'] or '-' }}</div>
-	<div id="div26">{{ item['freight'] or '-' }}</div>
-	<div id="div27">{{ item['delivery_fee'] or '-' }}</div>
-	<div id="div28">{{ item['pickup_fee'] or '-' }}</div>
-	<div id="div29">{{ item['package_fee'] or '-' }}</div>
-	<div id="div30">{{ item['unload_fee'] or '-' }}</div>
-	<div id="div31">{{ item['special_car_fee'] or '-' }}</div>
+	<div id="div24">{{ item['weight'] |round(0) or '-' }}</div>
+	<div id="div25">{{ item['charge_weight'] |round(0) or '-'}}</div>
+	<div id="div26">{{ item['freight'] |round(0) or '-' }}</div>
+	<div id="div27">{{ item['delivery_fee'] |round(0) or '-'}}</div>
+	<div id="div28">{{ item['pickup_fee'] |round(0) or '-' }}</div>
+	<div id="div29">{{ item['package_fee'] |round(0) or '-' }}</div>
+	<div id="div30">{{ item['unload_fee'] |round(0) or '-' }}</div>
+	<div id="div31">{{ item['special_car_fee'] |round(0) or '-' }}</div>
 	<div id="div32" class="dx">{{ item['declared_value'] if item else '-' }}</div>
-	<div id="div33">{{ item['other_fee'] or '-' }}</div>
-	<div id="div34">{{ item['insurance'] or '-' }}</div>
-	<div id="div35">{{ item['oversize_heavy'] or '-' }}</div>
+	<div id="div33">{{ item['other_fee'] |round(0) or '-' }}</div>
+	<div id="div34">{{ item['insurance'] |round(0) or '-' }}</div>
+	<div id="div35">{{ item['oversize_heavy'] |round(0) or '-' }}</div>
 	<div id="div36">
 {% set total = item['freight'] + item['delivery_fee'] + item['pickup_fee'] + item['package_fee'] + item['unload_fee'] + item['special_car_fee'] + item['other_fee']+item['insurance']+item['oversize_heavy'] %}
 {{ "%.2f"|format(total) }}</div>
 	<div id="div37">{{ item['cod_amount'] or '-' }}</div>
-	<div id="div38">{{ item['volume'] or '-' }}</div>
+	<div id="div38">{{ item['volume'] |round(0) or '-' }}</div>
 	<div id="div39">{{ item['receipt_remark'] or '-' }}</div>
 	<!-- <div id="div40">40</div> -->
 	<div id="div41">{{ item['payment_method'] or '-' }}</div>
