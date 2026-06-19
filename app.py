@@ -245,7 +245,7 @@ def tracking():
         main = query_sql("SELECT * FROM trackings WHERE tracking_no=%s", (ctx['tracking_no'],))
         if main:
             details = query_sql(
-                "SELECT * FROM tracking_details WHERE tracking_id=%s ORDER BY node_time DESC, sort_order",
+                "SELECT * FROM tracking_details WHERE tracking_id=%s ORDER BY node_time DESC, id DESC",
                 (main[0]['id'],))
             ctx['result'] = {'main': main[0], 'details': details}
         else:
