@@ -160,7 +160,7 @@
         /* 信息横条 */
         .info-bar {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(5, 1fr);
             padding: 10px 22px;
             background: #f9fafb;
             border-bottom: 2px dashed #000;
@@ -772,6 +772,10 @@
                 <div class="item">
                     <span class="lbl">付款方式</span>
                     <span class="val">{{ item['payment_method'] or '-' }}</span>
+                </div>
+                <div class="item">
+                    <span class="lbl">开票信息</span>
+                    <span class="val">{{ item['ticket_agent'] or '-' }}</span>
                 </div>
             </div>
 

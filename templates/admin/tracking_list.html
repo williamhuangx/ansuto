@@ -38,8 +38,12 @@
                 <th>收件公司/收件人/收件电话</th>
                 <th>运输类型</th>
                 <th>货物/重量(kg)/体积(m³)/件数</th>
+                <th style="display: none;">体积尺寸1</th>
+                <th style="display: none;">体积尺寸2</th>
+                <th style="display: none;">体积尺寸3</th>
                 <th style="display: none;">包装</th>
                 <th style="display: none;">送货方式</th>
+                <th style="display: none;">开单人</th>
                 <th style="display: none;">签回单</th>
                 <th style="display: none;">回单备注</th>
                 <th style="display: none;">回单情况</th>
@@ -63,6 +67,20 @@
                 <th style="display: none;">创建时间</th>
                 <th style="display: none;">更新时间</th>
                 <th>操作</th>
+                <th style="display: none;">承运公司</th>
+                <th style="display: none;">承运单号</th>
+                <th style="display: none;">承运备注</th>
+                <th style="display: none;">承运费用</th>
+                <th style="display: none;">承运均价不含费</th>
+                <th style="display: none;">承运付款方式</th>
+                <th style="display: none;">承运付款银行</th>
+                <th style="display: none;">承运付款日期</th>
+                <th style="display: none;">承运提货司机</th>
+                <th style="display: none;">承运提货费</th>
+                <th style="display: none;">承运提货付款方式</th>
+                <th style="display: none;">承运派送公司</th>
+                <th style="display: none;">承运派送费</th>
+                <th style="display: none;">承运付款状态</th>
             </tr>
         </thead>
         <tbody>
@@ -85,8 +103,12 @@
                 </td>
                 <td>{{ item['transport_type'] or '-' }}</td>
                 <td>{{ item['goods_name'] or '-' }}<br>{{ item['weight'] or '-' }}kg / {{ item['volume'] or '-' }}m³ / {{ item['pieces'] or '-' }}件</td>
+                <td style="display: none;">{{ item['volume_size1'] or '-' }}</td>
+                <td style="display: none;">{{ item['volume_size2'] or '-' }}</td>
+                <td style="display: none;">{{ item['volume_size3'] or '-' }}</td>
                 <td style="display: none;">{{ item['package'] or '-' }}</td>
                 <td style="display: none;">{{ item['delivery_method'] or '-' }}</td>
+                <td style="display: none;">{{ item['ticket_agent'] or '-' }}</td>
                 <td style="display: none;">{{ item['need_receipt'] or '-' }}</td>
                 <td style="display: none;">{{ item['receipt_remark'] or '-' }}</td>
                 <td style="display: none;">{{ item['receipt_status'] or '-' }}</td>
@@ -123,10 +145,24 @@
                     <a href="{{ url_for('admin_tracking_delete', tid=item['id']) }}" class="btn btn-sm btn-danger"
                         onclick="return confirm('确定删除?')">删除</a>
                 </td>
+                <td style="display: none;">{{ item['carrier_company'] or '-' }}</td>
+                <td style="display: none;">{{ item['Carrier_No'] or '-' }}</td>
+                <td style="display: none;">{{ item['Carrier_Remarks'] or '-' }}</td>
+                <td style="display: none;">{{ item['Carrier_cost'] or '-' }}</td>
+                <td style="display: none;">{{ item['Carrier_Price_excluding_tax'] or '-' }}</td>
+                <td style="display: none;">{{ item['Carrier_Payment_method'] or '-' }}</td>
+                <td style="display: none;">{{ item['Carrier_Paying_Bank'] or '-' }}</td>
+                <td style="display: none;">{{ item['Carrier_Payment_date'] or '-' }}</td>
+                <td style="display: none;">{{ item['Carrier_pickup_driver'] or '-' }}</td>
+                <td style="display: none;">{{ item['Carrier_pickup_fee'] or '-' }}</td>
+                <td style="display: none;">{{ item['Carrier_Cash_delivery'] or '-' }}</td>
+                <td style="display: none;">{{ item['Carrier_delivery_company'] or '-' }}</td>
+                <td style="display: none;">{{ item['Carrier_delivery_fee'] or '-' }}</td>
+                <td style="display: none;">{{ item['Carrier_Payment_Status'] or '-' }}</td>
             </tr>
             {% else %}
             <tr>
-                <td colspan="35" style="text-align:center; padding: 40px; color: #999;">暂无运单,请先添加</td>
+                <td colspan="54" style="text-align:center; padding: 40px; color: #999;">暂无运单,请先添加</td>
             </tr>
             {% endfor %}
         </tbody>

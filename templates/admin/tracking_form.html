@@ -368,6 +368,10 @@
                     <option value="lost" {% if item and item.get('status') == 'lost' %}selected{% endif %}>异常</option>
                 </select>
             </div>
+            <div class="item">
+                <label>开单人</label>
+                <input type="text" name="ticket_agent" value="{{ item['ticket_agent'] if item else '' }}" placeholder="姓名">
+            </div>
         </div>
 
         <!-- 主区: 寄件人/收件人 -->
@@ -447,6 +451,9 @@
                 <div class="field"><label>体积(m³) / VOLUME</label><input type="number" step="0.01" name="volume" value="{{ item['volume'] if item else 0 }}"></div>
                 <div class="field"><label>计费重量(kg)</label><input type="number" step="0.01" name="charge_weight" value="{{ item['charge_weight'] if item else 0 }}"></div>
                 <div class="field"><label>回单情况</label><input type="text" name="receipt_status" value="{{ item['receipt_status'] if item else '' }}"></div>
+                <div class="field"><label>体积尺寸1</label><input type="text" name="volume_size1" value="{{ item['volume_size1'] if item else '' }}" placeholder="长×宽×高"></div>
+                <div class="field"><label>体积尺寸2</label><input type="text" name="volume_size2" value="{{ item['volume_size2'] if item else '' }}" placeholder="长×宽×高"></div>
+                <div class="field"><label>体积尺寸3</label><input type="text" name="volume_size3" value="{{ item['volume_size3'] if item else '' }}" placeholder="长×宽×高"></div>
             </div>
         </div>
 
@@ -477,6 +484,27 @@
                 <div class="field"><label>到付金额</label><input type="number" step="0.01" name="cod_amount" value="{{ item['cod_amount'] if item else 0 }}"></div>
                 <!-- <div class="field"><label>提货要求</label><input type="text" name="pickup_request" value="{{ item['pickup_request'] if item else '' }}"></div>
                 <div class="field"><label>回单备注</label><input type="text" name="receipt_remark" value="{{ item['receipt_remark'] if item else '' }}"></div> -->
+            </div>
+        </div>
+
+        <!-- 承运信息 -->
+        <div class="waybill-section">
+            <h4>CARRIER INFO / 承运信息</h4>
+            <div class="waybill-grid">
+                <div class="field"><label>承运公司</label><input type="text" name="carrier_company" value="{{ item['carrier_company'] if item else '' }}" placeholder="承运商名称"></div>
+                <div class="field"><label>承运单号</label><input type="text" name="Carrier_No" value="{{ item['Carrier_No'] if item else '' }}" placeholder="承运单号"></div>
+                <div class="field"><label>承运费用</label><input type="number" step="0.01" name="Carrier_cost" value="{{ item['Carrier_cost'] if item else 0 }}"></div>
+                <div class="field"><label>承运均价不含税</label><input type="number" step="0.01" name="Carrier_Price_excluding_tax" value="{{ item['Carrier_Price_excluding_tax'] if item else 0 }}"></div>
+                <div class="field"><label>承运付款方式</label><input type="text" name="Carrier_Payment_method" value="{{ item['Carrier_Payment_method'] if item else '' }}"></div>
+                <div class="field"><label>承运付款银行</label><input type="text" name="Carrier_Paying_Bank" value="{{ item['Carrier_Paying_Bank'] if item else '' }}" placeholder="银行名称"></div>
+                <div class="field"><label>承运付款日期</label><input type="date" name="Carrier_Payment_date" value="{{ item['Carrier_Payment_date'] if item else '' }}"></div>
+                <div class="field"><label>承运提货司机</label><input type="text" name="Carrier_pickup_driver" value="{{ item['Carrier_pickup_driver'] if item else '' }}" placeholder="司机姓名"></div>
+                <div class="field"><label>承运提货费</label><input type="number" step="0.01" name="Carrier_pickup_fee" value="{{ item['Carrier_pickup_fee'] if item else 0 }}"></div>
+                <div class="field"><label>承运提货付款方式</label><input type="text" name="Carrier_Cash_delivery" value="{{ item['Carrier_Cash_delivery'] if item else '' }}"></div>
+                <div class="field"><label>承运派送公司</label><input type="text" name="Carrier_delivery_company" value="{{ item['Carrier_delivery_company'] if item else '' }}" placeholder="派送商名称"></div>
+                <div class="field"><label>承运派送费</label><input type="number" step="0.01" name="Carrier_delivery_fee" value="{{ item['Carrier_delivery_fee'] if item else 0 }}"></div>
+                <div class="field"><label>承运付款状态</label><input type="text" name="Carrier_Payment_Status" value="{{ item['Carrier_Payment_Status'] if item else '' }}"></div>
+                <div class="field" style="grid-column: span 4;"><label>承运备注</label><textarea name="Carrier_Remarks" rows="2" placeholder="承运相关备注信息">{{ item['Carrier_Remarks'] if item else '' }}</textarea></div>
             </div>
         </div>
 

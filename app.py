@@ -599,13 +599,32 @@ _TRACKING_FIELDS = [
     ('other_fee', float),          # 其它费用
     ('pickup_fee', float),         # 提货费
     ('special_car_fee', float),    # 专车费
-    ('oversize_heavy', float),       # 超长超重
+    ('oversize_heavy', float),     # 超长超重
     ('declared_value', float),     # 保价金额
     ('insurance', float),          # 保险
     ('freight', float),            # 运费
     ('cod_amount', float),         # 到付金额
     ('payment_method', str),       # 付款方式
     ('status', str),               # 目前状态
+    ('ticket_agent', str),         # 开单人
+    ('volume_size1', str),         # 体积尺寸1
+    ('volume_size2', str),         # 体积尺寸2
+    ('volume_size3', str),         # 体积尺寸3
+    ('carrier_company', str),      # 承运公司
+    ('Carrier_No', str),           # 承运单号
+    ('Carrier_Remarks', str),      # 承运备注
+    ('Carrier_cost', float),       # 承运费用
+    ('Carrier_Price_excluding_tax', float),       # 承运均价不含费
+    ('Carrier_Payment_method', str),       # 承运付款方式
+    ('Carrier_Paying_Bank', str),       # 承运付款银行
+    ('Carrier_Payment_date', str),       # 承运付款日期
+    ('Carrier_pickup_driver', str),       # 承运提货司机
+    ('Carrier_pickup_fee', str),       # 承运提货费
+    ('Carrier_Cash_delivery', str),       # 承运提货付款方式
+    ('Carrier_delivery_company', str),       # 承运派送公司
+    ('Carrier_delivery_fee', str),       # 承运派送费
+    ('Carrier_Payment_Status', str),       # 承运付款状态
+    
 ]
 
 

@@ -416,7 +416,8 @@
                 <strong style="color: #374151;">托运时间:</strong> {{ item['shipping_time'] or '-' }} &nbsp;|&nbsp;
                 <strong style="color: #374151;">运输类型:</strong> {{ item['transport_type'] or '-' }} &nbsp;|&nbsp;
                 <strong style="color: #374151;">送货方式:</strong> {{ item['delivery_method'] or '-' }} &nbsp;|&nbsp;
-                <strong style="color: #374151;">付款方式:</strong> {{ item['payment_method'] or '-' }}
+                <strong style="color: #374151;">付款方式:</strong> {{ item['payment_method'] or '-' }} &nbsp;|&nbsp;
+                <strong style="color: #374151;">开单人:</strong> {{ item['ticket_agent'] or '-' }}
             </div>
             <div class="actions">
                 <a href="{{ url_for('admin_tracking_print', tid=item['id']) }}" class="btn-print" style="padding:8px 18px; border-radius:4px; text-decoration:none; font-size:13px; font-weight:600; background:#b91c1c; color:#fff; margin-right:6px;">🖨 打印面单</a>
@@ -466,6 +467,9 @@
                 <div class="field"><span class="lbl">体积(m³)</span><div class="val num">{{ item['volume'] or '-' }}</div></div>
                 <div class="field"><span class="lbl">计费重量(kg)</span><div class="val num">{{ item['charge_weight'] or '-' }}</div></div>
                 <div class="field"><span class="lbl">回单情况</span><div class="val">{{ item['receipt_status'] or '-' }}</div></div>
+                <div class="field"><span class="lbl">体积尺寸1</span><div class="val">{{ item['volume_size1'] or '-' }}</div></div>
+                <div class="field"><span class="lbl">体积尺寸2</span><div class="val">{{ item['volume_size2'] or '-' }}</div></div>
+                <div class="field"><span class="lbl">体积尺寸3</span><div class="val">{{ item['volume_size3'] or '-' }}</div></div>
             </div>
         </div>
 
@@ -487,6 +491,27 @@
                 <div class="field"><span class="lbl">到付金额</span><div class="val money">{{ item['cod_amount'] if item else 0 }}</div></div>
                 <!-- <div class="field"><span class="lbl">提货要求</span><div class="val" style="font-size: 13px;">{{ item['pickup_request'] or '-' }}</div></div>
                 <div class="field"><span class="lbl">回单备注</span><div class="val" style="font-size: 13px;">{{ item['receipt_remark'] or '-' }}</div></div> -->
+            </div>
+        </div>
+
+        <!-- 承运信息 -->
+        <div class="waybill-section">
+            <h4>CARRIER INFO / 承运信息</h4>
+            <div class="waybill-grid">
+                <div class="field"><span class="lbl">承运公司</span><div class="val">{{ item['carrier_company'] or '-' }}</div></div>
+                <div class="field"><span class="lbl">承运单号</span><div class="val num">{{ item['Carrier_No'] or '-' }}</div></div>
+                <div class="field"><span class="lbl">承运费用(¥)</span><div class="val money">{{ item['Carrier_cost'] or '-' }}</div></div>
+                <div class="field"><span class="lbl">承运均价不含税(¥)</span><div class="val money">{{ item['Carrier_Price_excluding_tax'] or '-' }}</div></div>
+                <div class="field"><span class="lbl">承运付款方式</span><div class="val">{{ item['Carrier_Payment_method'] or '-' }}</div></div>
+                <div class="field"><span class="lbl">承运付款银行</span><div class="val">{{ item['Carrier_Paying_Bank'] or '-' }}</div></div>
+                <div class="field"><span class="lbl">承运付款日期</span><div class="val">{{ item['Carrier_Payment_date'] or '-' }}</div></div>
+                <div class="field"><span class="lbl">承运提货司机</span><div class="val">{{ item['Carrier_pickup_driver'] or '-' }}</div></div>
+                <div class="field"><span class="lbl">承运提货费(¥)</span><div class="val money">{{ item['Carrier_pickup_fee'] or '-' }}</div></div>
+                <div class="field"><span class="lbl">承运提货付款方式</span><div class="val">{{ item['Carrier_Cash_delivery'] or '-' }}</div></div>
+                <div class="field"><span class="lbl">承运派送公司</span><div class="val">{{ item['Carrier_delivery_company'] or '-' }}</div></div>
+                <div class="field"><span class="lbl">承运派送费(¥)</span><div class="val money">{{ item['Carrier_delivery_fee'] or '-' }}</div></div>
+                <div class="field"><span class="lbl">承运付款状态</span><div class="val">{{ item['Carrier_Payment_Status'] or '-' }}</div></div>
+                <div class="field" style="grid-column: span 4;"><span class="lbl">承运备注</span><div class="val" style="font-size: 13px; white-space: pre-wrap;">{{ item['Carrier_Remarks'] or '-' }}</div></div>
             </div>
         </div>
 

@@ -47,12 +47,12 @@ div{/*border: 1px solid #000099;*/height: 22px;font-size: 12px;font-weight:bold;
 #div37{width: 51px;top: 387px;left: 754px;}
 #div38{width: 79px;top: 351px;left: 274px;}
 #div39{width: 145px;top: 397px;left: 226px;text-align: left;}
-#div40{width: 79px;top: 402px;left: 380px;text-align: left;}
+#div40{width: 79px;top: 463px;left: 395px;}
 #div41{width: 79px;top: 387px;left: 642px;}
 #div42{width: 74px;top: 401px;left: 51px;text-align: left;}
-#div43{width: 124px;top: 413px;left: 139px;text-align: left;}
-#div44{width: 37px;top: 466px;left: 416px;}
-#div45{width: 79px;top: 383px;left: 661px;text-align: left;}
+#div43{width: 88px;top: 330px;left: 69px;text-align: left;}
+#div44{width: 88px;top: 346px;left: 69px;text-align: left;}
+#div45{width: 88px;top: 364px;left: 69px;text-align: left;}
 #div46{width: 79px;top: 383px;left: 710px;text-align: left;}
 #div47{width: 79px;top: 384px;left: 380px;text-align: left;}
 #div48{width: 114px;top: 418px;left: 417px;text-align: left;}
@@ -96,12 +96,12 @@ div{/*border: 1px solid #000099;*/height: 22px;font-size: 12px;font-weight:bold;
 	<div id="div37">{{ item['cod_amount'] or '-' }}</div>
 	<div id="div38">{{ item['volume'] |round(0) or '-' }}</div>
 	<div id="div39">{{ item['receipt_remark'] or '-' }}</div>
-	<!-- <div id="div40">40</div> -->
+	<div id="div40">{{ item['ticket_agent'] or '-' }}</div>
 	<div id="div41">{{ item['payment_method'] or '-' }}</div>
 	<div id="div42">{{ item['receipt_status'] or '-' }}</div>
-	<!-- <div id="div43">43</div> -->
-	<!-- <div id="div44">44</div> -->
-	<!-- <div id="div45">45</div> -->
+	<div id="div43">{{ item['volume_size1'] or '-' }}</div>
+	<div id="div44">{{ item['volume_size2'] or '-' }}</div>
+	<div id="div45">{{ item['volume_size3'] or '-' }}</div>
 	<!-- <div id="div46">46</div> -->
 	<!-- <div id="div47">47</div> -->
 	<div id="div48">{{ item['delivery_method'] or '-' }}</div>
